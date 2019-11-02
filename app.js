@@ -102,6 +102,5 @@ app.post("/docs/:id/comments", function(req, res){
 
 var port = process.env.PORT || 3000;
 app.listen(port, function () {
-  console.log("Server Has Startedd!");
-  console.log("doc");
+  console.log("Server Has Started!");
 });
