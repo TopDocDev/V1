@@ -1,0 +1,30 @@
+<% include ../partials/header %>
+ <div class="container">
+     <header class="jumbotron">
+         <div class="container">
+             <h1>Welcome</h1>
+             <p>Book your appointment online!</p>
+             <p>
+                <a class="btn btn-primary btn-large" href="/docs/new">Add New Doc</a>
+             </p>
+         </div>
+     </header>
+     
+     <div class="row text-center" style="display:flex; flex-wrap: wrap;">
+        <% doc.forEach(function(doc){ %>
+            <div class="col-md-3 col-sm-6">
+                <div class="thumbnail">
+                   <img src="<%= doc.image %>">
+                   <div class="caption">
+                       <h4><%= doc.name %></h4>
+                   </div>
+                   <p>
+                       <a href="/docs/<%= doc._id %>" class="btn btn-primary">view profile</a>
+                   </p>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+</div>
+
+<% include ../partials/footer %>
