@@ -4,6 +4,7 @@ var docSchema = new mongoose.Schema({
    name: String,
    image: String,
    description: String,
+   spec: String,
    comments: [
       {
          type: mongoose.Schema.Types.ObjectId,
