@@ -138,6 +138,8 @@ app.get("/docs/:id", function(req, res){
         }
     });
 });
+
+/*
 app.get("/docs/:id/signup", function(req, res){
     doc.findById(req.params.id).exec(function(err){
         if(err){
@@ -151,7 +153,7 @@ app.get("/docs/:id/signup", function(req, res){
     }
 
 });
-
+*/
 
 // ====================
 // COMMENTS ROUTES
