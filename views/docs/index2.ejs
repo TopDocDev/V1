@@ -1,0 +1,175 @@
+
+
+<% include ../partials/header %>
+
+    <div class="container-fluid position-relative">
+        <div class="row position-relative">
+            <div class="col-8 col-offset-4 Liste">
+
+                <section class="innereListe">
+                    <div class="filter"> filter
+
+                            <div class="row">
+                                <div class="col-7">
+                
+                                </div>
+                                <div class="col-1 tag">
+                                    <div class="Wochentag">
+                                        Mo
+                                    </div>
+                                    <div class="Datum">
+                                        27.4
+                                    </div>
+                                </div>
+                                <div class="col-1 tag">
+                                    <div>
+                                        Di
+                                    </div>
+                                    <div>
+                                        28.4
+                                    </div>
+                                </div>
+                                <div class="col-1 tag">
+                                    <div>
+                                        Mi
+                                    </div>
+                                    <div>
+                                        29.4
+                                    </div>
+                                </div>
+                                <div class="col-1 tag">
+                                    <div>
+                                        Do
+                                    </div>
+                                    <div>
+                                        30.4
+                                    </div>
+                                </div>
+                                <div class="col-1 tag">
+                                    <div>
+                                        Fr
+                                    </div>
+                                    <div>
+                                        1.5
+                                    </div>
+                                </div>            
+                            </div>
+
+                    </div>
+                    <% doc.forEach(function(doc){ %>
+                    <div class="kachel">
+                       
+
+                            <div class="aufteilung row">
+                                
+
+                              <div class="col-7" onclick="location.href='/docs/<%= doc._id %>';" style="cursor: pointer;">
+                                
+                                  <div class="photo">
+                                      <picture>
+                                        <img src="<%= doc.image %>" style="height: 86px; width: 86px;">
+
+                                      </picture>
+
+                                  </div>
+                                  <div class="text">
+                                      <h3>
+                                        <%= doc.name %>
+                                        
+                                      </h3>
+                                      <span>
+                                        <%= doc.spec %>
+                                      </span>
+                                      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+                                      <div class="rating">
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star checked"></span>
+                                        <span class="fa fa-star"></span>
+                                        <span style="padding-left: 2em"> <%= doc.rating %> Bewertungen</span>
+                                      </div>
+
+                                  </div>
+
+                            </div>
+                            
+
+                            <div class="col-1 termin-spalte">
+                                <div class="termin" href="/docs/<%= doc._id %>">08:00
+                                </div>
+                                <div class="termin">08:30
+                                </div>
+                                <div class="termin">9:00
+                                </div>
+                                <div class="termin">mehr
+                                </div>
+                            </div>
+                            <div class="col-1 termin-spalte">
+                                <div class="termin">08:00
+                                </div>
+                                <div class="termin">08:30
+                                </div>
+                                <div class="termin">9:00
+                                </div>
+                                <div class="termin">mehr
+                                </div>
+                            </div>
+                            <div class="col-1 termin-spalte">
+                                <div class="termin">08:00
+                                </div>
+                                <div class="termin">08:30
+                                </div>
+                                <div class="termin">9:00
+                                </div>
+                                <div class="termin">mehr
+                                </div>
+                            </div>
+                            <div class="col-1 termin-spalte">
+                                <div class="termin">08:00
+                                </div>
+                                <div class="termin">08:30
+                                </div>
+                                <div class="termin">9:00
+                                </div>
+                                <div class="termin">mehr
+                                </div>
+                            </div>
+                            <div class="col-1 termin-spalte">
+                                <div class="termin">08:00
+                                </div>
+                                <div class="termin">08:30
+                                </div>
+                                <div class="termin">9:00
+                                </div>
+                                <div class="termin">mehr
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+                    
+                    
+                </section>
+                
+            </div>
+
+            <div class="karte-aussen col-4">
+                <div id="karte-innen">
+                        <div id="map"></div>
+
+                          
+
+                      </body>
+
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7k5XIGkkgwdc7rcCSH10ZoGl-U3DlKiQ&callback=initMap&libraries=places " async defer></script>
+
+
+<% include ../partials/footer %>

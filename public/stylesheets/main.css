@@ -1,3 +1,99 @@
+
+.corona {
+    padding: 10px;
+    height: 48px;
+    background-color: #1259B2;
+}
+#navbar {
+
+    height: 110px;
+    width: 100%;
+    padding: 5%;
+    background-color: rgb(255, 240, 75);
+
+}
+.filter {
+    height: 64px;
+    padding: 8px;
+}
+.tag {
+    font-size: 15px;
+    font-family: sharp-sans-semibold, Arial, sans-serif;
+}
+
+sharp-sans-semibold, Arial, sans-serif
+.wochentag {
+    font: 15px sharp-sans-semibold, Arial, sans-serif;
+}
+.ganz {
+    height: 10000px;
+    width: 100%;
+}
+.Liste {
+    width: 60%;
+    height: auto;
+    float: left;
+   
+}
+.karte-aussen {
+    position: relative;
+}
+#karte-innen {
+    position: fixed;
+    height: 780px;
+    width: 388px;
+}
+
+.video {
+    height: 200px;
+    background: grey;
+    width: 100%
+}
+.kachel {
+    height: 197px;
+    padding: 12px;
+    border-bottom: 1px solid;
+    border-bottom-color:rgb(225, 225, 228);
+
+
+}
+.aufteilung {
+    height: 152px;
+}
+.photo {
+    height: 88px;
+    width: 88px;
+    margin: 1px;
+    float: left;
+}
+.text {
+    float: left;
+    padding-left: 20px;
+}
+.rating {
+    padding-top: 20px;
+}
+.checked {
+    color: orange;
+  }
+.termin-spalte {
+    padding: 0px;
+
+}
+.termin {
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 6px;
+    margin-top: 5px;
+    height: 31px;
+    width: 66px;
+    background-color: rgb(255, 240, 75);
+    text-align: center;
+}
+.container {
+    position: relative;
+}
+
 .thumbnail img {
     width: 100%;
 }
@@ -124,18 +220,6 @@ body {
  font-size: 1em;
 }
 
-.session-title a {
- color: #fff;
- text-decoration-style: dotted;
- 
- &:hover {
-     font-style: italic;
- }
- 
- &:focus {
-     outline: 2px dotted rgba(255,255,255,.8);
- }
-}
 
 .track-slot,
 .time-slot {
@@ -194,3 +278,18 @@ body {
 hr {
  margin: 40px 0;
 }
+
+.speciality {
+    margin: 1em;
+    width: 9rem;
+    float: left;
+    background-color: white;
+    
+  }
+  .abschnitt {
+    margin-top: 5rem;
+    padding: 2rem;
+  }
+  .nav-item {
+    padding-left: 2em;
+  }

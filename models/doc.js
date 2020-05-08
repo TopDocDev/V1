@@ -5,6 +5,8 @@ var docSchema = new mongoose.Schema({
    image: String,
    description: String,
    spec: String,
+   star: String,
+   rating: String,
    comments: [
       {
          type: mongoose.Schema.Types.ObjectId,
