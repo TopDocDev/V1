@@ -33,9 +33,23 @@
                                 
                                       function initMap() {
                                         // Create the map.
+                                        var lat = parseInt(document.getElementById("lat").value);
+                                        var lng = parseInt(document.getElementById("lng").value);
                                         var liestal = {lat: 47.4895838, lng: 7.732632};
+                                        var ort = {
+                                          lat: lat,
+                                          lng: lng
+                                        };
+                                        var map = new google.maps.Map(document.getElementById('map'), {
+                                                center: ort,
+                                                zoom: 13,
+                                                mapTypeId: 'roadmap'
+                                            });
+                                                                                
+
+                                        console.log(lat, lng);
                                         map = new google.maps.Map(document.getElementById('map'), {
-                                          center: liestal,
+                                          center: ort,
                                           zoom: 14
                                         });
                                 
@@ -46,7 +60,7 @@
                                 
                                         // Perform a nearby search.
                                         service.nearbySearch(
-                                            {location: liestal, radius: 5000, type: ['doctor']},
+                                            {location: ort, radius: 5000, type: ['doctor']},
                                             function(results, status) {
                                               if (status !== 'OK') return;
                                 

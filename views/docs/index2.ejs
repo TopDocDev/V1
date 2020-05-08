@@ -7,8 +7,30 @@
             <div class="col-8 col-offset-4 Liste">
 
                 <section class="innereListe">
-                    <div class="filter"> filter
+                    <div class="filter">                     
+                        <form>
+                            <div class="form-row">
+                              <div class="col">
+                                <input type="number" class="form-control" placeholder="lat" id="lat">
+                              </div>
+                              <div class="col">
+                                <input type="number" class="form-control" placeholder="lng" id="lng">
+                              </div>
+                              <div class="col">
+                                <input type="date" class="form-control" id="date">
+                              </div>
+                              <div class="col">
+                                <input type="text" class="form-control" placeholder="Versicherung">
+                              </div>
+                              <a type="button" class="btn btn-info" onclick=initMap()>Suche</a>
+                            </div>
+                            <script>
+                                var field = document.getElementById("date");
+                                var date = new Date();
 
+                                field.value = date.getDate().toString().padStart(2, 0) + '.' + (date.getMonth() + 1).toString().padStart(2, 0) + '.' + date.getFullYear().toString();
+                            </script>
+                          </form>
                             <div class="row">
                                 <div class="col-7">
                 
