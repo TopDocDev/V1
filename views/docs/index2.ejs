@@ -11,19 +11,55 @@
                         <form>
                             <div class="form-row">
                               <div class="col">
-                                <input type="number" class="form-control" placeholder="lat" id="lat">
+                                <input type="text" class="form-control" placeholder="facharzt" id="facharzt">
                               </div>
                               <div class="col">
-                                <input type="number" class="form-control" placeholder="lng" id="lng">
+                                <input id="autocomplete" type="text" class="form-control" placeholder="ort">
                               </div>
                               <div class="col">
-                                <input type="date" class="form-control" id="date">
-                              </div>
-                              <div class="col">
-                                <input type="text" class="form-control" placeholder="Versicherung">
+                                <input type="text" class="form-control" id="date">
                               </div>
                               <a type="button" class="btn btn-info" onclick=initMap()>Suche</a>
                             </div>
+                            <script>                                
+                                var map, places, infoWindow;
+                                var autocomplete;
+                                var countryRestrict = {"country" : "ch"}
+
+                                function initMap() {
+                                map = new google.maps.Map(document.getElementById('map'), {
+                                    zoom: 7,
+                                center: {lat: 47, lng: 8}
+                                });
+
+                                // Create the autocomplete object and associate it with the UI input control.
+                                // Restrict the search to the default country, and to place type "cities".
+                                autocomplete = new google.maps.places.Autocomplete(
+                                    /** @type {!HTMLInputElement} */ (
+                                        document.getElementById('autocomplete')), {
+                                        types: ['(cities)'],
+                                        componentRestrictions: countryRestrict
+                                    });
+                                places = new google.maps.places.PlacesService(map);
+
+                                autocomplete.addListener('place_changed', onPlaceChanged);
+                                }
+
+                                // When the user selects a city, get the place details for the city and
+                                // zoom the map in on the city.
+                                function onPlaceChanged() {
+                                var place = autocomplete.getPlace();
+                                if (place.geometry) {
+                                    map.panTo(place.geometry.location);
+                                    map.setZoom(15);
+                                    search();
+                                } else {
+                                    document.getElementById('autocomplete').placeholder = 'Enter a city';
+                                }
+                                }
+                                
+
+                            </script>
                             <script>
                                 var field = document.getElementById("date");
                                 var date = new Date();
@@ -116,9 +152,10 @@
 
                             </div>
                             
+                            
 
                             <div class="col-1 termin-spalte">
-                                <div class="termin" href="/docs/<%= doc._id %>">08:00
+                                <div class="termin">08:00
                                 </div>
                                 <div class="termin">08:30
                                 </div>
@@ -181,7 +218,6 @@
                         <div id="map"></div>
 
                           
-
                       </body>
 
 
