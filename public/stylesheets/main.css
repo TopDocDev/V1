@@ -13,8 +13,12 @@
 
 }
 .filter {
-    height: 64px;
+    height: 200px;
     padding: 8px;
+}
+.suche-index {
+    padding-top: 50px;
+    padding-bottom: 50px;
 }
 .tag {
     font-size: 15px;
@@ -30,7 +34,6 @@ sharp-sans-semibold, Arial, sans-serif
     width: 100%;
 }
 .Liste {
-    width: 60%;
     height: auto;
     float: left;
    
@@ -66,12 +69,15 @@ sharp-sans-semibold, Arial, sans-serif
     margin: 1px;
     float: left;
 }
+.beschreibung {
+    float: right;
+}
 .text {
     float: left;
     padding-left: 20px;
 }
 .rating {
-    padding-top: 20px;
+    padding-top: 2em;
 }
 .checked {
     color: orange;
@@ -284,12 +290,11 @@ hr {
     width: 9rem;
     float: left;
     background-color: white;
-    
-  }
-  .abschnitt {
-    margin-top: 5rem;
-    padding: 2rem;
-  }
-  .nav-item {
-    padding-left: 2em;
-  }
+}
+.abschnitt {
+margin-top: 5rem;
+padding: 2rem;
+}
+.nav-item {
+padding-left: 2em;
+}

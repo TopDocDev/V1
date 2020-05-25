@@ -9,7 +9,7 @@
                 <section class="innereListe">
                     <div class="filter">                     
                         <form>
-                            <div class="form-row">
+                            <div class="form-row suche-index">
                               <div class="col">
                                 <input type="text" class="form-control" placeholder="facharzt" id="facharzt">
                               </div>
@@ -116,19 +116,12 @@
                     </div>
                     <% doc.forEach(function(doc){ %>
                     <div class="kachel">
-                       
-
                             <div class="aufteilung row">
-                                
-
                               <div class="col-7" onclick="location.href='/docs/<%= doc._id %>';" style="cursor: pointer;">
-                                
                                   <div class="photo">
                                       <picture>
                                         <img src="<%= doc.image %>" style="height: 86px; width: 86px;">
-
                                       </picture>
-
                                   </div>
                                   <div class="text">
                                       <h3>

@@ -1,113 +1,82 @@
 <% include partials/header %>
-<!doctype html>
-<html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
-    <title>TopDoc</title>
-    <style>
-      .speciality {
-        margin: 1em;
-        width: 9rem;
-        float: left;
-       ;
-        
-      }
-      .abschnitt {
-        margin-top: 2rem;
-        padding: 2rem;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="jumbotron" style="background-color: #e4f7f7;">
-      <h1 class="display-4">Topdoc</h1>
-      <p class="lead">Finde und buche deinen Arzttermin online</p>
-      <hr class="my-4">
-      <p></p>
-      <a class="btn btn-light" href="/docs" role="button">Mehr erfahren</a>
+<div class="jumbotron">
+  <div class="container">
+    <h1 class="display-3">TopDoc</h1>
+    <p class="lead">Finde und buche deinen Arzttermin online</p>
+    <p><a class="btn btn-primary btn-lg" href="/docs" role="button">Termin buchen</a></p>
+  </div>
+</div>
+<div class="abschnitt">
+  <form>
+    <div class="form-row">
+      <div class="col">
+        <input type="text" class="form-control" placeholder="Symptom, Behandlung, Arzt">
+      </div>
+      <div class="col">
+        <input type="text" class="form-control" placeholder="Ort oder PLZ">
+      </div>
+      <div class="col">
+        <input type="text" class="form-control" id="date">
+      </div>
+      <div class="col">
+        <input type="text" class="form-control" placeholder="Versicherung">
+      </div>
+      <a type="button" class="btn btn-info" href="/docs">Suche</a>
     </div>
+  </form>
+  <script>
+    var field = document.getElementById("date");
+    var date = new Date();
+    field.value = date.getDate().toString().padStart(2, 0) + '.' + (date.getMonth() + 1).toString().padStart(2, 0) + '.' + date.getFullYear().toString();
+  </script>
+
+<div style="margin-top: 5rem;">
+  <h1>Beliebte Fachrichtungen</h1>
+  <div id="app-landing">
+        
+  <div class="speciality card" href="/docs" v-for="item in groceryList">
+  <bild
+  v-bind:bild="item"
+  ></bild>
+  <div class="card-body">
+    <todo-item
+      v-bind:todo="item"
+    ></todo-item>
+  </div>
+</div>
+</div>
+</div>
+<script>
+  Vue.component('bild', {
+    props: ["bild"],
+    template: '<img :src="bild.img" class="card-img-top">'
+
+  })
+  Vue.component('todo-item', {
+    props: ['todo'],
+    template: '<a href="/docs" class="stretched-link card-text">{{todo.text}}</a>'
+  })
+
+  var app7 = new Vue({
+    el: '#app-landing',
+    data: {
+      groceryList: [
+        { id: 0, text: 'Hausarzt', img: "https://d1uhlocgth3qyq.cloudfront.net/primarycare-foreground___3vr-_.svg" },
+        { id: 1, text: 'Gynäkologe', img: "https://d1uhlocgth3qyq.cloudfront.net/obgyn-foreground___3n8U5.svg" },
+        { id: 2, text: 'Zahnarzt', img: "https://image.flaticon.com/icons/png/512/45/45245.png" },
+        { id: 3, text: 'Dermatologe', img: "https://d1uhlocgth3qyq.cloudfront.net/dermatology-foreground___2S85y.svg" },
+        { id: 4, text: 'Psychiater', img: "https://d1uhlocgth3qyq.cloudfront.net/primarycare-foreground___3vr-_.svg" },
+        { id: 5, text: 'Augenarzt', img: "https://d1uhlocgth3qyq.cloudfront.net/optometry-foreground___CpXD2.svg" },
+        { id: 6, text: 'HNO-Arzt', img: "https://d1uhlocgth3qyq.cloudfront.net/ent-foreground___20BiN.svg" },
+        { id: 7, text: 'Gastroenterologe', img: "https://d1uhlocgth3qyq.cloudfront.net/gastro-foreground___3xErH.svg" },
+      ]
+    }
+  })
+</script>
 
 
 
 
-
-    <div class="abschnitt">
-      <form>
-        <div class="form-row">
-          <div class="col">
-            <input type="text" class="form-control" placeholder="Symptom, Behandlung, Arzt">
-          </div>
-          <div class="col">
-            <input type="text" class="form-control" placeholder="Ort oder PLZ">
-          </div>
-          <div class="col">
-            <input type="text" class="form-control" value="13.04.2020">
-          </div>
-          <div class="col">
-            <input type="text" class="form-control" placeholder="Versicherung">
-          </div>
-          <a type="button" class="btn btn-info" href="/docs">Suche</a>
-        </div>
-      </form>
-
-    <div style="margin-top: 5rem;">
-      <h1>Beliebte Fachrichtungen</h1>
-      <div class="speciality card" href="/docs">
-        <img src="https://d1uhlocgth3qyq.cloudfront.net/primarycare-foreground___3vr-_.svg" class="card-img-top" alt="...">
-        <div class="card-body">
-
-          <a href="/docs" class="text-warning stretched-link">Hausarzt</a>
-        </div>
-      </div>
-      <div class="speciality card">
-        <img src="https://d1uhlocgth3qyq.cloudfront.net/obgyn-foreground___3n8U5.svg" class="card-img-top" alt="...">
-        <div class="card-body">
-            <a href="/docs" class="text-warning stretched-link">Gynäkologe</a>
-        </div>
-      </div>
-      <div class="speciality card">
-        <img src="https://image.flaticon.com/icons/png/512/45/45245.png" class="card-img-top" alt="...">
-        <div class="card-body">
-          <a href="/docs" class="text-warning stretched-link">Zahnarzt</a>
-        </div>
-      </div>
-      <div class="speciality card">
-        <img src="https://d1uhlocgth3qyq.cloudfront.net/dermatology-foreground___2S85y.svg" class="card-img-top" alt="...">
-        <div class="card-body">
-          <p class="card-text">Hautarzt</p>
-        </div>
-      </div>
-      <div class="speciality card">
-        <img src="data:image/png;base64,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" class="card-img-top" alt="...">
-        <div class="card-body">
-          <p class="card-text">Psychiater</p>
-        </div>
-      </div>
-      <div class="speciality card">
-        <img src="https://d1uhlocgth3qyq.cloudfront.net/optometry-foreground___CpXD2.svg" class="card-img-top" alt="...">
-        <div class="card-body">
-          <p class="card-text">Augenarzt</p>
-        </div>
-      </div>
-      <div class="speciality card">
-        <img src="https://d1uhlocgth3qyq.cloudfront.net/ent-foreground___20BiN.svg" class="card-img-top" alt="...">
-        <div class="card-body">
-          <p class="card-text">HNO-Arzt</p>
-        </div>
-      </div>
-      <div class="speciality card">
-        <img src="https://d1uhlocgth3qyq.cloudfront.net/gastro-foreground___3xErH.svg" class="card-img-top" alt="...">
-        <div class="card-body">
-          <p class="card-text">Gastro-
-              enterologe</p>
-        </div>
-      </div>
 
 
     <!-- Optional JavaScript -->
@@ -116,7 +85,5 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
   </body>
-</html>
-
 
 <% include partials/footer %>

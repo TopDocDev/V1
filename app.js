@@ -15,7 +15,7 @@ mongoose.connect("mongodb://localhost/Doc");
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
-// seedDB();
+seedDB();
 
 function makeSchedule(){
     for(start = moment("08:00", "HH:mm"); start < moment("12:00", "HH:mm"); start += 1200000){
@@ -25,8 +25,8 @@ function makeSchedule(){
         let text = ""
         text += "<div class='session session-1 track-5' style='grid-column: track-5; grid-row: time-" + s + " / time-" + end + ";'> \n <h3 class='session-title'><a href='#'>Sprechstunde</a></h3> \n <span class='session-time'>" + s + "-" + end + "</span> \n </div>"
         console.log(text);
-    }
-}
+    };
+};
 
 
 var sampleDb = new sequelize(
@@ -66,11 +66,18 @@ function getDb(req, res) {
             console.log(err);
             return;
         }
-        req.query("select * from schedule", function (err, myobject){
+        req.query("select top 10 * from tabelle1$", function (err, myobject){
             if(err){
                 console.log(err);
             } else {
-                res.render("landing", {data: myobject});
+
+                doc.find({}, function(err, allDocs){
+                    if(err){
+                        console.log(err);
+                    } else {
+                       res.render("docs/index3",{doc : JSON.stringify(allDocs), data: myobject});
+                    }
+                 });
                 //res.send(employees);
                 
 
@@ -84,22 +91,19 @@ function getDb(req, res) {
 
 
 //ROUTES
+app.get("/vue", function(req, res){
+    res.render("vue");
+})
 
 
 
 app.get("/", function(req, res){
-    getDb(req, res);
+    res.render("landing");
 });
 //INDEX
 app.get("/docs", function(req, res){
 
-    doc.find({}, function(err, allDocs){
-       if(err){
-           console.log(err);
-       } else {
-          res.render("docs/index",{doc : allDocs});
-       }
-    });
+    getDb(req, res);
 });
 
 //CREATE
@@ -158,7 +162,7 @@ app.get("/docs/:id/signup", function(req, res){
 // Arztbereich
 
 app.get("/arztbereich/signup", function(req, res){
-    res.render("arztbereich/signup");
+    res.render("signup");
 });
 
 app.get("/arztbereich/arzt", function(req, res){
