@@ -15,7 +15,7 @@ mongoose.connect("mongodb://localhost/Doc");
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
-seedDB();
+// seedDB();
 
 function makeSchedule(){
     for(start = moment("08:00", "HH:mm"); start < moment("12:00", "HH:mm"); start += 1200000){
@@ -25,8 +25,8 @@ function makeSchedule(){
         let text = ""
         text += "<div class='session session-1 track-5' style='grid-column: track-5; grid-row: time-" + s + " / time-" + end + ";'> \n <h3 class='session-title'><a href='#'>Sprechstunde</a></h3> \n <span class='session-time'>" + s + "-" + end + "</span> \n </div>"
         console.log(text);
-    };
-};
+    }
+}
 
 
 var sampleDb = new sequelize(
@@ -66,18 +66,11 @@ function getDb(req, res) {
             console.log(err);
             return;
         }
-        req.query("select top 10 * from tabelle1$", function (err, myobject){
+        req.query("select * from schedule", function (err, myobject){
             if(err){
                 console.log(err);
             } else {
-
-                doc.find({}, function(err, allDocs){
-                    if(err){
-                        console.log(err);
-                    } else {
-                       res.render("docs/index2",{doc : allDocs, data: myobject});
-                    }
-                 });
+                res.render("landing", {data: myobject});
                 //res.send(employees);
                 
 
@@ -95,12 +88,18 @@ function getDb(req, res) {
 
 
 app.get("/", function(req, res){
-    res.render("landing");
+    getDb(req, res);
 });
 //INDEX
 app.get("/docs", function(req, res){
 
-    getDb(req, res);
+    doc.find({}, function(err, allDocs){
+       if(err){
+           console.log(err);
+       } else {
+          res.render("docs/index",{doc : allDocs});
+       }
+    });
 });
 
 //CREATE
@@ -159,7 +158,7 @@ app.get("/docs/:id/signup", function(req, res){
 // Arztbereich
 
 app.get("/arztbereich/signup", function(req, res){
-    res.render("signup");
+    res.render("arztbereich/signup");
 });
 
 app.get("/arztbereich/arzt", function(req, res){
