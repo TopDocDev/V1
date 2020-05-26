@@ -134,7 +134,9 @@
                       </div>
                     </div>
                     <div class="col-1 termin-spalte"v-for="n in 5">
-                      <termin v-for="n in 4"></termin>
+                      
+                        <termin v-for="n in 4"></termin>
+                      
                     </div>
                   </div>
                 </div>
@@ -169,7 +171,7 @@ props: ['sterne'],
 template: '<span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star"></span></span>'
 })
 Vue.component('termin', {
-  template: '<div class="termin">mehr</div>'
+  template: '<a href="/buchung"><div class="termin">mehr</div></a>'
 })
 var app1 = new Vue({
   el: '#app-index',

@@ -47,43 +47,35 @@
 </div>
 </div>
 <script>
-  Vue.component('bild', {
-    props: ["bild"],
-    template: '<img :src="bild.img" class="card-img-top">'
+Vue.component('bild', {
+  props: ["bild"],
+  template: '<img :src="bild.img" class="card-img-top">'
 
-  })
-  Vue.component('todo-item', {
-    props: ['todo'],
-    template: '<a href="/docs" class="stretched-link card-text">{{todo.text}}</a>'
-  })
+})
+Vue.component('todo-item', {
+  props: ['todo'],
+  template: '<a href="/docs" class="stretched-link card-text">{{todo.text}}</a>'
+})
 
-  var app7 = new Vue({
-    el: '#app-landing',
-    data: {
-      groceryList: [
-        { id: 0, text: 'Hausarzt', img: "https://d1uhlocgth3qyq.cloudfront.net/primarycare-foreground___3vr-_.svg" },
-        { id: 1, text: 'Gynäkologe', img: "https://d1uhlocgth3qyq.cloudfront.net/obgyn-foreground___3n8U5.svg" },
-        { id: 2, text: 'Zahnarzt', img: "https://image.flaticon.com/icons/png/512/45/45245.png" },
-        { id: 3, text: 'Dermatologe', img: "https://d1uhlocgth3qyq.cloudfront.net/dermatology-foreground___2S85y.svg" },
-        { id: 4, text: 'Psychiater', img: "https://d1uhlocgth3qyq.cloudfront.net/primarycare-foreground___3vr-_.svg" },
-        { id: 5, text: 'Augenarzt', img: "https://d1uhlocgth3qyq.cloudfront.net/optometry-foreground___CpXD2.svg" },
-        { id: 6, text: 'HNO-Arzt', img: "https://d1uhlocgth3qyq.cloudfront.net/ent-foreground___20BiN.svg" },
-        { id: 7, text: 'Gastroenterologe', img: "https://d1uhlocgth3qyq.cloudfront.net/gastro-foreground___3xErH.svg" },
-      ]
-    }
-  })
+var app7 = new Vue({
+  el: '#app-landing',
+  data: {
+    groceryList: [
+      { id: 0, text: 'Hausarzt', img: "https://d1uhlocgth3qyq.cloudfront.net/primarycare-foreground___3vr-_.svg" },
+      { id: 1, text: 'Gynäkologe', img: "https://d1uhlocgth3qyq.cloudfront.net/obgyn-foreground___3n8U5.svg" },
+      { id: 2, text: 'Zahnarzt', img: "https://image.flaticon.com/icons/png/512/45/45245.png" },
+      { id: 3, text: 'Dermatologe', img: "https://d1uhlocgth3qyq.cloudfront.net/dermatology-foreground___2S85y.svg" },
+      { id: 4, text: 'Psychiater', img: "https://d1uhlocgth3qyq.cloudfront.net/primarycare-foreground___3vr-_.svg" },
+      { id: 5, text: 'Augenarzt', img: "https://d1uhlocgth3qyq.cloudfront.net/optometry-foreground___CpXD2.svg" },
+      { id: 6, text: 'HNO-Arzt', img: "https://d1uhlocgth3qyq.cloudfront.net/ent-foreground___20BiN.svg" },
+      { id: 7, text: 'Gastroenterologe', img: "https://d1uhlocgth3qyq.cloudfront.net/gastro-foreground___3xErH.svg" },
+    ]
+  }
+})
 </script>
-
-
-
-
-
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-  </body>
-
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 <% include partials/footer %>

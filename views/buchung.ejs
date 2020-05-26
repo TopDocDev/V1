@@ -1,0 +1,125 @@
+<% include partials/header %>
+<link rel="stylesheet" href="/stylesheets/buchung.css">
+<style type="text/css">
+	.login-form {
+		width: 540px;
+    	margin: 30px auto;
+	}
+    .login-form form {
+    	margin-bottom: 15px;
+        background: #f7f7f7;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        padding: 30px;
+    }
+    .login-form h2 {
+        margin: 0 0 15px;
+    }
+    .login-form .hint-text {
+		color: #777;
+		padding-bottom: 15px;
+		text-align: center;
+    }
+    .form-control, .btn {
+        min-height: 38px;
+        border-radius: 2px;
+    }
+    .login-btn {        
+        font-size: 15px;
+        font-weight: bold;
+    }
+    .or-separator {
+        padding-top: 20px;
+        margin: 20px 0 10px;
+        text-align: center;
+        border-top: 1px solid #ccc;
+    }
+    .or-separator i {
+        padding: 0 10px;
+        background: #f7f7f7;
+        position: relative;
+        top: -11px;
+        z-index: 1;
+    }
+    .social-btn .btn {
+        margin: 10px 0;
+        font-size: 15px;
+        text-align: left; 
+        line-height: 24px;       
+    }
+	.social-btn .btn i {
+		float: left;
+		margin: 4px 15px  0 5px;
+        min-width: 15px;
+	}
+	.input-group-addon .fa{
+		font-size: 18px;
+	}
+</style>
+
+<div id="con">
+<div class="login-form" style="display:inline-block; text-align: left;">
+    <form>
+        <h2 class="text-center">Termin buchen</h2>		
+        <div class="text-center social-btn">
+            <a href="#" class="btn btn-primary btn-block"><i class="fa fa-facebook"></i> Mit <b>Facebook</b> fortfahren</a>
+            <a href="#" class="btn btn-info btn-block"><i class="fa fa-twitter"></i> Mit <b>Twitter</b> fortfahren</a>
+			<a href="#" class="btn btn-danger btn-block"><i class="fa fa-google"></i> Mit <b>Google</b> fortfahren</a>
+        </div>
+		<div class="or-separator"><i>oder</i></div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputEmail4">Vorname</label>
+            <input type="text" class="form-control" id="inputEmail4" placeholder="Vorname">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputPassword4">Nachname</label>
+            <input type="text" class="form-control" id="inputPassword4" placeholder="Nachname">
+          </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-10">
+                <label for="strasse">Strasse</label>
+                <input type="text" class="form-control" id="strasse" placeholder="Strasse">
+            </div>
+            <div class="form-group col-md-2">
+                    <label for="hausnummer">Nr</label>
+                    <input type="text" class="form-control" id="hausnummer" placeholder="Nr">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="plz">PLZ</label>
+                <input type="text" class="form-control" id="plz" placeholder="PLZ">
+            </div>
+            <div class="form-group col-md-9">
+                    <label for="Wohnort">Wohnort</label>
+                    <input type="text" class="form-control" id="wohnort" placeholder="Wohnort">
+            </div>
+        </div>
+        <div class="form-group">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="gridCheck">
+            <label class="form-check-label" for="gridCheck">
+              Ich kenne diesen Arzt bereits
+            </label>
+          </div>
+        </div>
+        <button id="but" type="submit" class="btn btn-primary" onclick="replace()">Termin buchen</button>
+    </div>
+    
+</form>
+
+</div>
+
+<script type="text/JavaScript">
+function replace(){
+  var myAnchor = document.getElementById("but");
+  var myDiv = document.createElement("div");
+  myDiv.innerHTML = "Termin erfolgreich gebucht!";
+  myDiv.classList.add("alert")
+  myDiv.classList.add("alert-success")
+  myAnchor.parentNode.replaceChild(myDiv, myAnchor);
+}
+</script>
+
+<% include partials/footer %>

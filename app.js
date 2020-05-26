@@ -91,10 +91,6 @@ function getDb(req, res) {
 
 
 //ROUTES
-app.get("/vue", function(req, res){
-    res.render("vue");
-})
-
 
 
 app.get("/", function(req, res){
@@ -161,8 +157,8 @@ app.get("/docs/:id/signup", function(req, res){
 
 // Arztbereich
 
-app.get("/arztbereich/signup", function(req, res){
-    res.render("signup");
+app.get("/buchung", function(req, res){
+    res.render("buchung");
 });
 
 app.get("/arztbereich/arzt", function(req, res){
