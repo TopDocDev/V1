@@ -10,12 +10,15 @@ var express     = require("express"),
     dayjs       = require("dayjs")
     moment      = require('moment');
 
+
 moment().format();
 mongoose.connect("mongodb://localhost/Doc");
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
-seedDB();
+// seedDB();
+
+
 
 function makeSchedule(){
     for(start = moment("08:00", "HH:mm"); start < moment("12:00", "HH:mm"); start += 1200000){
@@ -66,16 +69,18 @@ function getDb(req, res) {
             console.log(err);
             return;
         }
-        req.query("select top 10 * from tabelle1$", function (err, myobject){
+        req.query("select top 4 TT_DATEIN from v21db.dbo.Tabelle1$", function (err, myobject){
             if(err){
                 console.log(err);
             } else {
-
                 doc.find({}, function(err, allDocs){
                     if(err){
                         console.log(err);
                     } else {
-                       res.render("docs/index3",{doc : JSON.stringify(allDocs), data: myobject});
+                       res.render("docs/index4",{
+                           doc : JSON.stringify(allDocs),
+                           data: myobject
+                        })
                     }
                  });
                 //res.send(employees);
