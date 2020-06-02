@@ -16,7 +16,7 @@ mongoose.connect("mongodb://localhost/Doc");
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
-// seedDB();
+ seedDB();
 
 
 
@@ -132,14 +132,12 @@ app.get("/docs/new", function(req, res){
 
 
 app.get("/docs/:id", function(req, res){
-
     doc.findById(req.params.id).populate("comments").exec(function(err, foundDoc){
         if(err){
             console.log(err);
         } else {
             console.log(foundDoc)
-
-            res.render("docs/show", {doc: foundDoc});
+            res.render("docs/show2", {doc: foundDoc});
         }
     });
 });

@@ -1,0 +1,67 @@
+<% include ../partials/header %>
+<div id="app-8" class="container">
+    <div class="row">
+        <div class="col-8">
+            <div class="col-3">
+                <img v-bind:src="doc.image" alt="">
+            </div>
+            <div class="col-9">
+
+            </div>
+
+        </div>
+        <div class="col-4">
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+let app8 = new Vue ({
+    el: "#app-8",
+    data() {
+        doc: [],
+        doc: JSON.parse(<%- doc %>)
+
+
+        
+
+    },
+    created(){
+        console.log(doc)
+    }
+})
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<% include ../partials/footer %>

@@ -83,7 +83,7 @@
               <div id="app-index">
                 <div class="kachel" v-for="doc in docs">
                   <div class="aufteilung row">
-                    <div class='col-7' onclick='location.href="/docs/<%= doc._id %>";' style='cursor: pointer;'>
+                    <a class='col-7' v-bind:href="'/docs/' + doc._id" style='cursor: pointer;'>
                       <div class="row">
                         <div class='photo'>
                           <picture>
@@ -103,7 +103,7 @@
                           <span style="padding-top: 5em"> {{doc.rating}} Bewertungen</span>
                         </div>
                       </div>
-                    </div>
+                    </a>
                     <div class="col-1 termin-spalte"v-for="n in 5">  
                         <div href="/buchung" v-for="item in time">                  
                         <termin v-bind:zeit="item.TT_DATEIN"></termin>
