@@ -33,17 +33,16 @@
 
 <script>
 
+
 let app8 = new Vue ({
     el: "#app-8",
-    data() {
+    data: {
         doc: [],
-        doc: JSON.parse(<%- doc %>)
-
-
-        
-
+        doc: JSON.parse(JSON.stringify(<%- doc %>))
     },
     created(){
+
+        
         console.log(doc)
     }
 })

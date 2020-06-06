@@ -12,7 +12,7 @@ var express     = require("express"),
 
 
 moment().format();
-mongoose.connect("mongodb://localhost/Doc");
+mongoose.connect("mongodb://localhost/Doc"); 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
