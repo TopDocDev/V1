@@ -16,21 +16,7 @@ mongoose.connect("mongodb://localhost/Doc");
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
- seedDB();
-
-
-
-function makeSchedule(){
-    for(start = moment("08:00", "HH:mm"); start < moment("12:00", "HH:mm"); start += 1200000){
-        let s = moment(start).format("HHmm")
-        let end = moment(start).add(1200000).format("HHmm");
-        // let show =  s + "-" + end;
-        let text = ""
-        text += "<div class='session session-1 track-5' style='grid-column: track-5; grid-row: time-" + s + " / time-" + end + ";'> \n <h3 class='session-title'><a href='#'>Sprechstunde</a></h3> \n <span class='session-time'>" + s + "-" + end + "</span> \n </div>"
-        console.log(text);
-    };
-};
-
+//seedDB();
 
 var sampleDb = new sequelize(
     'SampleDb', 'louis', 'password', {
@@ -45,8 +31,6 @@ var User = sampleDb.define("user", {
     lastName: sequelize.STRING,
 
 });
-
-
 var dbConfig = {  
     server: 'localhost', 
     database: "v21db",
@@ -69,7 +53,7 @@ function getDb(req, res) {
             console.log(err);
             return;
         }
-        req.query("select top 4 TT_DATEIN from v21db.dbo.Tabelle1$", function (err, myobject){
+        req.query("select top 6 TT_NUMMER, TT_DATEIN, TT_DATAUS from v21db.dbo.Tabelle1$ order by TT_DATAUS desc", function (err, myobject){
             if(err){
                 console.log(err);
             } else {
@@ -77,20 +61,28 @@ function getDb(req, res) {
                     if(err){
                         console.log(err);
                     } else {
-                       res.render("docs/index4",{
-                           doc : JSON.stringify(allDocs),
-                           data: myobject
-                        })
+                       let arr = JSON.parse(JSON.stringify(myobject.recordset))
+                       xyz = [];
+                       for(i=0;i< arr.length; i++){
+                            let formated = moment(arr[i].TT_DATAUS).format("HH:mm");
+                            xyz.push(formated);
+                        }
+                        console.log(xyz)                       
+                        res.render("docs/index4",{
+                            doc : JSON.stringify(allDocs),
+                            data: JSON.stringify(xyz)
+                            })
                     }
                  });
                 //res.send(employees);
-                
-
-
             }
             conn.close();
         });
     });
+}
+
+function loadIndex(){
+    
 }
 
 
@@ -136,8 +128,7 @@ app.get("/docs/:id", function(req, res){
         if(err){
             console.log(err);
         } else {
-            console.log(foundDoc)
-            res.render("docs/show2", {doc: foundDoc});
+            res.render("docs/show2", {doc: JSON.stringify(foundDoc)});
         }
     });
 });
