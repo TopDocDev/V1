@@ -24,7 +24,6 @@
     font-size: 15px;
     font-family: sharp-sans-semibold, Arial, sans-serif;
 }
-
 sharp-sans-semibold, Arial, sans-serif
 .wochentag {
     font: 15px sharp-sans-semibold, Arial, sans-serif;
@@ -62,6 +61,10 @@ sharp-sans-semibold, Arial, sans-serif
 }
 .aufteilung {
     height: 152px;
+}
+.doc-info{
+    cursor: pointer;
+    color: black;
 }
 .photo {
     height: 88px;

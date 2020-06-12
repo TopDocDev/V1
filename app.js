@@ -53,7 +53,7 @@ function getDb(req, res) {
             console.log(err);
             return;
         }
-        req.query("select top 6 TT_NUMMER, TT_DATEIN, TT_DATAUS from v21db.dbo.Tabelle1$ order by TT_DATAUS desc", function (err, myobject){
+        req.query("SELECT * from v21db.dbo.Tabelle1$ where TT_DATAUS BETWEEN '06/08/2020' AND '06/09/2020'", function (err, myobject){
             if(err){
                 console.log(err);
             } else {

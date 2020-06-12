@@ -2,12 +2,26 @@
 <div id="app-8" class="container">
     <div class="row">
         <div class="col-8">
-            <div class="col-3">
-                <img v-bind:src="doc.image" alt="">
+            <div class="row element">
+                <div class="col-3 circular--landscape">
+                    <img v-bind:src="doc.image" alt="">
+                </div>
+                <div class="col-9 element-top" stye="border: 1px solid black">
+                    <h1>{{doc.name}}</h1>
+                    <h6>{{doc.spec}}</h6>
+                </div>
             </div>
-            <div class="col-9">
-
+            <div class="element row">
+                <div class="col-3">
+                    <h3>Bewertung:</h3>
+                    <h1>{{doc.star}}</h1>
+                    <Sterne></Sterne>
+                </div>
+                <div class="col-9">
+                    <p>{{doc.description}}</p>
+                </div>
             </div>
+            
 
         </div>
         <div class="col-4">
@@ -17,33 +31,44 @@
     </div>
 
 </div>
+<style scoped>
+    .circular--landscape {
+    display: inline-block;
+    position: relative;
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 50%;
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    .circular--landscape img {
+    width: auto;
+    height: 100%;
+    margin-left: -20px;
+    }
+    img{
+        width: 100%
+    }
+    .element{
+        border-top: 2px solid rgb(243, 243, 244);
+        padding: 20px;
+    }
+    .element-top{
+        padding: 50px;
+    }
+</style>
 <script>
-
-
+Vue.component('sterne', {
+props: ['sterne'],
+template: '<span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star"></span></span>'
+})
 let app8 = new Vue ({
     el: "#app-8",
     data: {
         doc: [],
-        doc: JSON.parse(JSON.stringify(<%- doc %>))
+        doc: <%- doc %>
     },
     created(){
-
-        
-        console.log(doc)
     }
 })
 </script>

@@ -83,9 +83,9 @@
               <div id="app-index">
                 <div class="kachel" v-for="doc in docs">
                   <div class="aufteilung row">
-                    <a class='col-7' v-bind:href="'/docs/' + doc._id" style='cursor: pointer;'>
+                    <a class='col-7 doc-info' v-bind:href="'/docs/' + doc._id">
                       <div class="row">
-                        <div class='photo'>
+                        <div class='photo circular--landscape'>
                           <picture>
                             <photo
                             v-bind:src="doc.image"
@@ -95,7 +95,6 @@
                         <div class='text'>
                           <h3>{{doc.name}}</h3>
                           <span>{{doc.spec}}</span>
-                          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
                           <div class="rating">
                             <sterne></sterne>
                             <span>({{doc.star}})</span>
@@ -105,9 +104,9 @@
                       </div>
                     </a>
                     <div class="col-1 termin-spalte"v-for="n in 5">  
-                        <div href="/buchung" v-for="item in time">                  
-                        <termin v-bind:zeit="item.TT_DATEIN"></termin>
-                        </div>  
+                        <a href="/buchung" v-for="item in time.slice(0,4)">                  
+                        <termin v-bind:zeit="item"></termin>
+                        </a>  
                     </div>
                   </div>
                 </div>
@@ -171,14 +170,20 @@ Vue.component('termin', {
 })
 
 
-
 var app1 = new Vue({
   el: '#app-index',
-  data: {
-    docs: JSON.parse('<%- doc %>'),
-    newArr: [],
-    time: <%- JSON.stringify(data.recordset) %>
+  data() {
+    return {
+      docs: JSON.parse('<%- doc %>'),
+      newArr: [],
+      time: <%- data %>
+    }
+
   },
+  created(){
+
+  }
+
    /*
   computed: {
     newArr: function(){
@@ -205,8 +210,23 @@ var app1 = new Vue({
   }
       */
 })
-
-
 </script>
+<style scoped>
+.circular--landscape {
+  display: inline-block;
+  position: relative;
+  width: 85px;
+  height: 85px;
+  overflow: hidden;
+  border-radius: 50%;
+  }
+
+  .circular--landscape img {
+  width: auto;
+  height: 100%;
+  margin-left: 0px;
+  }
+
+</style>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7k5XIGkkgwdc7rcCSH10ZoGl-U3DlKiQ&callback=initMap&libraries=places " async defer></script>
 

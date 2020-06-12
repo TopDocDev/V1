@@ -1,0 +1,40 @@
+var mongoose = require("mongoose");
+
+var newDocSchema = new mongoose.Schema({
+   name: String,
+   image: String,
+   description: String,
+   spec: String,
+   star: String,
+   rating: String,
+   comments: [
+      {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: "Comment"
+      }
+   ],
+   Agenda: [
+       {day1: [
+        {TT_DATEIN: "08:15",
+        TT_DATAUS: "08:30",
+        TT_DAUER: "15"},
+        {TT_DATEIN: "08:15",
+        TT_DATAUS: "08:30",
+        TT_DAUER: "15"},
+       ],
+       day2: [
+        {TT_DATEIN: "08:15",
+        TT_DATAUS: "08:30",
+        TT_DAUER: "15"},
+        {TT_DATEIN: "08:15",
+        TT_DATAUS: "08:30",
+        TT_DAUER: "15"},
+       ]
+    },
+       2.1.2019:
+
+
+   ]
+});
+
+module.exports = mongoose.model("newDoc", docSchema);
