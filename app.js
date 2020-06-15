@@ -31,7 +31,7 @@ var User = sampleDb.define("user", {
     lastName: sequelize.STRING,
 
 });
-var dbConfig = {  
+let dbConfig = {  
     server: 'localhost', 
     database: "v21db",
     authentication: {
@@ -53,7 +53,7 @@ function getDb(req, res) {
             console.log(err);
             return;
         }
-        req.query("SELECT * from v21db.dbo.Tabelle1$ where TT_DATAUS BETWEEN '06/08/2020' AND '06/09/2020'", function (err, myobject){
+        req.query("SELECT TT_NUMMER, TT_DATAUS, DATEADD(MINUTE, TT_DAUER, TT_DATAUS) AS TT_DATEIN FROM v21db.DBO.Tabelle1$ where TT_DATAUS BETWEEN '06/08/2020' AND '06/09/2020'", function (err, myobject){
             if(err){
                 console.log(err);
             } else {
@@ -62,9 +62,10 @@ function getDb(req, res) {
                         console.log(err);
                     } else {
                        let arr = JSON.parse(JSON.stringify(myobject.recordset))
+                       console.log(arr)
                        xyz = [];
                        for(i=0;i< arr.length; i++){
-                            let formated = moment(arr[i].TT_DATAUS).format("HH:mm");
+                            let formated = moment(arr[i].TT_DATAUS).format("yyyy-mm-dd HH:mm");
                             xyz.push(formated);
                         }
                         console.log(xyz)                       
@@ -80,12 +81,6 @@ function getDb(req, res) {
         });
     });
 }
-
-function loadIndex(){
-    
-}
-
-
 
 //ROUTES
 
@@ -154,6 +149,10 @@ app.get("/docs/:id/signup", function(req, res){
 app.get("/buchung", function(req, res){
     res.render("buchung");
 });
+
+app.get("/calendar", function(req, res){
+    res.render("calendar")
+})
 
 app.get("/arztbereich/arzt", function(req, res){
     res.render("arztbereich/arzt");

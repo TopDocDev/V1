@@ -1,12 +1,20 @@
 {
   "name": "v1",
   "version": "1.0.0",
+  "private": true,
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.4.0",
+    "@vue/cli-plugin-eslint": "~4.4.0",
+    "@vue/cli-service": "~4.4.0"
+  },
   "description": "TopDoc v5",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Louis Aebischer",
+  "author": {
+    "name": "Louis Aebischer"
+  },
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.14.1",
@@ -20,5 +28,6 @@
     "sequelize": "^5.21.2",
     "tedious": "^6.6.2"
   },
-  "devDependencies": {}
+  "readme": "ERROR: No README data found!",
+  "_id": "v1@1.0.0"
 }

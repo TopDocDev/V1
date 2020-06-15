@@ -1,0 +1,116 @@
+<% include partials/header %>
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+<v-app>
+  <div id="app">
+    <v-app>
+      <v-main>
+        <v-container>Hello world</v-container>
+      </v-main>
+    </v-app>
+  </div>
+</v-app>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+    })
+  </script>
+</body>
+</html>
+
+<!--
+<div id="app">
+<calendar>
+</div>
+
+<script type="module">
+Vue.component("calendar", {
+    template: `
+<div>
+<v-sheet
+    tile
+    height="54"
+    color="grey lighten-3"
+    class="d-flex"
+>
+    <v-btn
+    icon
+    class="ma-2"
+    @click="$refs.calendar.prev()"
+    >
+    <v-icon>mdi-chevron-left</v-icon>
+    </v-btn>
+    <v-select
+    v-model="type"
+    :items="types"
+    dense
+    outlined
+    hide-details
+    class="ma-2"
+    label="type"
+    ></v-select>
+    <v-select
+    v-model="mode"
+    :items="modes"
+    dense
+    outlined
+    hide-details
+    label="event-overlap-mode"
+    class="ma-2"
+    ></v-select>
+    <v-select
+    v-model="weekday"
+    :items="weekdays"
+    dense
+    outlined
+    hide-details
+    label="weekdays"
+    class="ma-2"
+    ></v-select>
+    <v-spacer></v-spacer>
+    <v-btn
+    icon
+    class="ma-2"
+    @click="$refs.calendar.next()"
+    >
+    <v-icon>mdi-chevron-right</v-icon>
+    </v-btn>
+</v-sheet>
+<v-sheet height="600">
+    <v-calendar
+    ref="calendar"
+    v-model="value"
+    :weekdays="weekday"
+    :type="type"
+    :events="events"
+    :event-overlap-mode="mode"
+    :event-overlap-threshold="30"
+    :event-color="getEventColor"
+    @change="getEvents"
+    ></v-calendar>
+</v-sheet>
+</div>
+    `
+})
+
+let app = new Vue({
+    el: "#app"
+})
+
+
+</script>
+
+
+
+
+<% include partials/footer %>-->
