@@ -1,3 +1,5 @@
+const { format } = require("path");
+
 var express     = require("express"),
     app         = express(),
     bodyParser  = require("body-parser"),
@@ -11,7 +13,6 @@ var express     = require("express"),
     moment      = require('moment');
 
 
-moment().format();
 mongoose.connect("mongodb://localhost/Doc"); 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
@@ -62,17 +63,59 @@ function getDb(req, res) {
                         console.log(err);
                     } else {
                        let arr = JSON.parse(JSON.stringify(myobject.recordset))
-                       console.log(arr)
+                       // console.log(arr)
                        xyz = [];
                        for(i=0;i< arr.length; i++){
-                            let formated = moment(arr[i].TT_DATAUS).format("yyyy-mm-dd HH:mm");
+                            let formated = moment(arr[i].TT_DATAUS).format("YYYY-MM-DD HH:mm");
                             xyz.push(formated);
                         }
-                        console.log(xyz)                       
-                        res.render("docs/index4",{
+                        // console.log(xyz)                       
+                        res.render("docs/index",{
                             doc : JSON.stringify(allDocs),
                             data: JSON.stringify(xyz)
                             })
+                    }
+                 });
+                //res.send(employees);
+            }
+            conn.close();
+        });
+    });
+}
+
+function getCalendar(req, res) {
+    var conn = new sql.ConnectionPool(dbConfig);  // create sql instance
+    var req = new sql.Request(conn);
+    conn.connect(function (err){
+        if (err) {
+            console.log(err);
+            return;
+        }
+        req.query("SELECT TT_PNAME as name, TT_DATAUS as 'end', DATEADD(MINUTE, -TT_DAUER, TT_DATAUS) AS start, 'green' as color from v21db.dbo.Tabelle1$ where TT_DATAUS > '01/01/2020' and TT_PNR is not null order by TT_DATAUS", function (err, myobject){
+            if(err){
+                console.log(err);
+            } else {
+                doc.find({}, function(err, allDocs){
+                    if(err){
+                        console.log(err);
+                    } else {
+                        let arr = JSON.parse(JSON.stringify(myobject.recordset));
+                        newArr = []
+                        arr.forEach(e => {
+                            let obj = {
+                                name: e.name,
+                                start: moment(e.start).format("YYYY-MM-DD HH:mm"),
+                                end: moment(e.end).format("YYYY-MM-DD HH:mm"),
+                                color: "yellow"
+                            }
+                            newArr.push(obj)                         
+                        });
+                        // console.log(newArr)   
+                        res.render("calendar",{
+                            doc : JSON.stringify(allDocs),
+                            data: JSON.stringify(newArr)
+                            })
+                        
                     }
                  });
                 //res.send(employees);
@@ -90,7 +133,6 @@ app.get("/", function(req, res){
 });
 //INDEX
 app.get("/docs", function(req, res){
-
     getDb(req, res);
 });
 
@@ -123,7 +165,7 @@ app.get("/docs/:id", function(req, res){
         if(err){
             console.log(err);
         } else {
-            res.render("docs/show2", {doc: JSON.stringify(foundDoc)});
+            res.render("docs/show", {doc: JSON.stringify(foundDoc)});
         }
     });
 });
@@ -146,12 +188,12 @@ app.get("/docs/:id/signup", function(req, res){
 
 // Arztbereich
 
-app.get("/buchung", function(req, res){
-    res.render("buchung");
+app.get("/docs/buchung", function(req, res){
+    res.render("docs/buchung");
 });
 
 app.get("/calendar", function(req, res){
-    res.render("calendar")
+    getCalendar(req,res)
 })
 
 app.get("/arztbereich/arzt", function(req, res){
