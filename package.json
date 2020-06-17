@@ -10,6 +10,7 @@
   "description": "TopDoc v5",
   "main": "app.js",
   "scripts": {
+    "dev": "npx nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": {

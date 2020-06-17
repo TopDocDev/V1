@@ -1,31 +1,231 @@
 <% include ../partials/header %>
- <div class="container">
-     <header class="jumbotron">
-         <div class="container">
-             <h1>Welcome</h1>
-             <p>Book your appointment online!</p>
-             <p>
-                <a class="btn btn-primary btn-large" href="/docs/new">Add New Doc</a>
-             </p>
-         </div>
-     </header>
-     
-     <div class="row text-center" style="display:flex; flex-wrap: wrap;">
-        <% doc.forEach(function(doc){ %>
-            <div class="col-md-3 col-sm-6">
-                <div class="thumbnail">
-                   <img src="<%= doc.image %>">
-                   <div class="caption">
-                       <h4><%= doc.name %></h4>
-                       <h4><b><%= doc.spec %></b></h4>
-                   </div>
-                   <p>
-                       <a href="/docs/<%= doc._id %>" class="btn btn-primary">view profile</a>
-                   </p>
-                </div>
-            </div>
-        <% }); %>
-    </div>
-</div>
 
-<% include ../partials/footer %>
+<div class="container-fluid position-relative">
+  <div class="row position-relative">
+    <div class="col-8 Liste">
+      <section class="innereListe">
+        <div class="filter">                     
+          <form>
+            <div class="form-row suche-index">
+              <div class="col">
+                <input type="text" class="form-control" placeholder="facharzt" id="facharzt">
+              </div>
+              <div class="col">
+                <input id="autocomplete" type="text" class="form-control" placeholder="ort">
+              </div>
+              <div class="col">
+                <input type="text" class="form-control" id="date">
+              </div>
+              <a type="button" class="btn btn-info" onclick=initMap()>Suche</a>
+            </div>
+          </form>
+            <script>
+                                       
+                var map, places, infoWindow;
+                var autocomplete;
+                var countryRestrict = {"country" : "ch"}
+
+                function initMap() {
+                map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 7,
+                center: {lat: 47, lng: 8}
+                });
+
+                // Create the autocomplete object and associate it with the UI input control.
+                // Restrict the search to the default country, and to place type "cities".
+                autocomplete = new google.maps.places.Autocomplete(
+                    /** @type {!HTMLInputElement} */ (
+                        document.getElementById('autocomplete')), {
+                        types: ['(cities)'],
+                        componentRestrictions: countryRestrict
+                    });
+                places = new google.maps.places.PlacesService(map);
+
+                autocomplete.addListener('place_changed', onPlaceChanged);
+                }
+
+                // When the user selects a city, get the place details for the city and
+                // zoom the map in on the city.
+                function onPlaceChanged() {
+                var place = autocomplete.getPlace();
+                if (place.geometry) {
+                    map.panTo(place.geometry.location);
+                    map.setZoom(15);
+                    search();
+                } else {
+                    document.getElementById('autocomplete').placeholder = 'Enter a city';
+                }
+                }
+                
+
+            </script>
+            <script>
+                var field = document.getElementById("date");
+                var date = new Date();
+                field.value = date.getDate().toString().padStart(2, 0) + '.' + (date.getMonth() + 1).toString().padStart(2, 0) + '.' + date.getFullYear().toString();
+            </script>
+
+                <div id="app-filter">  
+                    <div class="row">
+                        <div class="col-7"></div>
+                        <div class="col-5">
+                            <div class="row">
+                            <div v-for="item in arr">   
+                                <tag v-bind:tag="item.tag" v-bind:date="item.date"></tag>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+              <div id="app-index">
+                <div class="kachel" v-for="doc in docs">
+                  <div class="aufteilung row">
+                    <a class='col-7 doc-info' v-bind:href="'/docs/' + doc._id">
+                      <div class="row">
+                        <div class='photo circular--landscape'>
+                          <picture>
+                            <photo
+                            v-bind:src="doc.image"
+                            ></photo>
+                          </picture>
+                        </div>
+                        <div class='text'>
+                          <h3>{{doc.name}}</h3>
+                          <span>{{doc.spec}}</span>
+                          <div class="rating">
+                            <sterne></sterne>
+                            <span>({{doc.star}})</span>
+                          </div>
+                          <span style="padding-top: 5em"> {{doc.rating}} Bewertungen</span>
+                        </div>
+                      </div>
+                    </a>
+                    <div class="col-1 termin-spalte"v-for="n in 5">  
+                        <a href="/buchung" v-for="item in time.slice(0,4)">                  
+                        <termin v-bind:zeit="item"></termin>
+                        </a>  
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+          </section>
+        <div class="karte-aussen col-4">
+          <div id="karte-innen">
+            <div id="map"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+<script>
+    
+// app-filter
+Vue.component('tag', {
+    props: ["tag", "date"],
+    template: '<div class="col-1 tag"><div class="Wochentag">{{tag}}</div><div class="Datum"><span>{{date}}</span></div></div>',
+})
+var dayStart = moment();
+var arr = [];
+for(i=-1; i<4; i++){
+    let d = dayStart.add(1, "day");
+    let tag = d.format("dd");
+    let date = d.format("DD.MM");
+    arr.push({
+        tag: tag,
+        date: date
+    })
+}
+
+var app2 = new Vue({
+  el: '#app-filter',
+  data: {
+      arr: arr
+  }
+})
+
+// app-index
+Vue.component('kachel', {
+  template: "<div class='kachel'></div>",
+})  
+
+Vue.component('photo', {
+  props: ['photo'],
+  template: "<img style='height: 86px; width: 86px;'>",
+  message: "hello"
+})
+
+Vue.component('sterne', {
+props: ['sterne'],
+template: '<span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star"></span></span>'
+})
+Vue.component('termin', {
+  template: '<div class="termin">{{zeit}}</div>',
+  props: ['zeit']
+})
+
+
+var app1 = new Vue({
+  el: '#app-index',
+  data() {
+    return {
+      docs: JSON.parse('<%- doc %>'),
+      newArr: [],
+      time: <%- data %>
+    }
+
+  },
+  mounted(){
+    console.log(this.time)
+
+  }
+
+   /*
+  computed: {
+    newArr: function(){
+      return moment(this.time).format("HH:mm")
+    }
+   function getFields(input, field) {
+        var output = [];
+        for (var i=0; i < input.length ; ++i)
+            output.push(input[i][field]);
+        return output;
+    }
+    var numbers2 = getFields(this.time, "TT_DATEIN"); 
+
+
+    let newArr = []
+    for(i=0;i<this.time.length;i++){
+        let mom = moment(this.time[i])
+        r.push(mom.format("HH:mm"))	
+    }
+    console.log(newArr);
+    console.log(this.docs)
+    return r
+
+  }
+      */
+})
+</script>
+<style scoped>
+.circular--landscape {
+  display: inline-block;
+  position: relative;
+  width: 85px;
+  height: 85px;
+  overflow: hidden;
+  border-radius: 50%;
+  }
+
+  .circular--landscape img {
+  width: auto;
+  height: 100%;
+  margin-left: 0px;
+  }
+
+</style>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7k5XIGkkgwdc7rcCSH10ZoGl-U3DlKiQ&callback=initMap&libraries=places " async defer></script>
+
