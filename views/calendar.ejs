@@ -1,5 +1,11 @@
 <% include partials/header %>
-
+<!-- 
+<div v-for="item in events">
+<span>{{item.start}}</span>
+<span>{{item.end}}</span>
+<span>{{item.color}}</span>
+</div>
+-->
 <div id="app">
   <v-app>
   <calendar>
@@ -11,11 +17,6 @@
 Vue.component("calendar", {
   template: `
  <v-row class="fill-height">
- <div v-for="item in events">
-<span>{{item.start}}</span>
-<span>{{item.end}}</span>
-<span>{{item.color}}</span>
-</div>
     <v-col>
       <v-sheet height="64">
         <v-toolbar flat color="white">
@@ -105,6 +106,8 @@ Vue.component("calendar", {
             </v-toolbar>
             <v-card-text>
               <span v-html="selectedEvent.details"></span>
+              <span v-html="selectedEvent.start"></span>
+              <span v-html="selectedEvent.end"></span>
             </v-card-text>
             <v-card-actions>
               <v-btn
@@ -145,28 +148,31 @@ Vue.component("calendar", {
         let oldE = <%- data %>
         let newE = []
         oldE.forEach(getIntervals);
-        function getIntervals(e, index, array) {
+        function getIntervals(element, index, array) {
           if (index === 0) {
             return
           } else if (index > oldE.length - 2){
             return
           } else {
-            let b = moment(oldE[index + 1].start)
-            let a = moment(oldE[index].end); // another date
-            let duration = moment.duration(a.diff(b));
+            let emptyStart = moment(oldE[index].end)
+            let emptyEnd  = moment(oldE[index + 1].start)
+            let duration = moment.duration(emptyEnd.diff(emptyStart));
             let minutes = duration.asMinutes()
             let obj = {
               name: "frei",
-              start: a._i,
-              end: b._i,
-              color: "green"
+              start: emptyStart._i,
+              end: emptyEnd._i,
+              color: "green",
+              duration: minutes,
             }
-            if(minutes > 0){
+            if (minutes > 0){
+              console.log(obj)
               newE.push(obj)
               return
             } else {
               return
             }
+
           }
         }
         let combined = oldE.concat(newE)
