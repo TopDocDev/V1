@@ -148,6 +148,7 @@ Vue.component("calendar", {
         let oldE = <%- data %>
         let newE = []
         oldE.forEach(getIntervals);
+        // gibt Array mit offenen Zeitfenstern zurück
         function getIntervals(element, index, array) {
           if (index === 0) {
             return
@@ -160,24 +161,52 @@ Vue.component("calendar", {
             let minutes = duration.asMinutes()
             let obj = {
               name: "frei",
-              start: emptyStart._i,
-              end: emptyEnd._i,
+              start: emptyStart.format("YYYY-MM-DD HH:mm"),
+              end: emptyEnd.format("YYYY-MM-DD HH:mm"),
               color: "green",
               duration: minutes,
+              open: true
             }
             if (minutes > 0){
-              console.log(obj)
+              //console.log(obj)
               newE.push(obj)
-              return
-            } else {
-              return
             }
-
           }
         }
         let combined = oldE.concat(newE)
-        console.log(combined)
-        this.events = combined
+        let sorted = combined.sort(function(a, b){
+          if(a.start < b.start) { return -1; }
+          if(a.start > b.start) { return 1; }
+          return 0;
+        })
+        sorted.forEach(cut)
+        // schneidet Zeitfenster-Array auf Öffnungszeiten
+        function cut(element, index, array){
+          //console.log(moment(element.start))
+          let dayStart = moment(element.start).startOf("day").toString()
+          let open = moment(dayStart).add(8, "hours").toString()
+          let end = moment(element.end)
+          let duration = moment.duration(end.diff(dayStart))
+          let hours = duration.asHours()
+          //console.log(hours)
+          if(hours > 17 && index < array.length - 1){
+            element.end = moment(dayStart).add(17, "hours").format("YYYY-MM-DD HH:mm")            
+            //console.log(element.end)
+            let obj = {
+              name: "1. Termin",
+              start: moment(open).add(1, "day").format("YYYY-MM-DD HH:mm"),
+              end: array[index+1].start,
+              color: "green"
+            }
+            //console.log(obj)
+            sorted.push(obj)
+          }
+          else {
+            return
+          }
+        }
+
+        this.events = sorted
         return this.events
       },
       viewDay ({ date }) {
