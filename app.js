@@ -91,7 +91,11 @@ function getCalendar(req, res) {
             console.log(err);
             return;
         }
-        req.query("SELECT TT_PNAME as name, TT_DATAUS as 'end', DATEADD(MINUTE, -TT_DAUER, TT_DATAUS) AS start, 'green' as color from v21db.dbo.Tabelle1$ where TT_DATAUS > '01/01/2020' and TT_PNR is not null order by TT_DATAUS", function (err, myobject){
+        let a = {
+            number: 10000,
+            date: "06/06/2020",
+        }
+        req.query("SELECT TOP "+ a.number + "TT_PNAME as name, TT_DATAUS as 'end', DATEADD(MINUTE, -TT_DAUER, TT_DATAUS) AS start, 'green' as color from v21db.dbo.Tabelle1$ where TT_DATAUS > '" + a.date +"' and TT_PNR is not null order by TT_DATAUS", function (err, myobject){
             if(err){
                 console.log(err);
             } else {
@@ -100,16 +104,12 @@ function getCalendar(req, res) {
                         console.log(err);
                     } else {
                         let arr = JSON.parse(JSON.stringify(myobject.recordset));
-                        newArr = []
-                        arr.forEach(e => {
-                            let obj = {
+                        let newArr = arr.map(e => ({
                                 name: e.name,
                                 start: moment(e.start).format("YYYY-MM-DD HH:mm"),
                                 end: moment(e.end).format("YYYY-MM-DD HH:mm"),
-                                color: "yellow"
-                            }
-                            newArr.push(obj)                         
-                        });
+                                color: "yellow"                      
+                        }))
                         // console.log(newArr)   
                         res.render("calendar",{
                             doc : JSON.stringify(allDocs),
