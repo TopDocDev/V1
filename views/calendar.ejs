@@ -154,7 +154,6 @@ Vue.component("calendar", {
             let emptyEnd  = moment(array[index+1].start)
             let duration = moment.duration(emptyEnd.diff(emptyStart));
             let minutes = duration.asMinutes()
-            // let emptyStartCorrect = moment(array[index-1].end).add(minutes, "minutes")
             let obj = {
               name: "frei",
               start: emptyStart.format("YYYY-MM-DD HH:mm"),
@@ -181,16 +180,17 @@ Vue.component("calendar", {
           if (x > y) {return 1;}
           return 0;
         })
-        for (let i = 0; i < newE.length; i++) {
-          const element = newE[i];
-          //console.log(element.prevStart)
-          
-        }
-        //console.log(newE)
+        newE.sort(function(a, b){
+          var x = a.end;
+          var y = b.end;
+          if (x < y) {return -1;}
+          if (x > y) {return 1;}
+          return 0;
+        })
         
 
         // schneidet Zeitfenster-Array auf Öffnungszeiten
-        let cut = newE.flatMap(function (element, index, array, n){
+        let cut = combined.flatMap(function (element, index, array, n){
           //console.log(moment(element.start))
           let dayStart = moment(element.start).startOf("day").toString()
           let open = moment(dayStart).add(8, "hours").toString()
@@ -202,41 +202,56 @@ Vue.component("calendar", {
             return element
           }
           if(solution === 0 && index < array.length - 2){
-            //let prevStart = element.prevStart
-            console.log(array[index+1])
             let evening = {
               name: "eve",
               start: element.start,
               end: moment(dayStart).add(17, "hours").format("YYYY-MM-DD HH:mm"),
               color: "red"
-            }            
+            }       
+            evening["duration"] = moment.duration(moment(evening.end).diff(moment(evening.start))).asMinutes()     
             let morning = {
               name: "1. Termin",
               start: moment(open).add(24, "hours").format("YYYY-MM-DD HH:mm"),
-              end: array[index+1].prevStart,
+              end: array[index+1].start,
               color: "green"
             }
-            return [morning,evening]
+            if(evening.duration > 5){
+              return [morning,evening]
+            }
+            else {
+              return morning
+            }
+            
           }
           if(solution > 0 && index < array.length - 1){
-            let array = []
+            let arr = []
             let evening = {
               name: "eve",
               start: element.start,
               end: moment(dayStart).add(17, "hours").format("YYYY-MM-DD HH:mm"),
-              color: "red"
-            }            
-            array.push(evening)
-            for(n = 0; n < (solution-1); n++){
-                let morning = {
+              color: "red",
+            }
+            evening["duration"] = moment.duration(moment(evening.end).diff(moment(evening.start))).asMinutes()            
+            if(evening.duration > 5){
+              arr.push(evening)
+            }
+            for(n = 0; n < solution; n++){
+                let ganz = {
                     name: "ganz",
-                    start: moment(open).add([n] * 24, "hours").format("YYYY-MM-DD HH:mm"),
-                    end: moment(dayStart).add([n] * 24 + 17, "hours").format("YYYY-MM-DD HH:mm"),
+                    start: moment(open).add([n+1] * 24, "hours").format("YYYY-MM-DD HH:mm"),
+                    end: moment(dayStart).add([n+1] * 24 + 17, "hours").format("YYYY-MM-DD HH:mm"),
                     color: "orange"
                 }
-                array.push(morning)
+                arr.push(ganz)
             }
-            return array
+            let morning = {
+              name: "Schwanz",
+              start: moment(array[index+1].start).startOf("day").add(8, "hours").format("YYYY-MM-DD HH:mm"),
+              end: array[index+1].start,
+              color: "pink"
+            }
+            arr.push(morning)
+            return arr
 
           }
           else {
@@ -246,7 +261,7 @@ Vue.component("calendar", {
         
 
 
-        this.events = cut.concat(oldE)
+        this.events = cut
         return this.events
       },
       viewDay ({ date }) {
