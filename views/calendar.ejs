@@ -70,9 +70,9 @@ Vue.component("calendar", {
           :events="events"
           :event-color="getEventColor"
           :type="type"
-          :first-interval= 8 
+          :first-interval= 7 
           :interval-minutes= 60
-          :interval-count= 9 
+          :interval-count= 11 
           @click:event="showEvent"
           @click:more="viewDay"
           @click:date="viewDay"
@@ -137,8 +137,6 @@ Vue.component("calendar", {
       selectedElement: null,
       selectedOpen: false,
       events: [],
-      colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
-      names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
     }),
     created () {
       this.makeArray()
@@ -146,67 +144,109 @@ Vue.component("calendar", {
     methods: {
       makeArray(){
         let oldE = <%- data %>
-        let newE = []
-        oldE.forEach(getIntervals);
         // gibt Array mit offenen Zeitfenstern zurück
-        function getIntervals(element, index, array) {
-          if (index === 0) {
-            return
-          } else if (index > oldE.length - 2){
+        let newE = []
+        oldE.forEach(function(element, index, array) {
+          if (index === 0 || index > oldE.length -2) {
             return
           } else {
-            let emptyStart = moment(oldE[index].end)
-            let emptyEnd  = moment(oldE[index + 1].start)
+            let emptyStart = moment(array[index].end)
+            let emptyEnd  = moment(array[index+1].start)
             let duration = moment.duration(emptyEnd.diff(emptyStart));
             let minutes = duration.asMinutes()
+            // let emptyStartCorrect = moment(array[index-1].end).add(minutes, "minutes")
             let obj = {
               name: "frei",
               start: emptyStart.format("YYYY-MM-DD HH:mm"),
               end: emptyEnd.format("YYYY-MM-DD HH:mm"),
               color: "green",
               duration: minutes,
-              open: true
+              open: true,
+              prevStart: element.start,
             }
-            if (minutes > 0){
-              //console.log(obj)
+            if(minutes > 5){              
               newE.push(obj)
             }
+            else{
+              return
+            }
+
           }
-        }
+        })
         let combined = oldE.concat(newE)
-        let sorted = combined.sort(function(a, b){
-          if(a.start < b.start) { return -1; }
-          if(a.start > b.start) { return 1; }
+        combined.sort(function(a, b){
+          var x = a.end;
+          var y = b.end;
+          if (x < y) {return -1;}
+          if (x > y) {return 1;}
           return 0;
         })
-        sorted.forEach(cut)
+        for (let i = 0; i < newE.length; i++) {
+          const element = newE[i];
+          //console.log(element.prevStart)
+          
+        }
+        //console.log(newE)
+        
+
         // schneidet Zeitfenster-Array auf Öffnungszeiten
-        function cut(element, index, array){
+        let cut = newE.flatMap(function (element, index, array, n){
           //console.log(moment(element.start))
           let dayStart = moment(element.start).startOf("day").toString()
           let open = moment(dayStart).add(8, "hours").toString()
           let end = moment(element.end)
           let duration = moment.duration(end.diff(dayStart))
           let hours = duration.asHours()
-          //console.log(hours)
-          if(hours > 17 && index < array.length - 1){
-            element.end = moment(dayStart).add(17, "hours").format("YYYY-MM-DD HH:mm")            
-            //console.log(element.end)
-            let obj = {
+          let solution = Math.floor((hours-17)/24)
+          if(solution === -1 && index < array.length - 2){
+            return element
+          }
+          if(solution === 0 && index < array.length - 2){
+            //let prevStart = element.prevStart
+            console.log(array[index+1])
+            let evening = {
+              name: "eve",
+              start: element.start,
+              end: moment(dayStart).add(17, "hours").format("YYYY-MM-DD HH:mm"),
+              color: "red"
+            }            
+            let morning = {
               name: "1. Termin",
-              start: moment(open).add(1, "day").format("YYYY-MM-DD HH:mm"),
-              end: array[index+1].start,
+              start: moment(open).add(24, "hours").format("YYYY-MM-DD HH:mm"),
+              end: array[index+1].prevStart,
               color: "green"
             }
-            //console.log(obj)
-            sorted.push(obj)
+            return [morning,evening]
+          }
+          if(solution > 0 && index < array.length - 1){
+            let array = []
+            let evening = {
+              name: "eve",
+              start: element.start,
+              end: moment(dayStart).add(17, "hours").format("YYYY-MM-DD HH:mm"),
+              color: "red"
+            }            
+            array.push(evening)
+            for(n = 0; n < (solution-1); n++){
+                let morning = {
+                    name: "ganz",
+                    start: moment(open).add([n] * 24, "hours").format("YYYY-MM-DD HH:mm"),
+                    end: moment(dayStart).add([n] * 24 + 17, "hours").format("YYYY-MM-DD HH:mm"),
+                    color: "orange"
+                }
+                array.push(morning)
+            }
+            return array
+
           }
           else {
-            return
+            return element
           }
-        }
+        })
+        
 
-        this.events = sorted
+
+        this.events = cut.concat(oldE)
         return this.events
       },
       viewDay ({ date }) {
