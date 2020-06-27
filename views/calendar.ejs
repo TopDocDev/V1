@@ -1,11 +1,4 @@
 <% include partials/header %>
-<!-- 
-<div v-for="item in events">
-<span>{{item.start}}</span>
-<span>{{item.end}}</span>
-<span>{{item.color}}</span>
-</div>
--->
 <div id="app">
   <v-app>
   <calendar>
@@ -136,7 +129,7 @@ Vue.component("calendar", {
       selectedEvent: {},
       selectedElement: null,
       selectedOpen: false,
-      events: [],
+      events: <%- data %>,
     }),
     created () {
       this.makeArray()
@@ -187,8 +180,6 @@ Vue.component("calendar", {
           if (x > y) {return 1;}
           return 0;
         })
-        
-
         // schneidet Zeitfenster-Array auf Öffnungszeiten
         let cut = combined.flatMap(function (element, index, array, n){
           //console.log(moment(element.start))
@@ -198,22 +189,24 @@ Vue.component("calendar", {
           let duration = moment.duration(end.diff(dayStart))
           let hours = duration.asHours()
           let solution = Math.floor((hours-17)/24)
-          if(solution === -1 && index < array.length - 2){
+          if(solution === -1 && index < array.length - 1){
             return element
           }
-          if(solution === 0 && index < array.length - 2){
+          if(solution === 0 && index < array.length - 1){
             let evening = {
               name: "eve",
               start: element.start,
               end: moment(dayStart).add(17, "hours").format("YYYY-MM-DD HH:mm"),
-              color: "red"
+              color: "red",
+              open: true,
             }       
             evening["duration"] = moment.duration(moment(evening.end).diff(moment(evening.start))).asMinutes()     
             let morning = {
               name: "1. Termin",
               start: moment(open).add(24, "hours").format("YYYY-MM-DD HH:mm"),
               end: array[index+1].start,
-              color: "green"
+              color: "green",
+              open: true,
             }
             if(evening.duration > 5){
               return [morning,evening]
@@ -230,6 +223,7 @@ Vue.component("calendar", {
               start: element.start,
               end: moment(dayStart).add(17, "hours").format("YYYY-MM-DD HH:mm"),
               color: "red",
+              open: true,
             }
             evening["duration"] = moment.duration(moment(evening.end).diff(moment(evening.start))).asMinutes()            
             if(evening.duration > 5){
@@ -240,7 +234,8 @@ Vue.component("calendar", {
                     name: "ganz",
                     start: moment(open).add([n+1] * 24, "hours").format("YYYY-MM-DD HH:mm"),
                     end: moment(dayStart).add([n+1] * 24 + 17, "hours").format("YYYY-MM-DD HH:mm"),
-                    color: "orange"
+                    color: "orange",
+                    open: true,
                 }
                 arr.push(ganz)
             }
@@ -248,7 +243,8 @@ Vue.component("calendar", {
               name: "Schwanz",
               start: moment(array[index+1].start).startOf("day").add(8, "hours").format("YYYY-MM-DD HH:mm"),
               end: array[index+1].start,
-              color: "pink"
+              color: "pink",
+              open: true,
             }
             arr.push(morning)
             return arr
@@ -258,10 +254,28 @@ Vue.component("calendar", {
             return element
           }
         })
-        
-
-
-        this.events = cut
+        let neu = cut.filter(function(e){
+          return e.open === true
+        })
+        let d = 20
+        let split = neu.flatMap(function(e, i, a){
+          let duration = moment.duration(moment(e.end).diff(moment(e.start))).asMinutes()
+          let x = Math.floor(duration/d)
+          let array = []
+          for (let index = 0; index < x; index++) {
+            let obj = {
+              name: "split",
+              start: moment(e.start).add(index*d, "minutes").format("YYYY-MM-DD HH:mm"),
+              end: moment(e.start).add(index*d+d, "minutes").format("YYYY-MM-DD HH:mm"),
+              duration: d,
+              open: true,
+              color: "blue",
+            }     
+            array.push(obj)                  
+          }
+          return array
+        })
+        this.events = split.concat(oldE)
         return this.events
       },
       viewDay ({ date }) {
