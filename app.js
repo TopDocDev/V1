@@ -9,8 +9,9 @@ var express     = require("express"),
     seedDB      = require("./seeds"),
     sql         = require("mssql"),
     sequelize   = require("sequelize"),
-    dayjs       = require("dayjs")
-    moment      = require('moment');
+    moment      = require('moment'),
+    custom      = require("./functions/custom")
+
 
 
 mongoose.connect("mongodb://localhost/Doc"); 
@@ -18,7 +19,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 //seedDB();
-
 var sampleDb = new sequelize(
     'SampleDb', 'louis', 'password', {
   host: 'localhost',
@@ -54,7 +54,11 @@ function getDb(req, res) {
             console.log(err);
             return;
         }
-        req.query("SELECT TT_NUMMER, TT_DATAUS, DATEADD(MINUTE, TT_DAUER, TT_DATAUS) AS TT_DATEIN FROM v21db.DBO.Tabelle1$ where TT_DATAUS BETWEEN '06/08/2020' AND '06/09/2020'", function (err, myobject){
+        let a = {
+            number: 10000,
+            date: "01/01/2020",
+        }
+        req.query("SELECT TOP "+ a.number + "TT_PNAME as name, TT_DATAUS as 'end', DATEADD(MINUTE, -TT_DAUER, TT_DATAUS) AS start, 'green' as color from v21db.dbo.Tabelle1$ where TT_DATAUS > '" + a.date +"' and TT_PNR is not null order by TT_DATAUS", function (err, myobject){
             if(err){
                 console.log(err);
             } else {
@@ -63,16 +67,11 @@ function getDb(req, res) {
                         console.log(err);
                     } else {
                        let arr = JSON.parse(JSON.stringify(myobject.recordset))
-                       // console.log(arr)
-                       xyz = [];
-                       for(i=0;i< arr.length; i++){
-                            let formated = moment(arr[i].TT_DATAUS).format("YYYY-MM-DD HH:mm");
-                            xyz.push(formated);
-                        }
-                        // console.log(xyz)                       
+                       let a = custom.makeArray(arr)
+                       let b = custom.getFiveDays(a)         
                         res.render("docs/index",{
                             doc : JSON.stringify(allDocs),
-                            data: JSON.stringify(xyz)
+                            data: JSON.stringify(b)
                             })
                     }
                  });
@@ -93,7 +92,7 @@ function getCalendar(req, res) {
         }
         let a = {
             number: 10000,
-            date: "06/06/2020",
+            date: "01/01/2020",
         }
         req.query("SELECT TOP "+ a.number + "TT_PNAME as name, TT_DATAUS as 'end', DATEADD(MINUTE, -TT_DAUER, TT_DATAUS) AS start, 'green' as color from v21db.dbo.Tabelle1$ where TT_DATAUS > '" + a.date +"' and TT_PNR is not null order by TT_DATAUS", function (err, myobject){
             if(err){
@@ -105,12 +104,14 @@ function getCalendar(req, res) {
                     } else {
                         let arr = JSON.parse(JSON.stringify(myobject.recordset));
                         let newArr = arr.map(e => ({
-                                name: e.name,
-                                start: moment(e.start).format("YYYY-MM-DD HH:mm"),
-                                end: moment(e.end).format("YYYY-MM-DD HH:mm"),
-                                color: "yellow"                      
+                            name: e.name,
+                            start: moment(e.start).format("YYYY-MM-DD HH:mm"),
+                            end: moment(e.end).format("YYYY-MM-DD HH:mm"),
+                            color: "yellow",
+                            duration: moment.duration(moment(e.end).diff(moment(e.start))).asMinutes(),
+                            open: false,               
                         }))
-                        // console.log(newArr)   
+                        let split = custom.makeArray(newArr)
                         res.render("calendar",{
                             doc : JSON.stringify(allDocs),
                             data: JSON.stringify(newArr)

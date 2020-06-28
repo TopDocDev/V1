@@ -101,9 +101,9 @@
                         </div>
                       </div>
                     </a>
-                    <div class="col-1 termin-spalte"v-for="n in 5">  
-                        <a href="/buchung" v-for="item in time.slice(0,4)">                  
-                        <termin v-bind:zeit="item"></termin>
+                    <div class="col-1 termin-spalte"v-for="n in time">  
+                        <a href="/buchung" v-for="item in n.slice(0,4)">                  
+                          <termin v-bind:zeit="item.startFormated"></termin>
                         </a>  
                     </div>
                   </div>
@@ -180,6 +180,7 @@ var app1 = new Vue({
   },
   mounted(){
     console.log(this.time)
+    
 
   }
 
