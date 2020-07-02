@@ -1,0 +1,16 @@
+var mongoose = require("mongoose");
+
+var öffnungszeitenSchema = new mongoose.Schema({
+    dayStartH: String,
+    dayStartM: String,
+    mittagEndH: String,
+    mittagEndM: String,
+    mittagStartH: String,
+    mittagStartM: String,
+    dayEndH: String,
+    dayEndM: String,
+    dauer: String,
+    createdAt: String,
+});
+
+module.exports = mongoose.model("öffnungszeiten", öffnungszeitenSchema);
