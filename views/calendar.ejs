@@ -13,8 +13,43 @@ Vue.component("calendar", {
     <v-col>
       <v-sheet height="64">
         <v-toolbar flat color="white">
-          <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">
-            Today
+        <v-col cols="12" sm="6" md="2">
+          <v-text-field
+            label="Outlined"
+            outlined
+            v-model="i.a"
+          ></v-text-field>          
+        </v-col>
+        <v-col cols="12" sm="6" md="2">
+          <v-text-field
+            label="Outlined"
+            outlined
+            v-model="i.b"
+          ></v-text-field>          
+        </v-col>
+        <v-col cols="12" sm="6" md="2">
+          <v-text-field
+            label="Outlined"
+            outlined
+            v-model="i.c"
+          ></v-text-field>          
+        </v-col>
+        <v-col cols="12" sm="6" md="2">
+          <v-text-field
+            label="Outlined"
+            outlined
+            v-model="i.d"
+          ></v-text-field>          
+        </v-col>
+        <v-col cols="12" sm="6" md="2">
+          <v-text-field
+            label="Outlined"
+            outlined
+            v-model="i.e"
+          ></v-text-field>          
+        </v-col>
+          <v-btn v-on:click="makeArray">
+            makeArray
           </v-btn>
           <v-btn fab text small color="grey darken-2" @click="prev">
             <v-icon small>mdi-chevron-left</v-icon>
@@ -130,12 +165,39 @@ Vue.component("calendar", {
       selectedElement: null,
       selectedOpen: false,
       events: <%- data %>,
+      message: "hello",
+      i: {
+        a: "08:00",
+        b: "12:00",
+        c: "13:30",
+        d: "17:00",
+        e: "20"
+      }
     }),
     created () {
-      this.makeArray()
+     // this.makeArray()
     },
     methods: {
       makeArray(){
+        let i = this.i
+        let o = {
+          dayStartH: i.a.slice(0,2),
+          dayStartM: i.a.slice(3,5),
+          mittagEndH: i.b.slice(0,2),
+          mittagEndM: i.b.slice(3,5),
+          mittagStartH: i.c.slice(0,2),
+          mittagStartM: i.c.slice(3,5),
+          dayEndH: i.d.slice(0,2),
+          dayEndM: i.d.slice(3,5),
+          dauer: i.e,
+        }
+        for (var prop in o) {
+            if (Object.prototype.hasOwnProperty.call(o, prop)) {
+              o[prop] = Number(o[prop])
+            }
+        }
+        console.log(o)
+
         let oldE = <%- data %>
         // gibt Array mit offenen Zeitfenstern zurück
         let newE = []
@@ -182,13 +244,12 @@ Vue.component("calendar", {
         })
         // schneidet Zeitfenster-Array auf Öffnungszeiten
         let cut = combined.flatMap(function (element, index, array, n){
-          //console.log(moment(element.start))
           let dayStart = moment(element.start).startOf("day").toString()
-          let open = moment(dayStart).add(8, "hours").toString()
+          let open = moment(dayStart).add(o.dayStartH, "hours").add(o.dayStartM, "minutes").toString()
           let end = moment(element.end)
           let duration = moment.duration(end.diff(dayStart))
           let hours = duration.asHours()
-          let solution = Math.floor((hours-17)/24)
+          let solution = Math.floor((hours-o.dayEndH)/24)
           if(solution === -1 && index < array.length - 1){
             return element
           }
@@ -196,7 +257,7 @@ Vue.component("calendar", {
             let evening = {
               name: "eve",
               start: element.start,
-              end: moment(dayStart).add(17, "hours").format("YYYY-MM-DD HH:mm"),
+              end: moment(dayStart).add(o.dayEndH, "hours").add(o.dayEndM, "minutes").format("YYYY-MM-DD HH:mm"),
               color: "red",
               open: true,
             }       
@@ -221,7 +282,7 @@ Vue.component("calendar", {
             let evening = {
               name: "eve",
               start: element.start,
-              end: moment(dayStart).add(17, "hours").format("YYYY-MM-DD HH:mm"),
+              end: moment(dayStart).add(o.dayEndH, "hours").add(o.dayEndM, "minutes").format("YYYY-MM-DD HH:mm"),
               color: "red",
               open: true,
             }
@@ -233,15 +294,18 @@ Vue.component("calendar", {
                 let ganz = {
                     name: "ganz",
                     start: moment(open).add([n+1] * 24, "hours").format("YYYY-MM-DD HH:mm"),
-                    end: moment(dayStart).add([n+1] * 24 + 17, "hours").format("YYYY-MM-DD HH:mm"),
+                    end: moment(dayStart).add([n+1] * 24 + o.dayEndH, "hours").format("YYYY-MM-DD HH:mm"),
                     color: "orange",
                     open: true,
                 }
+                console.log(o.dayEndH)
+                console.log(moment(dayStart).add([n+1] * 24 + 17, "hours").format("YYYY-MM-DD HH:mm"))
+
                 arr.push(ganz)
             }
             let morning = {
               name: "Schwanz",
-              start: moment(array[index+1].start).startOf("day").add(8, "hours").format("YYYY-MM-DD HH:mm"),
+              start: moment(array[index+1].start).startOf("day").add(o.dayStartH, "hours").add(o.dayStartM, "minutes").format("YYYY-MM-DD HH:mm"),
               end: array[index+1].start,
               color: "pink",
               open: true,
@@ -257,8 +321,8 @@ Vue.component("calendar", {
         let neu = cut.filter(function(e){
           return e.open === true
         })
-        let d = 20
         let split = neu.flatMap(function(e, i, a){
+          let d = o.dauer
           let duration = moment.duration(moment(e.end).diff(moment(e.start))).asMinutes()
           let x = Math.floor(duration/d)
           let array = []
@@ -270,11 +334,14 @@ Vue.component("calendar", {
               duration: d,
               open: true,
               color: "blue",
+              startFormated: moment(e.start).add(index*d, "minutes").format("HH:mm")
             }     
             array.push(obj)                  
           }
           return array
         })
+        
+
         this.events = split.concat(oldE)
         return this.events
       },
