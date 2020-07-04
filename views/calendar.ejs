@@ -1,4 +1,5 @@
 <% include partials/header %>
+
 <div id="app">
   <v-app>
   <calendar>
@@ -13,44 +14,31 @@ Vue.component("calendar", {
     <v-col>
       <v-sheet height="64">
         <v-toolbar flat color="white">
-        <v-col cols="12" sm="6" md="2">
-          <v-text-field
-            label="Outlined"
-            outlined
-            v-model="i.a"
-          ></v-text-field>          
-        </v-col>
-        <v-col cols="12" sm="6" md="2">
-          <v-text-field
-            label="Outlined"
-            outlined
-            v-model="i.b"
-          ></v-text-field>          
-        </v-col>
-        <v-col cols="12" sm="6" md="2">
-          <v-text-field
-            label="Outlined"
-            outlined
-            v-model="i.c"
-          ></v-text-field>          
-        </v-col>
-        <v-col cols="12" sm="6" md="2">
-          <v-text-field
-            label="Outlined"
-            outlined
-            v-model="i.d"
-          ></v-text-field>          
-        </v-col>
-        <v-col cols="12" sm="6" md="2">
-          <v-text-field
-            label="Outlined"
-            outlined
-            v-model="i.e"
-          ></v-text-field>          
-        </v-col>
-          <v-btn v-on:click="makeArray">
-            makeArray
-          </v-btn>
+        <form>
+    <div class="form-row">
+        <label for="i.a">Morgen Start</label>
+      <div class="col-2">
+        <input type="text" class="form-control" placeholder="08:00" v-model="i.a" label="i.a">
+      </div>
+      <label for="i.b">Morgen Start</label>
+      <div class="col-2">
+        <input type="text" class="form-control" placeholder="12:00" v-model="i.b" label="i.b">
+      </div>
+      <label for="i.c">Morgen Start</label>
+      <div class="col-2">
+        <input type="text" class="form-control" placeholder="13:00" v-model="i.c" label="i.c">
+      </div>
+      <label for="i.d">Morgen Start</label>
+      <div class="col-2">
+        <input type="text" class="form-control" placeholder="17:00" v-model="i.d" label="i.d">
+      </div>
+      <label for="i.e">Morgen Start</label>
+      <div class="col-2">
+        <input type="text" class="form-control" placeholder="20" v-model="i.e" label="i.e">
+      </div>
+      <v-btn class="btn btn-primary" v-on:click="makeArray">Kalender berechnen</v-btn>
+    </div>
+</form>
           <v-btn fab text small color="grey darken-2" @click="prev">
             <v-icon small>mdi-chevron-left</v-icon>
           </v-btn>
@@ -196,7 +184,6 @@ Vue.component("calendar", {
               o[prop] = Number(o[prop])
             }
         }
-        console.log(o)
 
         let oldE = <%- data %>
         // gibt Array mit offenen Zeitfenstern zurück
@@ -298,9 +285,6 @@ Vue.component("calendar", {
                     color: "orange",
                     open: true,
                 }
-                console.log(o.dayEndH)
-                console.log(moment(dayStart).add([n+1] * 24 + 17, "hours").format("YYYY-MM-DD HH:mm"))
-
                 arr.push(ganz)
             }
             let morning = {
@@ -328,20 +312,24 @@ Vue.component("calendar", {
           let array = []
           for (let index = 0; index < x; index++) {
             let obj = {
-              name: "split",
+              name: "freier Termin",
               start: moment(e.start).add(index*d, "minutes").format("YYYY-MM-DD HH:mm"),
               end: moment(e.start).add(index*d+d, "minutes").format("YYYY-MM-DD HH:mm"),
               duration: d,
               open: true,
-              color: "blue",
+              color: "green",
               startFormated: moment(e.start).add(index*d, "minutes").format("HH:mm")
             }     
-            array.push(obj)                  
+            // Mittagspausen 
+            const mittagEnd = moment(obj.start).startOf("day").add(o.mittagStartH, "hours").add(o.mittagStartM, "minutes")
+            const mittagStart = moment(obj.start).startOf("day").add(o.mittagEndH, "hours").add(o.mittagEndM, "minutes")
+            if (moment(obj.start).isBetween(mittagStart, mittagEnd) || moment(obj.end).isBetween(mittagStart, mittagEnd)) {
+            } else {
+              array.push(obj)   
+            }                           
           }
           return array
         })
-        
-
         this.events = split.concat(oldE)
         return this.events
       },
