@@ -12,33 +12,91 @@ Vue.component("calendar", {
   template: `
  <v-row class="fill-height">
     <v-col>
-      <v-sheet height="64">
-        <v-toolbar flat color="white">
-        <form>
-    <div class="form-row">
-        <label for="i.a">Morgen Start</label>
-      <div class="col-2">
-        <input type="text" class="form-control" placeholder="08:00" v-model="i.a" label="i.a">
-      </div>
-      <label for="i.b">Morgen Start</label>
-      <div class="col-2">
-        <input type="text" class="form-control" placeholder="12:00" v-model="i.b" label="i.b">
-      </div>
-      <label for="i.c">Morgen Start</label>
-      <div class="col-2">
-        <input type="text" class="form-control" placeholder="13:00" v-model="i.c" label="i.c">
-      </div>
-      <label for="i.d">Morgen Start</label>
-      <div class="col-2">
-        <input type="text" class="form-control" placeholder="17:00" v-model="i.d" label="i.d">
-      </div>
-      <label for="i.e">Morgen Start</label>
-      <div class="col-2">
-        <input type="text" class="form-control" placeholder="20" v-model="i.e" label="i.e">
-      </div>
-      <v-btn class="btn btn-primary" v-on:click="makeArray">Kalender berechnen</v-btn>
+      <v-sheet height="200">
+
+<form class="form">
+  <div class="form-row">
+      
+    <div class="col-2">
+    <label for="i.a">Morgen von:</label>
+      <input type="text" class="form-control" placeholder="08:00" v-model="i.a" label="i.a">
     </div>
+    
+    <div class="col-2">
+    <label for="i.b">bis:</label>
+      <input type="text" class="form-control" placeholder="12:00" v-model="i.b" label="i.b">
+    </div>
+    
+    <div class="col-2">
+    <label for="i.c">Nachmittag von:</label>
+      <input type="text" class="form-control" placeholder="13:00" v-model="i.c" label="i.c">
+    </div>
+    
+    <div class="col-2">
+    <label for="i.d">bis:</label>
+      <input type="text" class="form-control" placeholder="17:00" v-model="i.d" label="i.d">
+    </div>
+
+    <div class="col-2">
+    <label for="i.e">Termin Dauer</label>
+      <input type="text" class="form-control" placeholder="20" v-model="i.e" label="i.e">
+    </div>
+    <div class="col-2">
+          <label for="dropdown">l</label>
+    <button class="btn btn-primary dropdown-toggle mr-4" type="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false" id="dropdown">Wochentage</button>
+
+  <div class="dropdown-menu">
+    <a class="dropdown-item">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="checkbox1" checked>
+        <label class="custom-control-label" for="checkbox1">Montag</label>
+      </div>
+    </a>
+    <a class="dropdown-item">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="checkbox2" checked>
+        <label class="custom-control-label" for="checkbox2">Dienstag</label>
+      </div>
+    </a>
+    <a class="dropdown-item">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="checkbox3" checked>
+        <label class="custom-control-label" for="checkbox3">Mittwoch</label>
+      </div>
+    </a>
+    <a class="dropdown-item">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="checkbox4" checked>
+        <label class="custom-control-label" for="checkbox4">Donnerstag</label>
+      </div>
+    </a>
+    <a class="dropdown-item">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="checkbox5" checked>
+        <label class="custom-control-label" for="checkbox5">Freitag</label>
+      </div>
+    </a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="checkbox6">
+        <label class="custom-control-label" for="checkbox6">Samstag</label>
+      </div>
+    </a>
+    <a class="dropdown-item">
+      <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input" id="checkbox7">
+        <label class="custom-control-label" for="checkbox7">Sonntag</label>
+      </div>
+    </a>
+    </div>
+  </div>
+    
+  </div>
+  <v-btn class="btn btn-primary" v-on:click="makeArray">Kalender berechnen</v-btn>
 </form>
+        <v-toolbar flat color="white">
           <v-btn fab text small color="grey darken-2" @click="prev">
             <v-icon small>mdi-chevron-left</v-icon>
           </v-btn>
@@ -364,37 +422,7 @@ Vue.component("calendar", {
         }
 
         nativeEvent.stopPropagation()
-      },
-      /*
-      updateRange ({ start, end }) {
-        const events = []
-
-        const min = new Date(`${start.date}T0:00:00`)
-        const max = new Date(`${end.date}T23:59:59`)
-        const days = (max.getTime() - min.getTime()) / 86400000
-        const eventCount = this.rnd(days, days + 20)
-
-        for (let i = 0; i < eventCount; i++) {
-          const allDay = this.rnd(0, 3) === 0
-          const firstTimestamp = this.rnd(min.getTime(), max.getTime())
-          const first = new Date(firstTimestamp - (firstTimestamp % 900000))
-          const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000
-          const second = new Date(first.getTime() + secondTimestamp)
-
-          events.push({
-            name: this.names[this.rnd(0, this.names.length - 1)],
-            start: first,
-            end: second,
-            color: this.colors[this.rnd(0, this.colors.length - 1)],
-            timed: !allDay,
-          })
-        }
-
-        this.events = events
-      },
-      rnd (a, b) {
-        return Math.floor((b - a + 1) * Math.random()) + a
-      },*/
+      }
     }
 })
 
@@ -402,9 +430,10 @@ let app = new Vue({
     el: "#app",
     vuetify: new Vuetify(),
 })
-
-
 </script>
+<style>
+</style>
+
 
 
 
