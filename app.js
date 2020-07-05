@@ -111,7 +111,7 @@ function getCalendar(req, res) {
                             duration: moment.duration(moment(e.end).diff(moment(e.start))).asMinutes(),
                             open: false,               
                         }))
-                        let split = custom.makeArray(newArr)
+                        // let split = custom.makeArray(newArr)
                         res.render("calendar",{
                             doc : JSON.stringify(allDocs),
                             data: JSON.stringify(newArr)
