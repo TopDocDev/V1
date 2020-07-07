@@ -131,27 +131,15 @@ function getCalendar(req, res) {
 }
 
 //ROUTES
-app.get("/axios", function(req, res){
-    res.render("axios");
-});
-app.post("/axios", function(req, res){
-    res.render("axios");
-});
-app.get("/login", function(req, res){
-    res.render("login")
-})
 app.post("/login", function(req, res){
     console.log(req.body)
 })
 
-app.get("/", function(req, res){
-    res.render("landing");
-});
-//INDEX
-app.get("/docs", function(req, res){
-    getDb(req, res);
-});
+app.get("/", (req, res) => res.render("landing"))
 
+app.post("")
+//INDEX
+app.get("/docs", (req, res) => getDb(req, res))
 
 //CREATE
 app.post("/docs", function(req, res){
@@ -172,9 +160,7 @@ app.post("/docs", function(req, res){
 });
 
 
-app.get("/docs/new", function(req, res){
-   res.render("docs/new"); 
-});
+app.get("/docs/new", (req, res) => res.render("docs/new"))
 
 
 app.get("/docs/:id", function(req, res){
@@ -205,24 +191,8 @@ app.get("/docs/:id/signup", function(req, res){
 
 // Arztbereich
 
-app.get("/docs/buchung", function(req, res){
-    res.render("docs/buchung");
-});
-
-app.get("/calendar", function(req, res){
-    getCalendar(req,res)
-})
-
-app.get("/arztbereich/arzt", function(req, res){
-    res.render("arztbereich/arzt");
-});
-
-app.get("/arztbereich/scheduleInput", function(req, res){
-    res.render("arztbereich/scheduleInput");
-});
-
-
-
+app.get("/docs/buchung", (req, res) => res.render("docs/buchung"))
+app.get("/calendar", (req, res) => getCalendar(req,res))
 // ====================
 // COMMENTS ROUTES
 // ====================
