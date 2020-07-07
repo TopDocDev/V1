@@ -1,6 +1,6 @@
 const { format } = require("path");
 
-var express     = require("express"),
+const express     = require("express"),
     app         = express(),
     bodyParser  = require("body-parser"),
     mongoose    = require("mongoose"),
@@ -10,12 +10,16 @@ var express     = require("express"),
     sql         = require("mssql"),
     sequelize   = require("sequelize"),
     moment      = require('moment'),
-    custom      = require("./functions/custom")
+    custom      = require("./functions/custom"),
+    axios       = require("axios"),
+    async       = require("async")
+
 
 
 
 mongoose.connect("mongodb://localhost/Doc"); 
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 //seedDB();
@@ -127,7 +131,18 @@ function getCalendar(req, res) {
 }
 
 //ROUTES
-
+app.get("/axios", function(req, res){
+    res.render("axios");
+});
+app.post("/axios", function(req, res){
+    res.render("axios");
+});
+app.get("/login", function(req, res){
+    res.render("login")
+})
+app.post("/login", function(req, res){
+    console.log(req.body)
+})
 
 app.get("/", function(req, res){
     res.render("landing");
@@ -136,6 +151,7 @@ app.get("/", function(req, res){
 app.get("/docs", function(req, res){
     getDb(req, res);
 });
+
 
 //CREATE
 app.post("/docs", function(req, res){

@@ -1,0 +1,119 @@
+<% include partials/header %>
+<!-- Add this to <head> -->
+
+<!-- Load required Bootstrap and BootstrapVue CSS -->
+<link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+<link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+
+<!-- Load polyfills to support older browsers -->
+<script src="//polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver" crossorigin="anonymous"></script>
+
+<!-- Load Vue followed by BootstrapVue -->
+<script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
+<script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+
+<!-- Load the following for BootstrapVueIcons support -->
+<script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
+<div id="app">
+    <login></login>
+</div>
+
+<script>
+
+Vue.component("login", {
+    template: `
+<div>
+    <b-form @submit="onSubmit" v-if="show">
+        <b-form-group
+        id="input-group-1"
+        label="Email address:"
+        label-for="input-1"
+        description="We'll never share your email with anyone else."
+        >
+        <b-form-input
+            id="input-1"
+            v-model="form.email"
+            type="email"
+            required
+            placeholder="Enter email"
+        ></b-form-input>
+        </b-form-group>
+
+        <b-form-group id="input-group-2" label="Your Name:" label-for="input-2">
+        <b-form-input
+            id="input-2"
+            v-model="form.name"
+            required
+            placeholder="Enter name"
+        ></b-form-input>
+        </b-form-group>
+
+        <b-form-group id="input-group-3" label="Food:" label-for="input-3">
+        <b-form-select
+            id="input-3"
+            v-model="form.food"
+            :options="foods"
+            required
+        ></b-form-select>
+        </b-form-group>
+
+        <b-form-group id="input-group-4">
+        <b-form-checkbox-group v-model="form.checked" id="checkboxes-4">
+            <b-form-checkbox value="me">Check me out</b-form-checkbox>
+            <b-form-checkbox value="that">Check that out</b-form-checkbox>
+        </b-form-checkbox-group>
+        </b-form-group>
+
+        <b-button type="submit" variant="primary">Submit</b-button>
+        <b-button type="reset" variant="danger">Reset</b-button>
+    </b-form>
+    <b-card class="mt-3" header="Form Data Result">
+        <pre class="m-0">{{ form }}</pre>
+    </b-card>
+    </div>
+    
+    `,
+    data() {
+        return {
+          form: {
+            email: 'louis.aebischer@eblcom.ch',
+            name: 'Louis',
+            food: 'Carrots',
+            checked: []
+          },
+          foods: [{ text: 'Select One', value: null }, 'Carrots', 'Beans', 'Tomatoes', 'Corn'],
+          show: true
+        }
+      },
+      methods: {
+        onSubmit(evt) {
+          //alert(JSON.stringify(this.form))
+          axios.post('http://localhost:3000/login',{ 
+              params: { 
+                  name: this.form.name, 
+                  email: this.form.email, 
+                  food: this.form.food 
+                }
+            })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(error => {});
+
+        },
+      }
+
+})
+let app = new Vue({
+    el: "#app"
+})
+
+
+  
+
+  </script>
+
+
+
+<% include partials/footer %>
