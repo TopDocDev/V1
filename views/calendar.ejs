@@ -192,12 +192,15 @@ Vue.component("calendar", {
             </v-card-actions>
           </v-card>
         </v-menu>
+        
+            <v-btn class="btn btn-primary" v-on:click="onSubmit">Woche hochladen</v-btn>
+
       </v-sheet>
     </v-col>
   </v-row>
     `,
       data: () => ({
-      focus: '',
+      focus: moment().format("YYYY-MM-DD"),
       type: 'week',
       typeToLabel: {
         month: 'Month',
@@ -209,6 +212,7 @@ Vue.component("calendar", {
       selectedElement: null,
       selectedOpen: false,
       events: <%- data %>,
+      newEvents: [],
       message: "hello",
       i: {
         a: "08:00",
@@ -220,7 +224,7 @@ Vue.component("calendar", {
       wochentage: [1,2,3,4,5],
     }),
     created () {
-     // this.makeArray()
+
     },
     mounted (){ 
     },
@@ -395,7 +399,26 @@ Vue.component("calendar", {
           return array
         })
         this.events = split.concat(oldE)
-        return this.events
+        this.newEvents = split
+
+        
+      },
+      onSubmit() {
+        //wählt Wochentage
+        const now = this.focus
+        let week = this.newEvents.filter(function(e,i,a){
+          let t = moment(e.start)
+          let weekStart = moment(now).startOf("week")
+          let weekEnd = moment(now).endOf("week")
+          return weekStart < t && t < weekEnd
+        })
+        console.log(week)
+        axios.post('http://localhost:3000/calendar',{ 
+          params: { 
+            week: JSON.stringify(week)
+          }
+        })
+        alert("Woche erfolgreich hochgeladen!")
       },
       viewDay ({ date }) {
         this.focus = date
