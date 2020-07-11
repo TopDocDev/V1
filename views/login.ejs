@@ -87,8 +87,7 @@ Vue.component("login", {
         }
       },
       methods: {
-        onSubmit(evt) {
-          //alert(JSON.stringify(this.form))
+        onSubmit() {
           axios.post('http://localhost:3000/login',{ 
               params: { 
                   name: this.form.name, 
@@ -96,14 +95,8 @@ Vue.component("login", {
                   food: this.form.food 
                 }
             })
-            .then(function (response) {
-                console.log(response);
-            })
-            .catch(error => {});
-
         },
       }
-
 })
 let app = new Vue({
     el: "#app"
