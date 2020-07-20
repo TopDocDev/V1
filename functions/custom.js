@@ -12,75 +12,40 @@ const dbConfig = {
       }
   },
 }; 
-function getCalendar(req, res) {
-  var conn = new sql.ConnectionPool(dbConfig);  // create sql instance
-  var req = new sql.Request(conn);
-  conn.connect(function (err){
+module.exports.getDb = () => {
+  return new Promise((resolve, reject) => {
+    var conn = new sql.ConnectionPool(dbConfig);  // create sql instance
+    var req = new sql.Request(conn);
+    conn.connect(function (err){
       if (err) {
           console.log(err);
           return;
       }
       let a = {
-          number: 10000,
-          date: "01/01/2020",
+          number: 1000,
+          date: "07/20/2020",
       }
-      req.query("SELECT TOP "+ a.number + "TT_PNAME as name, TT_DATAUS as 'end', DATEADD(MINUTE, -TT_DAUER, TT_DATAUS) AS start, 'green' as color from v21db.dbo.vm97$ where TT_DATAUS > '" + a.date +"' and TT_PNR is not null order by TT_DATAUS", function (err, myobject){
+      const text = "SELECT TOP "+ a.number + "TT_PNAME as name, TT_DATAUS as 'end', DATEADD(MINUTE, -TT_DAUER, TT_DATAUS) AS start, 'green' as color from v21db.dbo.vm97$ where TT_DATAUS > '" + a.date +"' and TT_PNR is not null order by TT_DATAUS"
+      req.query(text, function (err, myobject){
+        
         let arr = JSON.parse(JSON.stringify(myobject.recordset));
         let newArr = arr.map(e => ({
             name: e.name,
-            start: moment(e.start).format("YYYY-MM-DD HH:mm"),
-            end: moment(e.end).format("YYYY-MM-DD HH:mm"),
+            start: moment(e.start).utc().format("YYYY-MM-DD HH:mm"),
+            end: moment(e.end).utc().format("YYYY-MM-DD HH:mm"),
             color: "yellow",
             duration: moment.duration(moment(e.end).diff(moment(e.start))).asMinutes(),
             open: false,               
         }))
+        console.log(arr)
+        console.log(newArr)
+        
         // let split = custom.makeArray(newArr)
-        res.render("calendar",{
-            data: JSON.stringify(newArr)
-            })
-                      
-                  
-              
-              //res.send(employees);
-
-
+        resolve(newArr)
       });
-  });
+    });   
+  })
 }
-/*getDb = function(){
-  const conn = new sql.ConnectionPool(dbConfig);
-  const req = new sql.Request(conn)
-  conn.connect()
-  .then(function getData (req) {
-      let a = {
-          number: 1,
-          date: "01/01/2020",
-      }
-      const text = "SELECT TOP "+ a.number + "TT_PNAME as name, TT_DATAUS as 'end', DATEADD(MINUTE, -TT_DAUER, TT_DATAUS) AS start, 'green' as color from v21db.dbo.Tabelle1$ where TT_DATAUS > '" + a.date +"' and TT_PNR is not null order by TT_DATAUS"
-      req.query(text)
-      .then(function(res){
-        let newArr = res.recordset.map(e => ({
-          name: e.name,
-          start: moment(e.start).format("YYYY-MM-DD HH:mm"),
-          end: moment(e.end).format("YYYY-MM-DD HH:mm"),
-          color: "yellow",
-          duration: moment.duration(moment(e.end).diff(moment(e.start))).asMinutes(),
-          open: false,               
-      }))
-      //console.log(newArr)
-      }
-
-      )
-
-      .catch((err) => console.log("Custom " + err))
-    }
-  )
-  .catch(function (err) {
-      console.log(err);
-  });
-}
-getDb()
-*/
 function makeArray(oldE) {
     let y = oldE.map(e => ({
         name: e.name,
@@ -228,12 +193,18 @@ function makeArray(oldE) {
     })
     return split
 }
+function sortByEnd(a, b){
+  var x = a.end;
+  var y = b.end;
+  if (x < y) {return -1;}
+  if (x > y) {return 1;}
+  return 0;
+}
 function getFiveDays(input){
   const date = []
-  for (let i = 0; i < 5; i++) {
+  for (let i = 1; i < 6; i++) {
     date.push(moment().add([i]*24, "hours").format("YYYY-MM-DD"))  
   }
-
   let output = date.map(function(element, index, array){
     let newArr = input.filter(function(e){
       return e.start.startsWith(element)
@@ -242,7 +213,20 @@ function getFiveDays(input){
   })
   return output
 }
-
+function makeOrange(e,i,a){
+  const obj = {
+    name: "Termin auf Website",
+    start: e.start,
+    end: e.end,
+    duration: e.duration,
+    open: false,
+    color: "orange",
+    startFormated: e.startFormated,
+    toDb: true
+  }
+  return obj
+}
+module.exports.makeOrange = makeOrange;
+module.exports.sortByEnd = sortByEnd;
 module.exports.makeArray = makeArray;
 module.exports.getFiveDays = getFiveDays;
-module.exports.getCalendar = getCalendar;
