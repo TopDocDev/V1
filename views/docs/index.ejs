@@ -68,13 +68,11 @@
                 <div id="app-filter">  
                     <div class="row">
                         <div class="col-7"></div>
-                        <div class="col-5">
-                            <div class="row">
+
                             <div v-for="item in arr">   
                                 <tag v-bind:tag="item.tag" v-bind:date="item.date"></tag>
                             </div>
-                        </div>
-                        </div>
+
                     </div>
                 </div>
               </div>
@@ -160,7 +158,7 @@ Vue.component('photo', {
 
 Vue.component('sterne', {
 props: ['sterne'],
-template: '<span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star"></span></span>'
+template: '<span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span></span>'
 })
 Vue.component('termin', {
   template: '<div class="termin">{{zeit}}</div>',
@@ -176,12 +174,9 @@ var app1 = new Vue({
       newArr: [],
       time: <%- data %>
     }
-
   },
   mounted(){
     console.log(this.time)
-    
-
   }
 
    /*
