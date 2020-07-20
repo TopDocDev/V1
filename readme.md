@@ -1,1 +1,3 @@
-Vil Spass :)
+npm install
+
+npm run dev
