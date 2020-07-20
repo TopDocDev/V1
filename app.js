@@ -14,7 +14,7 @@ const express     = require("express"),
     axios       = require("axios"),
     async       = require("async")
 
-const custom = require("./functions/custom")
+const custom = require("./functions/custom");
 
 
 
@@ -24,7 +24,7 @@ app.use(bodyParser.json());
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 
-seedDB();
+//seedDB();
 
 //ROUTES
 app.post("/login", function(req, res){
@@ -33,18 +33,70 @@ app.post("/login", function(req, res){
 
 app.get("/", (req, res) => res.render("landing"))
 
-
+app.get("/calendar", (req, res) => {
+    custom.getDb()
+    .then((data) => {
+        week.find({}, (err, result) => {
+            res.render("calendar", {data: JSON.stringify(data.concat(result))})
+        })
+    })
+})
 
 
 app.post("/calendar", (req, res) => {
+    //week.collection.drop()
     const weekArray = JSON.parse(req.body.params.week)
-    for (let i = 0; i < weekArray.length; i++) {
-        const e = weekArray[i];
-            week.create(e)  
+    const orangeArray = weekArray.map(custom.makeOrange)
+    console.log(orangeArray)
+    for (let i = 0; i < orangeArray.length; i++) {
+        const e = orangeArray[i];
+        week.create(e)  
     }
-    console.log(weekArray)
+    
 })
 //INDEX
+/*
+getDocs = () => {
+    return new Promise((resolve, reject) => {
+        doc.find({}, (err, allDocs) => {
+            if(err){
+                reject(err)
+            } else {
+                resolve(allDocs)
+            }
+        })
+
+    })
+}
+
+findWeek = function(){
+    const sub = week.find({}, (err, result) => {
+        return result
+    })
+    return sub
+}
+//findWeek()
+getWeeks = () => {
+    return new Promise((resolve, reject) => {
+        week.find({}, (err, result) => {
+            if(err){
+                reject(err)
+            } else {
+                resolve(result)
+            }
+        })
+    })
+}
+getDocs()
+.then((data) => {
+    return getWeeks()
+})
+.then((data) => {
+    console.log(data)
+})
+.catch((err) => console.log(err))
+*/
+
 app.get("/docs", (req, res) => doc.find({}, function(err, allDocs){
     if(err){
         console.log(err)
@@ -53,40 +105,28 @@ app.get("/docs", (req, res) => doc.find({}, function(err, allDocs){
             if(err){
                 console.log(err)
             } else {
-                const sorted = allWeeks.sort(function(a, b){
-                    var x = a.end;
-                    var y = b.end;
-                    if (x < y) {return -1;}
-                    if (x > y) {return 1;}
-                    return 0;
-                  })
-                const data = JSON.stringify(custom.getFiveDays(sorted))
+                const sorted = allWeeks.sort(custom.sortByEnd)
+                const data = custom.getFiveDays(sorted)
+                console.log(data)
                 res.render("docs/index",{
                     doc : JSON.stringify(allDocs),
-                    data: data
+                    data: JSON.stringify(data)
                 })
-                //console.log(data)
             }
         })
     }
 }))
-try {
-    doc.deleteMany( { "name" : "Dr. Jasmine Parambia" } );
- } catch (e) {
-    print (e);
- }
+
 //CREATE
 app.post("/docs", function(req, res){
     var name = req.body.name;
     var image = req.body.image;
     var desc = req.body.description;
     var newDoc = {name: name, image: image, description: desc}
-
     doc.create(newDoc, function(err, newlyCreated){
         if(err){
             console.log(err);
         } else {
-
             res.redirect("/docs");
         }
     });
@@ -113,17 +153,12 @@ app.get("/docs/:id/signup", function(req, res){
             console.log(err)
         } else {
             res.render("docs/signup");
-
         }
-        
-
     }
-
 });
 */
 
 app.get("/docs/buchung", (req, res) => res.render("docs/buchung"))
-app.get("/calendar", (req, res) => custom.getCalendar(req,res))
 
 // ====================
 // COMMENTS ROUTES
