@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-var Doc = require("./models/doc");
+var doc = require("./models/doc");
 var Comment   = require("./models/comment");
 
 var data = [
@@ -10,7 +10,7 @@ var data = [
         spec: "Dermatologie",
         star: "5.0",
         rating: "966"
-    },
+    },/*
     {
         name: "Dr. Jasmine Parambia", 
         image: "https://images.docfinder.at/vl0vay6wgW/dr-jasmin-darabnia-praktische-aerztin-1010-wien-54267.jpg",
@@ -66,19 +66,19 @@ var data = [
         spec: "Gastroenterologie",
         star: "4.9",
         rating: "767",
-    },
+    },*/
 ]
 
 function seedDB(){
 
-   Doc.remove({}, function(err){
+   doc.remove({}, function(err){
         if(err){
             console.log(err);
         }
         console.log("removed docs!");
  
         data.forEach(function(seed){
-            Doc.create(seed, function(err, doc){
+            doc.create(seed, function(err, doc){
                 if(err){
                     console.log(err)
                 } else {
@@ -102,5 +102,6 @@ function seedDB(){
         });
     }); 
 }
+seedDB
 
 module.exports = seedDB;
