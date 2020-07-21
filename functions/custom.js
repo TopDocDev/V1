@@ -22,7 +22,7 @@ module.exports.getDb = () => {
           return;
       }
       let a = {
-          number: 1000,
+          number: 200,
           date: "07/20/2020",
       }
       const text = "SELECT TOP "+ a.number + "TT_PNAME as name, TT_DATAUS as 'end', DATEADD(MINUTE, -TT_DAUER, TT_DATAUS) AS start, 'green' as color from v21db.dbo.vm97$ where TT_DATAUS > '" + a.date +"' and TT_PNR is not null order by TT_DATAUS"
@@ -37,8 +37,6 @@ module.exports.getDb = () => {
             duration: moment.duration(moment(e.end).diff(moment(e.start))).asMinutes(),
             open: false,               
         }))
-        console.log(arr)
-        console.log(newArr)
         
         // let split = custom.makeArray(newArr)
         resolve(newArr)
@@ -207,7 +205,7 @@ function getFiveDays(input){
   }
   let output = date.map(function(element, index, array){
     let newArr = input.filter(function(e){
-      return e.start.startsWith(element)
+      return moment(e.start).format("YYYY-MM-DD").startsWith(element)
     })
     return newArr
   })
@@ -216,8 +214,8 @@ function getFiveDays(input){
 function makeOrange(e,i,a){
   const obj = {
     name: "Termin auf Website",
-    start: e.start,
-    end: e.end,
+    start: moment(e.start).toISOString(),
+    end: moment(e.end).toISOString(),
     duration: e.duration,
     open: false,
     color: "orange",
@@ -230,3 +228,15 @@ module.exports.makeOrange = makeOrange;
 module.exports.sortByEnd = sortByEnd;
 module.exports.makeArray = makeArray;
 module.exports.getFiveDays = getFiveDays;
+
+// Boilerplate: 
+// return {
+//   name: e.name,
+//   start: e.start,
+//   end: e.end,
+//   duration: e.duration,
+//   open: e.open,
+//   toDb: e.toDb,
+//   color: e.color,
+//   startFormated: e.startFormated
+// }

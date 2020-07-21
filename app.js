@@ -13,7 +13,7 @@ const express     = require("express"),
     moment      = require('moment'),
     axios       = require("axios"),
     async       = require("async")
-
+    //var startDate = moment("Wed Jul 01 2020 03:00:00 GMT+0200").startOf('month').format("YYYY-MM-DD HH:mm")
 const custom = require("./functions/custom");
 
 
@@ -37,17 +37,45 @@ app.get("/calendar", (req, res) => {
     custom.getDb()
     .then((data) => {
         week.find({}, (err, result) => {
-            res.render("calendar", {data: JSON.stringify(data.concat(result))})
+            const momentified = result.map((e,i,a) => {
+                return {
+                    name: e.name,
+                    start: moment(e.start).format("YYYY-MM-DD HH:mm"),
+                    end: moment(e.end).format("YYYY-MM-DD HH:mm"),
+                    duration: e.duration,
+                    open: e.open,
+                    toDb: e.toDb,
+                    color: e.color,
+                    startFormated: e.startFormated
+                }
+            })
+            res.render("calendar", {data: JSON.stringify(data.concat(momentified))})
         })
     })
 })
 
 
 app.post("/calendar", (req, res) => {
-    //week.collection.drop()
+    deleteWeek = () => {
+        const weekStart = moment(req.body.params.now).startOf("week").toISOString()
+        const weekEnd = moment(req.body.params.now).endOf("week").toISOString()
+        week.deleteMany({
+            start: {
+                $gte: weekStart,
+                $lte: weekEnd
+            }
+        }, (err, result) => {
+            if(err){
+                console.log(err)
+            } else {
+                console.log(result)
+            }
+        })
+        console.log(weekStart)
+    }
+    deleteWeek()
     const weekArray = JSON.parse(req.body.params.week)
     const orangeArray = weekArray.map(custom.makeOrange)
-    console.log(orangeArray)
     for (let i = 0; i < orangeArray.length; i++) {
         const e = orangeArray[i];
         week.create(e)  

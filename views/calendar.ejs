@@ -238,8 +238,9 @@ Vue.component("calendar", {
         const start = this.selectedEvent.start
         this.events = this.events.filter(function( obj ) {
           return obj.start !== start;
-        });
+        })
         this.selectedOpen = false
+        console.log(this.events)
       },
       makeArray(){
         let wochentage = this.wochentage
@@ -260,7 +261,7 @@ Vue.component("calendar", {
               o[prop] = Number(o[prop])
             }
         }
-
+        this.events = []
         let oldE = <%- data %>.sort(byEnd)
         const newE = oldE.map(getEmpty).filter((e) => e.duration > 1)
         let combined = oldE.concat(newE)
@@ -274,18 +275,29 @@ Vue.component("calendar", {
           let duration = moment.duration(end.diff(dayStart))
           let hours = duration.asHours()
           let solution = Math.floor((hours-o.dayEndH)/24)
-          if(solution === -1 && index < array.length - 1){
+          if(element.open === false){
             return element
           }
+          else if(solution === -1 && index < array.length - 1){
+            let obj = {
+              name: "in between",
+              start: element.start,
+              end: element.end,
+              color: "red",
+              open: true,
+            }
+            return obj
+          }
           if(solution === 0 && index < array.length - 1){
+            // event geht bis zum nächsten Tag
             let evening = {
-              name: "eve",
+              name: "WHYYYY?????",
               start: element.start,
               end: moment(dayStart).add(o.dayEndH, "hours").add(o.dayEndM, "minutes").format("YYYY-MM-DD HH:mm"),
               color: "red",
               open: true,
             }       
-            evening["duration"] = moment.duration(moment(evening.end).diff(moment(evening.start))).asMinutes()     
+            evening["duration"] = moment.duration(moment(evening.end).diff(moment(evening.start))).asMinutes()
             let morning = {
               name: "1. Termin",
               start: moment(open).add(24, "hours").format("YYYY-MM-DD HH:mm"),
@@ -293,7 +305,8 @@ Vue.component("calendar", {
               color: "green",
               open: true,
             }
-            if(evening.duration > 1){
+            
+            if(evening.duration > 0){
               return [morning,evening]
             }
             else {
@@ -302,6 +315,7 @@ Vue.component("calendar", {
             
           }
           if(solution > 0 && index < array.length - 1){
+            //event geht bis mindestens bis übernächsten Tag -> ganztagige Verfügbarkeit am nächsten Tag einfügen
             let arr = []
             let evening = {
               name: "eve",
@@ -375,16 +389,12 @@ Vue.component("calendar", {
         
         this.events = split.concat(oldE)
 
-        this.newEvents = split.concat(oldE).filter((e,i,a) => e.toDb === true)
-
-
-
-        
       },
       onSubmit() {
         //wählt Wochentage
         const now = this.focus
-        let week = this.newEvents.filter(function(e,i,a){
+        const newEvents = this.events.filter((e,i,a) => e.toDb === true)
+        let week = newEvents.filter(function(e,i,a){
           let t = moment(e.start)
           let weekStart = moment(now).startOf("week")
           let weekEnd = moment(now).endOf("week")
@@ -393,7 +403,8 @@ Vue.component("calendar", {
         console.log(week)
         axios.post('http://localhost:3000/calendar',{ 
           params: { 
-            week: JSON.stringify(week)
+            week: JSON.stringify(week),
+            now: now
           }
         })
         alert(week.length + " Termine in dieser Woche erfolgreich hochgeladen!")
