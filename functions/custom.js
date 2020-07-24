@@ -30,7 +30,7 @@ module.exports.getDb = () => {
         
         let arr = JSON.parse(JSON.stringify(myobject.recordset));
         let newArr = arr.map(e => ({
-            name: e.name,
+            name: "Termin auf Vitomed",
             start: moment(e.start).utc().format("YYYY-MM-DD HH:mm"),
             end: moment(e.end).utc().format("YYYY-MM-DD HH:mm"),
             color: "yellow",
@@ -220,6 +220,7 @@ function makeOrange(e,i,a){
     open: false,
     color: "orange",
     startFormated: e.startFormated,
+    dateFormated: moment(e.start).format("dd, DD.MM HH:MM"),
     toDb: true
   }
   return obj

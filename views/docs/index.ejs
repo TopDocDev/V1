@@ -100,9 +100,11 @@
                       </div>
                     </a>
                     <div class="col-1 termin-spalte"v-for="n in time">  
-                        <a href="/buchung" v-for="item in n">                  
+                      <div v-for="item in n.slice(0,4)"> 
+                        <a v-bind:href="'/buchung/' + item._id">                 
                           <termin v-bind:zeit="item.startFormated"></termin>
                         </a>  
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -161,8 +163,15 @@ props: ['sterne'],
 template: '<span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span></span>'
 })
 Vue.component('termin', {
-  template: '<div class="termin">{{zeit}}</div>',
-  props: ['zeit']
+  template: `
+
+    <div class="termin">{{zeit}}</div>
+
+    `,
+  props: ['zeit'],
+  methods: {
+
+  }
 })
 
 
@@ -177,33 +186,9 @@ var app1 = new Vue({
   },
   mounted(){
     console.log(this.time)
+  },
+  methods: {
   }
-
-   /*
-  computed: {
-    newArr: function(){
-      return moment(this.time).format("HH:mm")
-    }
-   function getFields(input, field) {
-        var output = [];
-        for (var i=0; i < input.length ; ++i)
-            output.push(input[i][field]);
-        return output;
-    }
-    var numbers2 = getFields(this.time, "TT_DATEIN"); 
-
-
-    let newArr = []
-    for(i=0;i<this.time.length;i++){
-        let mom = moment(this.time[i])
-        r.push(mom.format("HH:mm"))	
-    }
-    console.log(newArr);
-    console.log(this.docs)
-    return r
-
-  }
-      */
 })
 </script>
 <style scoped>

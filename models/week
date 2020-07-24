@@ -9,6 +9,7 @@ var weekSchema = new mongoose.Schema({
     toDb: Boolean,
     color: String,
     startFormated: String,
+    dateFormated: String
 })
 
 module.exports = mongoose.model("week", weekSchema);

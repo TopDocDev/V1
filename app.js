@@ -135,7 +135,6 @@ app.get("/docs", (req, res) => doc.find({}, function(err, allDocs){
             } else {
                 const sorted = allWeeks.sort(custom.sortByEnd)
                 const data = custom.getFiveDays(sorted)
-                console.log(data)
                 res.render("docs/index",{
                     doc : JSON.stringify(allDocs),
                     data: JSON.stringify(data)
@@ -173,6 +172,17 @@ app.get("/docs/:id", function(req, res){
         }
     });
 });
+// week.findById("5f172cd12a53b103dc6cc32d", (err, result) => console.log(result))
+app.get("/buchung/:id",function(req, res){
+    console.log(req.params.id)
+    week.findById(req.params.id).exec(function(err, result){
+        if(err){
+            console.log(err)
+        } else {
+            res.render("docs/buchung", {termin: result})
+        }
+    })
+})
 
 /*
 app.get("/docs/:id/signup", function(req, res){
