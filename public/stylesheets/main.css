@@ -51,13 +51,20 @@ sharp-sans-semibold, Arial, sans-serif
     background: grey;
     width: 100%
 }
-.kachel {
-    height: 197px;
+.kachel-top {
+    height: 100px;
     padding: 12px;
     border-bottom: 1px solid;
     border-bottom-color:rgb(225, 225, 228);
-
-
+}
+.black {
+    border: 1px solid black;
+}
+.kachel {
+    height: 197px;
+    padding: 0px;
+    border-bottom: 1px solid;
+    border-bottom-color:rgb(225, 225, 228);
 }
 .aufteilung {
     height: 152px;
@@ -100,6 +107,21 @@ sharp-sans-semibold, Arial, sans-serif
     text-align: center;
     cursor: pointer;
     color: black;
+}
+.more {
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 6px;
+    margin-top: 5px;
+    height: 31px;
+    width: 66px;
+    background-color: rgb(255, 240, 75);
+    text-align: center;
+    cursor: pointer;
+    color: black;
+}
+.datum {
+    width: 46px;
 }
 .container {
     position: relative;

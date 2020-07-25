@@ -19,115 +19,129 @@
               <a type="button" class="btn btn-info" onclick=initMap()>Suche</a>
             </div>
           </form>
-            <script>
-                                       
-                var map, places, infoWindow;
-                var autocomplete;
-                var countryRestrict = {"country" : "ch"}
-
-                function initMap() {
-                map = new google.maps.Map(document.getElementById('map'), {
-                    zoom: 7,
-                center: {lat: 47, lng: 8}
-                });
-
-                // Create the autocomplete object and associate it with the UI input control.
-                // Restrict the search to the default country, and to place type "cities".
-                autocomplete = new google.maps.places.Autocomplete(
-                    /** @type {!HTMLInputElement} */ (
-                        document.getElementById('autocomplete')), {
-                        types: ['(cities)'],
-                        componentRestrictions: countryRestrict
-                    });
-                places = new google.maps.places.PlacesService(map);
-
-                autocomplete.addListener('place_changed', onPlaceChanged);
-                }
-
-                // When the user selects a city, get the place details for the city and
-                // zoom the map in on the city.
-                function onPlaceChanged() {
-                var place = autocomplete.getPlace();
-                if (place.geometry) {
-                    map.panTo(place.geometry.location);
-                    map.setZoom(15);
-                    search();
-                } else {
-                    document.getElementById('autocomplete').placeholder = 'Enter a city';
-                }
-                }
-                
-
-            </script>
-            <script>
-                var field = document.getElementById("date");
-                var date = new Date();
-                field.value = date.getDate().toString().padStart(2, 0) + '.' + (date.getMonth() + 1).toString().padStart(2, 0) + '.' + date.getFullYear().toString();
-            </script>
-
-                <div id="app-filter">  
-                    <div class="row">
-                        <div class="col-7"></div>
-
-                            <div v-for="item in arr">   
-                                <tag v-bind:tag="item.tag" v-bind:date="item.date"></tag>
-                            </div>
-
+        </div>
+        <div id="app">
+          <div class="kachel-top row">
+            <div class="col-7"></div>
+            <div v-for="item in arr">   
+              <tag v-bind:tag="item.tag" v-bind:date="item.date"></tag>
+            </div>
+          </div>
+          <div class="kachel" v-for="doc in docs">
+            <div class="aufteilung row">
+              <a class='col-7 doc-info' v-bind:href="'/docs/' + doc._id">
+                <div class="row">
+                  <div class='photo circular--landscape'>
+                    <picture>
+                      <photo
+                      v-bind:src="doc.image"
+                      ></photo>
+                    </picture>
+                  </div>
+                  <div class='text'>
+                    <h3>{{doc.name}}</h3>
+                    <span>{{doc.spec}}</span>
+                    <div class="rating">
+                      <sterne></sterne>
+                      <span>({{doc.star}})</span>
                     </div>
-                </div>
-              </div>
-              <div id="app-index">
-                <div class="kachel" v-for="doc in docs">
-                  <div class="aufteilung row">
-                    <a class='col-7 doc-info' v-bind:href="'/docs/' + doc._id">
-                      <div class="row">
-                        <div class='photo circular--landscape'>
-                          <picture>
-                            <photo
-                            v-bind:src="doc.image"
-                            ></photo>
-                          </picture>
-                        </div>
-                        <div class='text'>
-                          <h3>{{doc.name}}</h3>
-                          <span>{{doc.spec}}</span>
-                          <div class="rating">
-                            <sterne></sterne>
-                            <span>({{doc.star}})</span>
-                          </div>
-                          <span style="padding-top: 5em"> {{doc.rating}} Bewertungen</span>
-                        </div>
-                      </div>
-                    </a>
-                    <div class="col-1 termin-spalte"v-for="n in time">  
-                      <div v-for="item in n.slice(0,4)"> 
-                        <a v-bind:href="'/buchung/' + item._id">                 
-                          <termin v-bind:zeit="item.startFormated"></termin>
-                        </a>  
-                      </div>
-                    </div>
+                    <span style="padding-top: 5em"> {{doc.rating}} Bewertungen</span>
                   </div>
                 </div>
+              </a>
+              <div class="col-1 termin-spalte"v-for="n in time">  
+                <div v-for="item in n.slice(0, toShow)"> 
+                  <a v-bind:href="'/buchung/' + item._id">                 
+                    <termin v-bind:zeit="item.startFormated"></termin>
+                  </a>  
+                  
+                </div>
+                <a v-bind:href="'/docs/' + doc._id">
+                  <more></more> 
+                </a>
               </div>
+              
             </div>
-            
-          </section>
-        <div class="karte-aussen col-4">
-          <div id="karte-innen">
-            <div id="map"></div>
           </div>
         </div>
       </div>
+    </section>
+    <div class="karte-aussen col-4">
+      <div id="karte-innen">
+        <div id="map"></div>
+      </div>
     </div>
-
+  </div>
+</div>
 
 <script>
-    
-// app-filter
+                                    
+  var map, places, infoWindow;
+  var autocomplete;
+  var countryRestrict = {"country" : "ch"}
+
+  function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 7,
+  center: {lat: 47, lng: 8}
+  });
+
+  // Create the autocomplete object and associate it with the UI input control.
+  // Restrict the search to the default country, and to place type "cities".
+  autocomplete = new google.maps.places.Autocomplete(
+      /** @type {!HTMLInputElement} */ (
+          document.getElementById('autocomplete')), {
+          types: ['(cities)'],
+          componentRestrictions: countryRestrict
+      });
+  places = new google.maps.places.PlacesService(map);
+
+  autocomplete.addListener('place_changed', onPlaceChanged);
+  }
+
+  // When the user selects a city, get the place details for the city and
+  // zoom the map in on the city.
+  function onPlaceChanged() {
+  var place = autocomplete.getPlace();
+  if (place.geometry) {
+      map.panTo(place.geometry.location);
+      map.setZoom(15);
+      search();
+  } else {
+      document.getElementById('autocomplete').placeholder = 'Enter a city';
+  }
+  }
+  
+
+</script>
+<script>
+  var field = document.getElementById("date");
+  var date = new Date();
+  field.value = date.getDate().toString().padStart(2, 0) + '.' + (date.getMonth() + 1).toString().padStart(2, 0) + '.' + date.getFullYear().toString();
+</script>
+<script>
+
 Vue.component('tag', {
     props: ["tag", "date"],
-    template: '<div class="col-1 tag"><div class="Wochentag">{{tag}}</div><div class="Datum"><span>{{date}}</span></div></div>',
+    template: `
+    <div class="col-1 tag">
+      <div class="Wochentag">{{tag}}</div>
+      <div class="Datum">
+        <span>{{date}}</span>
+      </div>
+    </div>
+    `
+  ,
 })
+Vue.component('more', {
+  template: "<div class='more' onclick='showMore'>Mehr</div>",
+  methods: {
+    showMore(){
+      this.toShow = arr.length
+      console.log(this.toShow)
+    }
+  }
+})  
 var dayStart = moment();
 var arr = [];
 for(i=-1; i<4; i++){
@@ -139,13 +153,6 @@ for(i=-1; i<4; i++){
         date: date
     })
 }
-
-var app2 = new Vue({
-  el: '#app-filter',
-  data: {
-      arr: arr
-  }
-})
 
 // app-index
 Vue.component('kachel', {
@@ -164,30 +171,30 @@ template: '<span><span class="fa fa-star checked"></span><span class="fa fa-star
 })
 Vue.component('termin', {
   template: `
-
     <div class="termin">{{zeit}}</div>
-
     `,
   props: ['zeit'],
   methods: {
-
   }
 })
 
 
-var app1 = new Vue({
-  el: '#app-index',
+var app = new Vue({
+  el: '#app',
   data() {
     return {
       docs: JSON.parse('<%- doc %>'),
       newArr: [],
-      time: <%- data %>
+      time: <%- data %>,
+      arr: arr,
+      toShow: 4,
     }
   },
   mounted(){
     console.log(this.time)
   },
   methods: {
+
   }
 })
 </script>

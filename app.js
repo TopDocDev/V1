@@ -162,7 +162,6 @@ app.post("/docs", function(req, res){
 
 app.get("/docs/new", (req, res) => res.render("docs/new"))
 
-
 app.get("/docs/:id", function(req, res){
     doc.findById(req.params.id).populate("comments").exec(function(err, foundDoc){
         if(err){
@@ -172,7 +171,7 @@ app.get("/docs/:id", function(req, res){
         }
     });
 });
-// week.findById("5f172cd12a53b103dc6cc32d", (err, result) => console.log(result))
+
 app.get("/buchung/:id",function(req, res){
     console.log(req.params.id)
     week.findById(req.params.id).exec(function(err, result){
