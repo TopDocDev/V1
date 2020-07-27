@@ -27,6 +27,9 @@
     "mongoose": "^5.7.5",
     "mssql": "^6.0.1",
     "nodemon": "^2.0.4",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^6.0.1",
     "sequelize": "^5.21.2",
     "tedious": "^6.6.2"
   },

@@ -12,10 +12,16 @@ const express     = require("express"),
     sequelize   = require("sequelize"),
     moment      = require('moment'),
     axios       = require("axios"),
-    async       = require("async")
-    //var startDate = moment("Wed Jul 01 2020 03:00:00 GMT+0200").startOf('month').format("YYYY-MM-DD HH:mm")
+    async       = require("async"),
+    User        = require("./models/user"),
+    passport    = require("passport")
+    // passport-local = require("passport-local"),
+    // passport-local-mongoose = require("passport-local-mongoose")
 const custom = require("./functions/custom");
+// passport.use(User.createStrategy());
 
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
 
 
 mongoose.connect("mongodb+srv://louis:louis@cluster0-bbdc4.mongodb.net/TopDoc?retryWrites=true&w=majority", {useNewUrlParser: true,  useUnifiedTopology: true }); 
@@ -167,10 +173,19 @@ app.get("/docs/:id", function(req, res){
         if(err){
             console.log(err);
         } else {
-            res.render("docs/show", {doc: JSON.stringify(foundDoc)});
+            console.log(foundDoc)
+            week.find({}, function(err, allWeeks){
+                if(err){
+                    console.log(err)
+                } else {
+                    const sorted = allWeeks.sort(custom.sortByEnd)
+                    const data = custom.getFiveDays(sorted)
+                    res.render("docs/show", {doc: JSON.stringify(foundDoc), data: JSON.stringify(data)}); 
+                }
+            })
         }
-    });
-});
+    })
+})
 
 app.get("/buchung/:id",function(req, res){
     console.log(req.params.id)
@@ -230,6 +245,30 @@ app.post("/docs/:id/comments", function(req, res){
    });
 
 });
+// register
+app.get("/register", function(req, res){
+    res.render("register"); 
+ });
+ //handling user sign up
+ app.post("/register", function(req, res){
+     console.log(req.body)
+     User.register(new User(
+            {
+            vorname: req.body.vorname,
+            nachname: req.body.nachname,
+            username: req.body.username,
+            handy: req.body.handy,
+            }
+        ), req.body.password, function(err, user){
+         if(err){
+             console.log(err);
+             return res.render('register');
+         }
+         passport.authenticate("local")(req, res, function(){
+            res.redirect("/secret");
+         });
+     });
+ });
 
 var port = process.env.PORT || 3000;
 app.listen(port, function () {

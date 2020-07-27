@@ -1,0 +1,54 @@
+<% include ./partials/header %>
+<link rel="stylesheet" href="/stylesheets/buchung.css">
+<style type="text/css">
+
+</style>
+
+<div id="con">
+<div class="login-form" style="display:inline-block; text-align: left;">
+    <form action="/register" method="POST">
+        <h2 class="text-center">Account erstellen</h2>		
+        <div class="or-separator"></div>
+        <div class="form-row">
+            <div class="col">
+                <label for="Vorname">Vorname</label>
+                <input type="text" class="form-control" id="Vorname" placeholder="Vorname" name="vorname" value="Louis">
+            </div>
+            <div class="col">
+                <label for="Nachname">Nachname</label>
+                <input type="text" class="form-control" id="Nachname" placeholder="Nachname" name="nachname" value="Aebischer">
+            </div>
+        </div>
+        <div class="form-row">
+            <label for="username">E-Mail</label>
+            <input type="email" class="form-control" id="username" placeholder="email" name="username"  value="Louis.Aebischer@stud.unibas.ch">
+        </div>
+        <div class="form-row">
+                <label for="handy">Handy-Nummer</label>
+                <input type="number" class="form-control" id="strasse" placeholder="handy" name="handy" value="0765741296">
+        </div>
+        <div class="form-row">
+            <label for="password">Passwort</label>
+            <input type="password" class="form-control" id="password" placeholder="password" name="password" value="password">
+        </div>
+        <button id="but" type="submit" class="btn btn-primary">Registrieren</button>
+    </form>
+</div>
+</div>
+
+<script type="text/JavaScript">
+function replace(){
+  var myAnchor = document.getElementById("but");
+  var myDiv = document.createElement("div");
+  myDiv.innerHTML = "Account erstellt!";
+  myDiv.classList.add("alert")
+  myDiv.classList.add("alert-success")
+  myAnchor.parentNode.replaceChild(myDiv, myAnchor);
+}
+
+</script>
+
+<% include ./partials/footer %>
+
+
+
