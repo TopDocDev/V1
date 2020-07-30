@@ -53,8 +53,7 @@
                 <div v-for="item in n.slice(0, toShow)"> 
                   <a v-bind:href="'/buchung/' + item._id">                 
                     <termin v-bind:zeit="item.startFormated"></termin>
-                  </a>  
-                  
+                  </a>
                 </div>
                 <a v-bind:href="'/docs/' + doc._id">
                   <more></more> 
@@ -213,6 +212,9 @@ var app = new Vue({
   height: 100%;
   margin-left: 0px;
   }
+  .datum {
+    width: 46px;
+}
 
 </style>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7k5XIGkkgwdc7rcCSH10ZoGl-U3DlKiQ&callback=initMap&libraries=places " async defer></script>
