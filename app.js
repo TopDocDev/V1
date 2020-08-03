@@ -384,18 +384,7 @@ app.post('/buchung/:id/register', (req, res) => {
                             'You are now registered and can log in'
                         )
                         res.redirect('/buchung/' + req.params.id)
-                        week.findByIdAndUpdate(
-                            termin.id,
-                            { status: "pending" ,
-                            color: "blue"},
-                            function(err, result) {
-                              if (err) {
-                                res.send(err);
-                              } else {
-                                console.log("booked!")
-                              }
-                            }
-                        )
+                        custom.saveDate(termin.id)
                     })
                     .catch(err => console.log(err))
                 })
@@ -405,6 +394,7 @@ app.post('/buchung/:id/register', (req, res) => {
       }
     })
 })
+
 
 // const id = "5f26acdac412ed33a85e1bf0"
 

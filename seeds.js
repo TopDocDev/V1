@@ -1,6 +1,7 @@
 var mongoose = require("mongoose");
 var doc = require("./models/doc");
 var Comment   = require("./models/comment");
+week        = require("./models/week")
 
 var data = [
     {

@@ -1,5 +1,22 @@
 const moment = require("moment")
 const sql = require("mssql")
+const mongoose = require("mongoose")
+const week = require("../models/week")
+
+function saveDate(id){
+  week.findByIdAndUpdate(
+      id,
+      { status: "pending" ,
+      color: "blue"},
+      function(err, result) {
+        if (err) {
+          res.send(err);
+        } else {
+          console.log("booked!")
+        }
+      }
+  )
+}
 
 const dbConfig = {  
   server: 'localhost', 
@@ -230,6 +247,7 @@ module.exports.makeOrange = makeOrange;
 module.exports.sortByEnd = sortByEnd;
 module.exports.makeArray = makeArray;
 module.exports.getFiveDays = getFiveDays;
+module.exports.saveDate = saveDate;
 
 // Boilerplate: 
 // return {
