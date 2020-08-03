@@ -34,7 +34,14 @@ app.use(session({
 	resave: true
 }));
 
-app.use(flash());
+app.use(flash())
+app.use(function(req, res, next) {
+    res.locals.success_msg = req.flash('success_msg')
+    res.locals.error_msg = req.flash('error_msg')
+    res.locals.error = req.flash('error')
+    res.locals.success = req.flash('success')
+    next();
+  });
 
 app.use(passport.initialize());
 // app.use(passport.session());
@@ -364,7 +371,7 @@ app.post('/buchung/:id/register', (req, res) => {
                 handy,
                 password
               })
-              console.log(newUser)  
+              //console.log(newUser)  
               bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(newUser.password, salt, (err, hash) => {
                   if (err) throw err;
@@ -372,12 +379,11 @@ app.post('/buchung/:id/register', (req, res) => {
                   newUser
                     .save()
                     .then(user => {
-                        res.render('docs/buchung', {
-                            success: "Erfolgreich registriert!!!", 
-                            errors: errors,
-                            termin
-
-                        })
+                        req.flash(
+                            'success_msg',
+                            'You are now registered and can log in'
+                        )
+                        res.redirect('/buchung/' + req.params.id)
                         week.findByIdAndUpdate(
                             termin.id,
                             { status: "pending" ,
@@ -386,7 +392,7 @@ app.post('/buchung/:id/register', (req, res) => {
                               if (err) {
                                 res.send(err);
                               } else {
-                                console.log(result)
+                                console.log("booked!")
                               }
                             }
                         )
@@ -432,9 +438,11 @@ app.get("/login", (req, res) => res.render("login"))
 app.post('/buchung/:id/login', (req, res, next) => {
     passport.authenticate('local', {
       successRedirect: '/buchung/' + req.params.id,
+      successFlash: 'Welcome!',
       failureRedirect: '/buchung/' + req.params.id,
       failureFlash: true
-    })(req, res, next);
+    })
+    (req, res, next);
 })
 
 // app.post('/buchung/:id/login', (req, res) => {
