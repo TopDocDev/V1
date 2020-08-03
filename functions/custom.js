@@ -221,7 +221,8 @@ function makeOrange(e,i,a){
     color: "orange",
     startFormated: e.startFormated,
     dateFormated: moment(e.start).format("dd, DD.MM hh:mm"),
-    toDb: true
+    toDb: true,
+    status: "open"
   }
   return obj
 }

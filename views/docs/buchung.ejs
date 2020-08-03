@@ -6,8 +6,16 @@
 <div id="con">
 <div class="login-form" style="display:inline-block; text-align: left;">
   <form action="/buchung/<%= termin._id %>/login" method="post">
-    <h2 class="text-center">Termin buchen </h2>		
+    <h2 class="text-center">Einloggen und Termin buchen</h2>		
     <p>Datum: <%= termin.dateFormated %></p>
+    <% if(locals.error !== undefined){ %>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <%= error %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <% } %>
     <div class="form-row">
       <div class="col">
         <label for="username">E-Mail</label>
@@ -23,6 +31,24 @@
     
     <div class="or-separator"><i>oder</i></div>
     <form action="/buchung/<%= termin._id %>/register" method="post">
+      <h2 class="text-center">Neuen Account registrieren und buchen</h2>
+      <% if (locals.success_msg !== undefined){%>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <%= success %>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+    <% } else if(locals.errors !== undefined) { %>
+        <% errors.forEach(function(error) { %>
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              <%= error.msg %>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+        <% }); %>
+    <% } %>
       <div class="form-row">
         <div class="col">
             <label for="Vorname">Vorname</label>
@@ -41,18 +67,18 @@
             <label for="handy">Handy-Nummer</label>
             <input type="number" class="form-control" id="strasse" placeholder="handy" name="handy" value="0765741296">
     </div>
-    <div class="form-row">
+    <div class="form-row" id="password-div">
         <label for="password">Passwort</label>
         <input type="password" class="form-control" id="password" placeholder="password" name="password" value="password">
     </div>
-      <div class="form-group radio">
+      <!-- <div class="form-group radio">
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="gridCheck" checked>
+          <input class="form-check-input" type="checkbox" id="gridCheck" checked onclick="noAccount()">
           <label class="form-check-label" for="gridCheck">
             Account erstellen
           </label>
         </div>
-      </div>
+      </div> -->
       <button id="but" type="submit" class="btn btn-primary">Termin buchen</button>
     </div>
   </form>
@@ -60,14 +86,6 @@
 </div>
 
 <script type="text/JavaScript">
-function replace(){
-  var myAnchor = document.getElementById("but");
-  var myDiv = document.createElement("div");
-  myDiv.innerHTML = "Termin erfolgreich gebucht!";
-  myDiv.classList.add("alert")
-  myDiv.classList.add("alert-success")
-  myAnchor.parentNode.replaceChild(myDiv, myAnchor);
-}
 
 </script>
 

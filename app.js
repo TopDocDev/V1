@@ -1,5 +1,3 @@
-const { format } = require("path");
-
 const express     = require("express"),
     app         = express(),
     bodyParser  = require("body-parser"),
@@ -19,23 +17,41 @@ const express     = require("express"),
     LocalStrategy = require("passport-local")
     bcrypt      = require("bcryptjs")
 
+
+require('./config/passport')(passport)
+
     // passport-local = require("passport-local"),
     // passport-local-mongoose = require("passport-local-mongoose")
-const custom = require("./functions/custom");  
+const custom = require("./functions/custom")
+
+// session herecy
+const session = require('express-session');
+const flash = require('connect-flash');
+
+app.use(session({
+	secret:'happy dog',
+	saveUninitialized: true,
+	resave: true
+}));
+
+app.use(flash());
 
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+// passport.use(new LocalStrategy(User.authenticate()));
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
+//mongodb+srv://louis:<password>@cluster0-bbdc4.mongodb.net/<dbname>?retryWrites=true&w=majority
 
+mongoose.connect("mongodb+srv://louis:louis@cluster0-bbdc4.mongodb.net/TopDoc?retryWrites=true&w=majority", {useNewUrlParser: true,  useUnifiedTopology: true })
+    .then(() => console.log('MongoDB Connected'))
+    .catch(err => console.log(err));
 
-mongoose.connect("mongodb+srv://louis:louis@cluster0-bbdc4.mongodb.net/TopDoc?retryWrites=true&w=majority", {useNewUrlParser: true,  useUnifiedTopology: true }); 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.set("view engine", "ejs");
-app.use(express.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/public"))
 
 //seedDB();
 
@@ -55,9 +71,9 @@ app.get("/calendar", (req, res) => {
                     duration: e.duration,
                     open: e.open,
                     toDb: e.toDb,
-                    booked,
                     color: e.color,
-                    startFormated: e.startFormated
+                    startFormated: e.startFormated,
+                    status: e.status
                 }
             })
             res.render("calendar", {data: JSON.stringify(data.concat(momentified))})
@@ -201,27 +217,6 @@ app.get("/buchung/:id",function(req, res){
         }
     })
 })
-app.post("/buchung/:id",function(req, res){
-    passport.authenticate('local', { failureRedirect: '/docs' }),
-    function(req, res) {
-      res.redirect('/')
-      console.log("Termin gebucht!")
-    }
-})
-
-/*
-app.get("/docs/:id/signup", function(req, res){
-    doc.findById(req.params.id).exec(function(err){
-        if(err){
-            console.log(err)
-        } else {
-            res.render("docs/signup");
-        }
-    }
-});
-*/
-
-app.get("/docs/buchung", (req, res) => res.render("docs/buchung"))
 
 // ====================
 // COMMENTS ROUTES
@@ -263,7 +258,7 @@ app.get("/register", function(req, res){
 })
 
 app.post('/register', (req, res) => {
-    const { vorname, nachname, username, handy, password, password2} = req.body;
+    const { vorname, nachname, username, handy, password, password2} = req.body
     let errors = []
     if (!vorname || !nachname || !username || !handy || !password || !password2) {
       errors.push({ msg: 'Bitte füllen Sie alle Felder aus' });
@@ -329,81 +324,87 @@ app.post('/register', (req, res) => {
 })
 
 app.post('/buchung/:id/register', (req, res) => {
-    const id = req.params.id
-    const { vorname, nachname, username, handy, password, password2} = req.body;
-    let errors = []
-    if (!vorname || !nachname || !username || !handy || !password || !password2) {
-      errors.push({ msg: 'Bitte füllen Sie alle Felder aus' });
-    }  
-    if (password != password2) {
-      errors.push({ msg: 'Passwörter sind nicht gleich' });
-    }  
-    if (password.length < 6) {
-      errors.push({ msg: 'Passwort muss mindestens 6 Zeichen lang sein!' });
-    }  
-    if (errors.length > 0) {
-      res.render('register', {
-        errors,
-        vorname,
-        nachname,
-        username,
-        handy,
-        password,
-        password2
-      })
-    } else {
-      User.findOne({ username: username }).then(user => {
-        if (user) {
-          errors.push({ msg: 'Email wird bereits verwendet!' });
-          console.log(errors)
-          res.render('register', {
-            errors: errors,
+    week.findById(req.params.id,  function(err, termin){
+        const { vorname, nachname, username, handy, password, password2} = req.body
+        let errors = []
+        if (!vorname || !nachname || !username || !handy || !password ) {
+          errors.push({ msg: 'Bitte füllen Sie alle Felder aus' });
+        }  
+        if (password.length < 6) {
+          errors.push({ msg: 'Passwort muss mindestens 6 Zeichen lang sein!' });
+        }  
+        if (errors.length > 0) {
+          res.render('docs/buchung', {
+            termin,
+            errors,
             vorname,
             nachname,
             username,
             handy,
             password,
-            password2
           })
         } else {
-          const newUser = new User({
-            vorname,
-            nachname,
-            username,
-            handy,
-            password
-          })
+          User.findOne({ username: username }).then(user => {
+            if (user) {
+              errors.push({ msg: 'Email wird bereits verwendet!' })
+              res.render('docs/buchung', {
+                termin,
+                errors,
+                vorname,
+                nachname,
+                username,
+                handy,
+                password,
+              })
+            } else {
+              const newUser = new User({
+                vorname,
+                nachname,
+                username,
+                handy,
+                password
+              })
+              console.log(newUser)  
+              bcrypt.genSalt(10, (err, salt) => {
+                bcrypt.hash(newUser.password, salt, (err, hash) => {
+                  if (err) throw err;
+                  newUser.password = hash;
+                  newUser
+                    .save()
+                    .then(user => {
+                        res.render('docs/buchung', {
+                            success: "Erfolgreich registriert!!!", 
+                            errors: errors,
+                            termin
 
-
-          console.log(newUser)
-          
-  
-          bcrypt.genSalt(10, (err, salt) => {
-            bcrypt.hash(newUser.password, salt, (err, hash) => {
-              if (err) throw err;
-              newUser.password = hash;
-              newUser
-                .save()
-                .then(user => {
-                    res.render('buchung/' + id, {success: "Erfolgreich registriert!!!", errors: errors})
+                        })
+                        week.findByIdAndUpdate(
+                            termin.id,
+                            { status: "pending" ,
+                            color: "blue"},
+                            function(err, result) {
+                              if (err) {
+                                res.send(err);
+                              } else {
+                                console.log(result)
+                              }
+                            }
+                        )
+                    })
+                    .catch(err => console.log(err))
                 })
-                .catch(err => console.log(err));
             })
+          }
         })
       }
     })
-  }
 })
-// saveDate("5f22f23dbd53ac4014e4538b")
-// function saveDate(id){
-//     const result = week.findById(id, (err, result) => {
-//         return result
-//     })
-//     terminGebucht.create(result, (err) => {
-//         if(err){console.log(err)}
-//         else{console.log("termin gebucht!")}
-//     })
-// }
+
+// const id = "5f26acdac412ed33a85e1bf0"
+
+
+
+
 
 //handling user sign up
 // app.post("/register", function(req, res){
@@ -428,15 +429,44 @@ app.post('/buchung/:id/register', (req, res) => {
 
 app.get("/login", (req, res) => res.render("login"))
 
-
-
-app.post('/buchung/:id/d', (req, res, next) => {
-    console.log(req.params.id)
+app.post('/buchung/:id/login', (req, res, next) => {
     passport.authenticate('local', {
-      successRedirect: '/dashboard',
-      failureRedirect: '/users/login',
-    })(req, res, next)
-  })
+      successRedirect: '/buchung/' + req.params.id,
+      failureRedirect: '/buchung/' + req.params.id,
+      failureFlash: true
+    })(req, res, next);
+})
+
+// app.post('/buchung/:id/login', (req, res) => {
+//     week.findById(req.params.id,  function(err, termin){
+//         passport.authenticate('local', { failureRedirect: '/login' }),
+//         function(req, res) {
+//             res.render('docs/buchung', {
+//                 termin
+//             })
+//         }
+//     })
+// })
+
+// app.post('/buchung/:id/login', (req, res) => {
+//     week.findById(req.params.id, (err, termin) => {
+//         passport.authenticate('local'),
+//         function(req, res){
+//             res.render("landing")
+//         } 
+//         // {
+//         //     successRedirect: res.render("docs/buchung", {
+//         //         termin: termin,
+//         //         loginSuccess: "Termin erfolgreich gebucht!"
+//         //     }),
+//         //     failureRedirect: res.render("docs/buchung", {
+//         //         termin: termin,
+//         //         loginError: "kein Erfolg!"
+//         //     })
+//         // }
+//     })
+// })
+
 var port = process.env.PORT || 3000;
 app.listen(port, function () {
     console.log("Server Has Started!");

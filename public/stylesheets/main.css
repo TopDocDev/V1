@@ -57,7 +57,7 @@ sharp-sans-semibold, Arial, sans-serif
     border-bottom: 1px solid;
     border-bottom-color:rgb(225, 225, 228);
 }
-.black {
+.b {
     border: 1px solid black;
 }
 .kachel {
@@ -120,9 +120,7 @@ sharp-sans-semibold, Arial, sans-serif
     cursor: pointer;
     color: black;
 }
-.datum {
-    width: 46px;
-}
+
 .container {
     position: relative;
 }

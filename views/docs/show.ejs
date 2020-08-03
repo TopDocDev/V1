@@ -1,36 +1,118 @@
 <% include ../partials/header %>
-<div id="app-8" class="container">
+<div id="app" class="container">
     <div class="row">
-        <div class="col-8">
+        <div class="col-8 b">
             <div class="row element">
                 <div class="col-3 circular--landscape">
-                    <img v-bind:src="doc.image" alt="">
+                    <img v-bind:src="docs.image" alt="">
                 </div>
                 <div class="col-9 element-top" stye="border: 1px solid black">
-                    <h1>{{doc.name}}</h1>
-                    <h6>{{doc.spec}}</h6>
+                    <h1>{{docs.name}}</h1>
+                    <h6>{{docs.spec}}</h6>
                 </div>
             </div>
             <div class="element row">
                 <div class="col-3">
                     <h3>Bewertung:</h3>
-                    <h1>{{doc.star}}</h1>
+                    <h1>{{docs.star}}</h1>
                     <Sterne></Sterne>
                 </div>
                 <div class="col-9">
-                    <p>{{doc.description}}</p>
+                    <p>{{docs.description}}</p>
                 </div>
             </div>
-            
-
         </div>
-        <div class="col-4">
-
+        <div class="col-4"></div>
+        <div class="row">
+            <div v-for="item in arr" class="col">   
+                <tag v-bind:tag="item.tag" v-bind:date="item.date"></tag>
+            </div>
+            <div class="row">
+                <div class="col termin-spalte"v-for="n in time">  
+                    <div v-for="item in n"> 
+                        <a v-bind:href="'/buchung/' + item._id">                 
+                        <termin v-bind:zeit="item.startFormated"></termin>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
-
     </div>
-
 </div>
+
+<script>
+
+Vue.component('tag', {
+    props: ["tag", "date"],
+    template: `
+    <div class="col-1 tag">
+      <div class="Wochentag">{{tag}}</div>
+      <div>
+        <span>{{date}}</span>
+      </div>
+    </div>
+    `
+  ,
+})
+Vue.component('more', {
+  template: "<div class='more' onclick='showMore'>Mehr</div>",
+  methods: {
+    showMore(){
+      this.toShow = arr.length
+      console.log(this.toShow)
+    }
+  }
+})  
+var dayStart = moment();
+var arr = [];
+for(i=-1; i<4; i++){
+    let d = dayStart.add(1, "day");
+    let tag = d.format("dd");
+    let date = d.format("DD.MM");
+    arr.push({
+        tag: tag,
+        date: date
+    })
+}
+Vue.component('kachel', {
+  template: "<div class='kachel'></div>",
+})  
+
+Vue.component('photo', {
+  props: ['photo'],
+  template: "<img style='height: 86px; width: 86px;'>",
+  message: "hello"
+})
+
+Vue.component('sterne', {
+props: ['sterne'],
+template: '<span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span></span>'
+})
+Vue.component('termin', {
+  template: `
+    <div class="termin">{{zeit}}</div>
+    `,
+  props: ['zeit'],
+  methods: {
+  }
+})
+
+let app = new Vue ({
+    el: "#app",
+    data: {
+        docs: JSON.parse('<%- doc %>'),
+        newArr: [],
+        time: <%- data %>,
+        arr: arr,
+        toShow: 4,
+    },
+    created(){
+        console.log(this.time)
+    }
+})
+</script>
+
+
 <style scoped>
     .circular--landscape {
     display: inline-block;
@@ -57,24 +139,6 @@
         padding: 50px;
     }
 </style>
-<script>
-Vue.component('sterne', {
-props: ['sterne'],
-template: '<span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star"></span></span>'
-})
-let app8 = new Vue ({
-    el: "#app-8",
-    data: {
-        doc: [],
-        doc: <%- doc %>
-    },
-    created(){
-    }
-})
-</script>
-
-
-
 
 
 
