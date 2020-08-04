@@ -18,7 +18,7 @@ const express     = require("express"),
     bcrypt      = require("bcryptjs")
 
 
-require('./config/passport')(passport)
+
 
     // passport-local = require("passport-local"),
     // passport-local-mongoose = require("passport-local-mongoose")
@@ -51,7 +51,7 @@ app.use(passport.initialize());
 // passport.deserializeUser(User.deserializeUser());
 //mongodb+srv://louis:<password>@cluster0-bbdc4.mongodb.net/<dbname>?retryWrites=true&w=majority
 
-mongoose.connect("mongodb+srv://louis:louis@cluster0-bbdc4.mongodb.net/TopDoc?retryWrites=true&w=majority", {useNewUrlParser: true,  useUnifiedTopology: true })
+mongoose.connect('mongodb://louis:louis@cluster0-shard-00-00-bbdc4.mongodb.net:27017,cluster0-shard-00-01-bbdc4.mongodb.net:27017,cluster0-shard-00-02-bbdc4.mongodb.net:27017/TopDoc?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority', {useNewUrlParser: true,  useUnifiedTopology: true })  
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.log(err));
 
@@ -163,7 +163,7 @@ app.get("/docs", (req, res) => doc.find({}, function(err, allDocs){
     if(err){
         console.log(err)
     } else {
-        week.find({}, function(err, allWeeks){
+        week.find({status: "open"}, function(err, allWeeks){
             if(err){
                 console.log(err)
             } else {
@@ -423,16 +423,21 @@ app.post('/buchung/:id/register', (req, res) => {
 //     })
 // })
 
-app.get("/login", (req, res) => res.render("login"))
+// app.get("/login", (req, res) => res.render("login"))
 
 app.post('/buchung/:id/login', (req, res, next) => {
-    passport.authenticate('local', {
-      successRedirect: '/buchung/' + req.params.id,
-      successFlash: 'Welcome!',
-      failureRedirect: '/buchung/' + req.params.id,
-      failureFlash: true
+    week.findById(req.params.id, (err, result) => {
+        require('./config/passport')(passport, result)
+        req._toParam = 'Hello'
+        passport.authenticate('local', {
+          successRedirect: '/buchung/' + req.params.id,
+          successFlash: 'Welcome!',
+          failureRedirect: '/buchung/' + req.params.id,
+          failureFlash: true
+        })
+        (req, res, next);
     })
-    (req, res, next);
+
 })
 
 // app.post('/buchung/:id/login', (req, res) => {

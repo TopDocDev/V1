@@ -3,16 +3,18 @@ const sql = require("mssql")
 const mongoose = require("mongoose")
 const week = require("../models/week")
 
-function saveDate(id){
+function saveDate(id, user){
   week.findByIdAndUpdate(
       id,
-      { status: "pending" ,
-      color: "blue"},
+      { status: "pending",
+      color: "blue",
+      user: user
+      },
       function(err, result) {
         if (err) {
           res.send(err);
         } else {
-          console.log("booked!")
+          console.log("Termin erfolgreich gebucht!")
         }
       }
   )
@@ -239,7 +241,8 @@ function makeOrange(e,i,a){
     startFormated: e.startFormated,
     dateFormated: moment(e.start).format("dd, DD.MM hh:mm"),
     toDb: true,
-    status: "open"
+    status: "open",
+    user: "none"
   }
   return obj
 }

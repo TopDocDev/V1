@@ -5,7 +5,8 @@ const custom = require("../functions/custom")
 // Load User model
 const User = require('../models/user');
 
-module.exports = function(passport) {
+module.exports = function(passport, termin) {
+  console.log(termin)
   passport.use(
     new LocalStrategy((username, password, done) => {
       // Match user
@@ -13,17 +14,17 @@ module.exports = function(passport) {
         username: username
       }).then(user => {
         if (!user) {
-          return done(null, false, { message: 'That email is not registered' });
+          return done(null, false, { message: 'DIese Email ist noch nicht registriert' });
         }
 
         // Match password
         bcrypt.compare(password, user.password, (err, isMatch) => {
           if (err) {console.log(err)}
           if (isMatch) {
-            custom.saveDate(user.id)
-            return done(null, user, {message: "Welcome!"});
+            custom.saveDate(termin.id, user.id)
+            return done(null, user, {message: "Termin erfolgreich gebucht!"});
           } else {
-            return done(null, false, { message: 'Password incorrect' });
+            return done(null, false, { message: 'falsches Passwort!' });
           }
         });
       });
