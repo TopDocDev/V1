@@ -14,7 +14,7 @@ module.exports = function(passport, termin) {
         username: username
       }).then(user => {
         if (!user) {
-          return done(null, false, { message: 'DIese Email ist noch nicht registriert' });
+          return done(null, false, { message: 'Diese Email ist noch nicht registriert' });
         }
 
         // Match password

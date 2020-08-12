@@ -1,0 +1,63 @@
+<% include ../partials/header %>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-6 col-lg-3 col-md-0"></div>
+        <div class="col-xl-6 col-lg-9 col-md-12">
+            <div class="row">
+                <div class="col-3">
+                  picture
+                </div>
+                <div class="col-9">
+                  
+                </div>
+              </div>
+              <% for(i=0; i< data.length; i++){ %>
+                  <div>
+                      <span class="date row"></span>
+                      <div class="row">
+                          <% data[i].forEach((e,i,a) => { %>
+                              <a href="/buchung/<%= e._id %>" class="col-xs-2 termin-show">
+                                  <div>
+                                      <%= e.startFormated%>
+                                  </div>
+                              </a>
+                          <% }) %>
+                      </div>
+                  </div>
+              <% } %>
+        </div>  
+    </div>
+</div>
+<script>
+
+    const dateArray = []
+    for(i=0; i<365; i++){
+        const Wochentage = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag",]
+        const day = moment().add(i, "d").locale("de").format("dddd DD.MM.YYYY")
+        dateArray.push(day)
+    }
+
+    const dateEl = document.querySelectorAll(".date")
+    
+    for (let index = 0; index < dateEl.length; index++) {
+        const element = dateEl[index];
+        element.innerHTML = dateArray[index]
+    }
+
+</script>
+<style>
+    .termin-show {
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 4px;
+    margin: 5px;
+    height: 31px;
+    min-width: 52px;
+    background-color: rgb(255, 240, 75);
+    text-align: center;
+    cursor: pointer;
+    color: black;
+}
+</style>
+
+<% include ../partials/footer %>

@@ -201,14 +201,13 @@ app.get("/docs/:id", function(req, res){
         if(err){
             console.log(err);
         } else {
-            console.log(foundDoc)
             week.find({}, function(err, allWeeks){
                 if(err){
                     console.log(err)
                 } else {
                     const sorted = allWeeks.sort(custom.sortByEnd)
                     const data = custom.getFiveDays(sorted)
-                    res.render("docs/show", {doc: JSON.stringify(foundDoc), data: JSON.stringify(data)}); 
+                    res.render("docs/show2", {doc: foundDoc, data: data}); 
                 }
             })
         }
