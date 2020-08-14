@@ -168,7 +168,7 @@ app.get("/docs", (req, res) => doc.find({}, function(err, allDocs){
                 console.log(err)
             } else {
                 const sorted = allWeeks.sort(custom.sortByEnd)
-                const data = custom.getFiveDays(sorted)
+                const data = custom.getNDays(sorted, 5)
                 res.render("docs/index",{
                     doc : JSON.stringify(allDocs),
                     data: JSON.stringify(data)
@@ -206,8 +206,12 @@ app.get("/docs/:id", function(req, res){
                     console.log(err)
                 } else {
                     const sorted = allWeeks.sort(custom.sortByEnd)
-                    const data = custom.getFiveDays(sorted)
-                    res.render("docs/show2", {doc: foundDoc, data: data}); 
+                    const data = custom.getNDays(sorted, 20)
+                    res.render("docs/show2", {
+                        doc: foundDoc, 
+                        data: data,
+                        dataStringified: JSON.stringify(data),
+                    }); 
                 }
             })
         }

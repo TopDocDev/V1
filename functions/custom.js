@@ -217,9 +217,9 @@ function sortByEnd(a, b){
   if (x > y) {return 1;}
   return 0;
 }
-function getFiveDays(input){
+function getNDays(input, n){
   const date = []
-  for (let i = 1; i < 6; i++) {
+  for (let i = 1; i < n+1; i++) {
     date.push(moment().add([i]*24, "hours").format("YYYY-MM-DD"))  
   }
   let output = date.map(function(element, index, array){
@@ -249,7 +249,7 @@ function makeOrange(e,i,a){
 module.exports.makeOrange = makeOrange;
 module.exports.sortByEnd = sortByEnd;
 module.exports.makeArray = makeArray;
-module.exports.getFiveDays = getFiveDays;
+module.exports.getNDays = getNDays;
 module.exports.saveDate = saveDate;
 
 // Boilerplate: 
