@@ -3,9 +3,9 @@
 <style type="text/css">
 </style>
 
-<div id="con">
+<div class="container">
 <div class="login-form" style="display:inline-block; text-align: left;">
-  <form action="/buchung/<%= termin._id %>/login" method="post">
+  <form action="/auth/buchung/<%= termin._id %>/login" method="post">
     <h2 class="text-center">Einloggen und Termin buchen</h2>		
     <p>Datum: <%= termin.dateFormated %></p>
     <% if(error != ''){ %>
@@ -25,11 +25,11 @@
         </div>
         <% } %>
     <div class="form-row">
-      <div class="col">
+      <div class="col-lg-6 col-md-3 col-sm-3 col-xs-3">
         <label for="username">E-Mail</label>
         <input type="email" class="form-control" id="username" placeholder="email" name="username"  value="louis@ch">
       </div>
-      <div class="col">
+      <div class="col-lg-6 col-md-3 col-sm-3 col-xs-3">
         <label for="password">Passwort</label>
         <input type="password" class="form-control" id="password" placeholder="password" name="password" value="24plechabo">
       </div>
@@ -38,7 +38,7 @@
     </form>
     
     <div class="or-separator"><i>oder</i></div>
-    <form action="/buchung/<%= termin._id %>/register" method="post">
+    <form action="/auth/buchung/<%= termin._id %>/register" method="post">
       <h2 class="text-center">Neuen Account registrieren und buchen</h2>
           <% if(typeof errors != 'undefined'){ %> <% errors.forEach(function(error) { %>
             <div class="alert alert-warning alert-dismissible fade show" role="alert">

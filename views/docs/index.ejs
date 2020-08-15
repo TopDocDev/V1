@@ -51,7 +51,7 @@
               </a>
               <div class="col-1 termin-spalte"v-for="n in time">  
                 <div v-for="item in n.slice(0, toShow)"> 
-                  <a v-bind:href="'/buchung/' + item._id">                 
+                  <a v-bind:href="'/auth/buchung/' + item._id">                 
                     <termin v-bind:zeit="item.startFormated"></termin>
                   </a>
                 </div>
