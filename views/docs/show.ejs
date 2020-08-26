@@ -1,155 +1,126 @@
 <% include ../partials/header %>
-<div id="app" class="container">
+<div id="app" class="container-fluid">
     <div class="row">
-        <div class="col-8 b">
-            <div class="row element">
-                <div class="col-3 circular--landscape">
-                    <img v-bind:src="docs.image" alt="">
-                </div>
-                <div class="col-9 element-top" stye="border: 1px solid black">
-                    <h1>{{docs.name}}</h1>
-                    <h6>{{docs.spec}}</h6>
-                </div>
-            </div>
-            <div class="element row">
+        <div class="col-xl-6 col-lg-3 col-md-0"></div>
+        <div class="col-xl-6 col-lg-9 col-md-12">
+            <div class="row">
                 <div class="col-3">
-                    <h3>Bewertung:</h3>
-                    <h1>{{docs.star}}</h1>
-                    <Sterne></Sterne>
+                  picture
                 </div>
                 <div class="col-9">
-                    <p>{{docs.description}}</p>
+                  name
                 </div>
-            </div>
-        </div>
-        <div class="col-4"></div>
-        <div class="row">
-            <div v-for="item in arr" class="col">   
-                <tag v-bind:tag="item.tag" v-bind:date="item.date"></tag>
-            </div>
-            <div class="row">
-                <div class="col termin-spalte"v-for="n in time">  
-                    <div v-for="item in n"> 
-                        <a v-bind:href="'/buchung/' + item._id">                 
-                        <termin v-bind:zeit="item.startFormated"></termin>
+            </div>    
+            <button id="previous" class="btn btn-primary" v-on:click="previous">previous</button>          
+            <button id="next" class="btn btn-primary" v-on:click="next">next</button>
+
+            <div v-for="(day, i) in dataWithDate.slice(this.focus, this.focus + 10)">
+                <div class="row">
+                    <div v-for="item in day.slice(0,1)">
+                        <div class="col-xs-6">
+                            {{ item.date }}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div v-for="item in day.slice(1, show[i])">
+                        <a href="/" class="col-xs-2 termin-show">
+                            <div>
+                                {{ item.startFormated }}
+                            </div>
                         </a>
                     </div>
+                    <div v-if="day.length > 10" class="col-xs-2 termin-show" @click="showAll(i)">
+                        mehr
+                    </div>
+                    <div v-if="day.length < 2">
+                        keine Termine an diesem Tag
+                    </div>
+                    
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script>
 
-Vue.component('tag', {
-    props: ["tag", "date"],
-    template: `
-    <div class="col-1 tag">
-      <div class="Wochentag">{{tag}}</div>
-      <div>
-        <span>{{date}}</span>
-      </div>
-    </div>
-    `
-  ,
-})
-Vue.component('more', {
-  template: "<div class='more' onclick='showMore'>Mehr</div>",
-  methods: {
-    showMore(){
-      this.toShow = arr.length
-      console.log(this.toShow)
-    }
-  }
-})  
-var dayStart = moment();
-var arr = [];
-for(i=-1; i<4; i++){
-    let d = dayStart.add(1, "day");
-    let tag = d.format("dd");
-    let date = d.format("DD.MM");
-    arr.push({
-        tag: tag,
-        date: date
-    })
-}
-Vue.component('kachel', {
-  template: "<div class='kachel'></div>",
-})  
-
-Vue.component('photo', {
-  props: ['photo'],
-  template: "<img style='height: 86px; width: 86px;'>",
-  message: "hello"
-})
-
-Vue.component('sterne', {
-props: ['sterne'],
-template: '<span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span><span class="fa fa-star checked"></span></span>'
-})
-Vue.component('termin', {
-  template: `
-    <div class="termin">{{zeit}}</div>
-    `,
-  props: ['zeit'],
-  methods: {
-  }
-})
-
-let app = new Vue ({
+<script type="application/javascript">
+var vm = new Vue({
     el: "#app",
     data: {
-        docs: JSON.parse('<%- doc %>'),
-        newArr: [],
-        time: <%- data %>,
-        arr: arr,
-        toShow: 4,
+        schedule: <%- dataStringified %>,
+        focus: 0,
+        show: [10, 10, 10,10, 10, 10,10, 10, 10,10, 10, 10,10, 10, 10,10, 10, 10,10, 10, 10,10, 10, 10,10, 10, 10,10, 10, 10],
+        hideMore: ["false", "false", "false","false", "false", "false","false", "false", "false","false", "false", "false","false", "false", "false","false", "false", "false"]
     },
-    created(){
-        console.log(this.time)
-    }
+    beforeCreate() {
+        this.makeShow
+    },
+
+    computed: {
+        dataWithDate: function(){
+            const newArr = this.schedule
+            const dateArray = []
+            for(i=1; i<365; i++){
+                const obj = {
+                    date: moment().add(i, "d").locale("de").format("dddd DD.MM.YYYY")
+                }
+                dateArray.push(obj)
+            }
+            for(i=0; i<newArr.length; i++){
+                newArr[i].unshift(dateArray[i])
+            }
+            return newArr
+        }
+    },
+    methods: {
+        next: function(){
+            this.focus = this.focus + 10
+        },
+        previous: function(){
+            this.focus = this.focus - 10
+        },
+        showAll: function(i){
+            console.log(i)
+            this.show.splice(i, 1, 100)
+            this.hideMore.splice(i, 1, true)
+        },
+        makeShow: function(){
+            arr = []
+            for (let index = 0; index < 365; index++) {
+                arr.push(10)
+            }
+            return arr
+        }
+    }    
 })
+
 </script>
 
-
 <style scoped>
-    .circular--landscape {
-    display: inline-block;
-    position: relative;
-    width: 200px;
-    height: 200px;
-    overflow: hidden;
-    border-radius: 50%;
+    .date {
+        margin: 15px;
+        font-family: sharp-sans-bold, Arial, sans-serif;
+        font: 18px sharp-sans-semibold, Arial, sans-serif;
+        color:rgb(0, 35, 75)
+        
     }
-
-    .circular--landscape img {
-    width: auto;
-    height: 100%;
-    margin-left: -20px;
+    
+    .more {
+        cursor: auto
     }
-    img{
-        width: 100%
-    }
-    .element{
-        border-top: 2px solid rgb(243, 243, 244);
-        padding: 20px;
-    }
-    .element-top{
-        padding: 50px;
-    }
+    .termin-show {
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 4px;
+    margin: 5px;
+    height: 31px;
+    min-width: 52px;
+    background-color: rgb(255, 240, 75);
+    text-align: center;
+    cursor: pointer;
+    color: black;
+}
 </style>
-
-
-
-
-
-
-
-
-
-
-
-
 
 <% include ../partials/footer %>

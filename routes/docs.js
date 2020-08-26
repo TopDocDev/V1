@@ -32,8 +32,8 @@ router.get("/:id", function(req, res){
                     console.log(err)
                 } else {
                     const sorted = allWeeks.sort(custom.sortByEnd)
-                    const data = custom.getNDays(sorted, 20)
-                    res.render("docs/show2", {
+                    const data = custom.getNDays(sorted, 365)
+                    res.render("docs/show", {
                         doc: foundDoc, 
                         data: data,
                         dataStringified: JSON.stringify(data),
