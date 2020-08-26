@@ -401,7 +401,7 @@ Vue.component("calendar", {
           return weekStart < t && t < weekEnd
         })
         console.log(week)
-        axios.post('http://localhost:3000/calendar',{ 
+        axios.post('http://localhost:3000/arzt/calendar', { 
           params: { 
             week: JSON.stringify(week),
             now: now
