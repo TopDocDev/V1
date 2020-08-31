@@ -217,7 +217,6 @@ Vue.component("calendar", {
       selectedOpen: false,
       events: <%- data %>,
       newEvents: [],
-      message: "hello",
       i: {
         a: "08:00",
         b: "12:00",
@@ -234,13 +233,13 @@ Vue.component("calendar", {
     },
     methods: {
       //delete method, looks for same start property
-      deleteEvent(){
+      deleteEvent(e){
         const start = this.selectedEvent.start
         this.events = this.events.filter(function( obj ) {
           return obj.start !== start;
         })
         this.selectedOpen = false
-        console.log(this.events)
+        e.preventDefault()
       },
       makeArray(){
         let wochentage = this.wochentage

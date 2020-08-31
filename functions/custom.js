@@ -21,14 +21,14 @@ function saveDate(id, user){
 }
 
 const dbConfig = {  
-  server: 'localhost', 
+  server: '192.168.0.10', 
   database: "v21db",
   authentication: {
-      type: 'default',
-      options: {
-          userName: 'louis', 
-          password: 'password'  
-      }
+    type: 'default',
+    options: {
+        userName: 'louis', 
+        password: 'password'  
+    }
   },
 }; 
 module.exports.getDb = () => {
