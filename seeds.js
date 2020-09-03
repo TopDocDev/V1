@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
 var doc = require("./models/doc");
 var Comment   = require("./models/comment");
-week        = require("./models/week")
+const Termin = require("./models/termin")
 
 var data = [
     {
@@ -85,15 +85,13 @@ function seedDB(){
         if(err){
             console.log(err);
         }
-        console.log("removed docs!");
- 
+        console.log("removed docs!")
         data.forEach(function(seed){
             doc.create(seed, function(err, doc){
                 if(err){
                     console.log(err)
                 } else {
-                    console.log("added a doc");
-
+                    console.log("added a doc")
                     Comment.create(
                         {
                             text: "This place is great, but I wish there was internet",

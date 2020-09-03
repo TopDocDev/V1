@@ -13,31 +13,38 @@
     "dev": "npx nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": {
-    "name": "Louis Aebischer"
-  },
+  "author": "Louis Aebischer",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.19.2",
     "bcrypt": "^5.0.0",
     "bcryptjs": "^2.4.3",
-    "body-parser": "^1.14.1",
+    "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
-    "dayjs": "^1.8.17",
-    "ejs": "^2.5.5",
+    "dayjs": "^1.8.34",
+    "driver": "^1.0.0",
+    "ejs": "^2.7.4",
     "ejs-lint": "^1.1.0",
-    "express": "^4.13.3",
+    "express": "^4.17.1",
     "express-session": "^1.17.1",
-    "moment": "^2.24.0",
-    "mongoose": "^5.7.5",
-    "mssql": "^6.0.1",
+    "moment": "^2.27.0",
+    "mongodb": "^3.6.0",
+    "mongoose": "^5.10.2",
+    "mssql": "^6.2.1",
     "nodemon": "^2.0.4",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^6.0.1",
-    "sequelize": "^5.21.2",
-    "tedious": "^6.6.2"
+    "sequelize": "^5.22.3",
+    "tedious": "^6.7.0"
   },
-  "readme": "ERROR: No README data found!",
-  "_id": "v1@1.0.0"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TopDocDev/V1.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/TopDocDev/V1/issues"
+  },
+  "homepage": "https://github.com/TopDocDev/V1#readme"
 }

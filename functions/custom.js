@@ -1,10 +1,10 @@
 const moment = require("moment")
 const sql = require("mssql")
 const mongoose = require("mongoose")
-const week = require("../models/week")
+const Termin = require("../models/termin.js")
 
 function saveDate(id, user){
-  week.findByIdAndUpdate(
+  Termin.findByIdAndUpdate(
       id,
       { status: "pending",
       color: "blue",
@@ -21,7 +21,7 @@ function saveDate(id, user){
 }
 
 const dbConfig = {  
-  server: '192.168.0.10', 
+  server: 'localhost', 
   database: "v21db",
   authentication: {
     type: 'default',
@@ -30,7 +30,8 @@ const dbConfig = {
         password: 'password'  
     }
   },
-}; 
+}
+
 module.exports.getDb = () => {
   return new Promise((resolve, reject) => {
     var conn = new sql.ConnectionPool(dbConfig);  // create sql instance

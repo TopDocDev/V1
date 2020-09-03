@@ -4,11 +4,11 @@
         <div class="col-xl-6 col-lg-3 col-md-0"></div>
         <div class="col-xl-6 col-lg-9 col-md-12">
             <div class="row">
-                <div class="col-3">
-                  picture
+                <div class="col-4">
+                  <img v-bind:src="doc.image" style='height: 86px; width: 86px;' class="circular--landscape" alt="">
                 </div>
-                <div class="col-9">
-                  name
+                <div class="col-8">
+                   <h3>{{doc.name}}</h3>
                 </div>
             </div>    
             <button id="previous" class="btn btn-primary" v-on:click="previous">previous</button>          
@@ -23,8 +23,8 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div v-for="item in day.slice(1, show[i])">
-                        <a href="'/docs/' + doc._id" class="col-xs-2 termin-show">
+                    <div v-for="(item, index) in day.slice(1, show[i])">
+                        <a v-bind:href="'/auth/buchung/' + item._id" class="col-xs-2 termin-show">
                             <div>
                                 {{ item.startFormated }}
                             </div>
@@ -48,6 +48,7 @@
 var vm = new Vue({
     el: "#app",
     data: {
+        doc: <%- doc %>,
         schedule: <%- dataStringified %>,
         focus: 0,
         show: [10, 10, 10,10, 10, 10,10, 10, 10,10, 10, 10,10, 10, 10,10, 10, 10,10, 10, 10,10, 10, 10,10, 10, 10,10, 10, 10],
@@ -98,6 +99,14 @@ var vm = new Vue({
 </script>
 
 <style scoped>
+    .circular--landscape {
+        display: inline-block;
+        position: relative;
+        width: 85px;
+        height: 85px;
+        overflow: hidden;
+        border-radius: 50%;
+        }
     .date {
         margin: 15px;
         font-family: sharp-sans-bold, Arial, sans-serif;

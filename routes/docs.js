@@ -1,13 +1,13 @@
 const router  = require("express").Router()
 const custom = require("../functions/custom")
 const Doc = require("../models/doc")
-const Week = require("../models/week")
+const Termin = require("../models/termin")
 
 router.get("/", (req, res) => Doc.find({}, function(err, allDocs){
     if(err){
         console.log(err)
     } else {
-        Week.find({status: "open"}, function(err, allWeeks){
+        Termin.find({status: "open"}, function(err, allWeeks){
             if(err){
                 console.log(err)
             } else {
@@ -27,14 +27,14 @@ router.get("/:id", function(req, res){
         if(err){
             console.log(err);
         } else {
-            Week.find({}, function(err, allWeeks){
+            Termin.find({}, function(err, allWeeks){
                 if(err){
                     console.log(err)
                 } else {
                     const sorted = allWeeks.sort(custom.sortByEnd)
                     const data = custom.getNDays(sorted, 365)
                     res.render("docs/show", {
-                        doc: foundDoc, 
+                        doc: JSON.stringify(foundDoc), 
                         data: data,
                         dataStringified: JSON.stringify(data),
                     }); 
@@ -97,6 +97,7 @@ router.post("/:id/comments", function(req, res){
        }
    })
 })
+
 
 
 module.exports = router
