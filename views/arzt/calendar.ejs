@@ -390,7 +390,7 @@ Vue.component("calendar", {
           return array
         })
         
-        this.events = uncut
+        this.events = split.concat(oldE)
 
       },
       onSubmit() {
