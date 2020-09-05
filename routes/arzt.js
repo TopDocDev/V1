@@ -11,11 +11,9 @@ router.get("/calendar", (req, res) => {
                 start: moment(e.start).format("YYYY-MM-DD HH:mm"),
                 end: moment(e.end).format("YYYY-MM-DD HH:mm"),
                 duration: e.duration,
-                open: e.open,
-                toDb: e.toDb,
                 color: e.color,
                 startFormated: e.startFormated,
-                status: e.status
+                type: e.type
             }
         })
         res.render("arzt/calendar", {data: JSON.stringify(momentified)})
@@ -31,12 +29,12 @@ router.post("/calendar", (req, res) => {
                 $gte: weekStart,
                 $lte: weekEnd
             },
-            type: "free"
+            type: "unbooked"
         }, (err, result) => {
             if(err){
                 console.log(err)
             } else {
-                console.log(result)
+                console.log("Previous week deleted!")
             }
         })
     }
@@ -46,6 +44,7 @@ router.post("/calendar", (req, res) => {
     for (let i = 0; i < orangeArray.length; i++) {
         const e = orangeArray[i];
         Termin.create(e)  
+        console.log(e.start)
     }
     
 })

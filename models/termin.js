@@ -1,6 +1,6 @@
-var mongoose = require("mongoose");
+var mongoose = require("mongoose")
 
-var weekSchema = new mongoose.Schema({
+var terminSchema = new mongoose.Schema({
     name: String,
     start: Date,
     end: Date,
@@ -12,7 +12,7 @@ var weekSchema = new mongoose.Schema({
     dateFormated: String,
     status: String,
     user: String,
-    type: String,
+    type: String
 })
 
-module.exports = mongoose.model("week", weekSchema);
+module.exports = mongoose.model("termin", terminSchema)

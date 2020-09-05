@@ -3,10 +3,11 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const User = require('../models/user');
+const Termin = require('../models/termin'); 
 //const { forwardAuthenticated } = require('../config/auth');
 
 router.get("/buchung/:id",function(req, res){
-  week.findById(req.params.id).exec(function(err, result){
+  Termin.findById(req.params.id).exec(function(err, result){
       if(err){
           console.log(err)
       } else {
@@ -86,7 +87,7 @@ router.post('/register', (req, res) => {
 })
 
 router.post('/buchung/:id/register', (req, res) => {
-  week.findById(req.params.id,  function(err, termin){
+  Termin.findById(req.params.id,  function(err, termin){
       const { vorname, nachname, username, handy, password, password2} = req.body
       let errors = []
       if (!vorname || !nachname || !username || !handy || !password ) {
@@ -151,7 +152,7 @@ router.post('/buchung/:id/register', (req, res) => {
 })
 
 router.post('/buchung/:id/login', (req, res, next) => {
-  week.findById(req.params.id, (err, result) => {
+  Termin.findById(req.params.id, (err, result) => {
       require('../config/passport')(passport, result)
       req._toParam = 'Hello'
       passport.authenticate('local', {

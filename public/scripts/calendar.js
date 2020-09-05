@@ -9,8 +9,7 @@ export function getEmpty(element, index, array) {
       end: undefined,
       color: "green",
       duration: 20,
-      open: true,
-      toDb: false
+      type: "empty"
       }
     } else {
       let emptyStart = moment(array[index].end)
@@ -23,8 +22,7 @@ export function getEmpty(element, index, array) {
       end: emptyEnd.format("YYYY-MM-DD HH:mm"),
       color: "green",
       duration: minutes,
-      open: true,
-      toDb: false
+      type: "empty"
       }
     }
     return obj
@@ -40,8 +38,7 @@ export function splitFunction(e, i, a){
         start: moment(e.start).add(index*d, "minutes").format("YYYY-MM-DD HH:mm"),
         end: moment(e.start).add(index*d+d, "minutes").format("YYYY-MM-DD HH:mm"),
         duration: d,
-        open: true,
-        toDb: true,
+        type: "split",
         color: "green",
         startFormated: moment(e.start).add(index*d, "minutes").format("HH:mm")
       }     

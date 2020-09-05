@@ -7,7 +7,7 @@ router.get("/", (req, res) => Doc.find({}, function(err, allDocs){
     if(err){
         console.log(err)
     } else {
-        Termin.find({status: "open"}, function(err, allWeeks){
+        Termin.find({type: "unbooked"}, function(err, allWeeks){
             if(err){
                 console.log(err)
             } else {
@@ -27,7 +27,7 @@ router.get("/:id", function(req, res){
         if(err){
             console.log(err);
         } else {
-            Termin.find({}, function(err, allWeeks){
+            Termin.find({type: "unbooked"}, function(err, allWeeks){
                 if(err){
                     console.log(err)
                 } else {

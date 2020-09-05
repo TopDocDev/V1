@@ -234,15 +234,13 @@ function getNDays(input, n){
 function makeOrange(e,i,a){
   const obj = {
     name: "Termin auf Website",
+    type: "unbooked",
     start: moment(e.start).toISOString(),
     end: moment(e.end).toISOString(),
     duration: e.duration,
-    open: false,
     color: "orange",
     startFormated: e.startFormated,
     dateFormated: moment(e.start).format("dd, DD.MM hh:mm"),
-    toDb: true,
-    status: "open",
     user: "none"
   }
   return obj

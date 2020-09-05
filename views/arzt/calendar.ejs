@@ -171,7 +171,7 @@ Vue.component("calendar", {
               <v-btn icon>
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
-              <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
+              <v-toolbar-title v-html="selectedEvent.type"></v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn icon>
                 <v-icon>mdi-heart</v-icon>
@@ -260,21 +260,21 @@ Vue.component("calendar", {
               o[prop] = Number(o[prop])
             }
         }
-        this.events = []
         let oldE = <%- data %>.sort(byEnd)
-        const newE = oldE.map(getEmpty).filter((e) => e.duration > 1)
-        let combined = oldE.concat(newE)
+        const empty = oldE.map(getEmpty).filter((e) => e.duration > 1)
+
+        let combined = oldE.concat(empty)
         combined.sort(byEnd)
-        newE.sort(byEnd)
+        empty.sort(byEnd)
         // schneidet Zeitfenster-Array auf Öffnungszeiten
-        let cut = combined.flatMap(function (element, index, array, n){
+        let uncut = combined.flatMap(function (element, index, array, n){
           let dayStart = moment(element.start).startOf("day").toString()
           let open = moment(dayStart).add(o.dayStartH, "hours").add(o.dayStartM, "minutes").toString()
           let end = moment(element.end)
           let duration = moment.duration(end.diff(dayStart))
           let hours = duration.asHours()
           let solution = Math.floor((hours-o.dayEndH)/24)
-          if(element.open === false){
+          if(element.type !== "empty"){ // wenn Termin schon vorher besteht, nicht für split weiterverwenden
             return element
           }
           else if(solution === -1 && index < array.length - 1){
@@ -283,7 +283,7 @@ Vue.component("calendar", {
               start: element.start,
               end: element.end,
               color: "red",
-              open: true,
+              type: "uncut"
             }
             return obj
           }
@@ -294,7 +294,7 @@ Vue.component("calendar", {
               start: element.start,
               end: moment(dayStart).add(o.dayEndH, "hours").add(o.dayEndM, "minutes").format("YYYY-MM-DD HH:mm"),
               color: "red",
-              open: true,
+              type: "uncut"
             }       
             evening["duration"] = moment.duration(moment(evening.end).diff(moment(evening.start))).asMinutes()
             let morning = {
@@ -302,7 +302,7 @@ Vue.component("calendar", {
               start: moment(open).add(24, "hours").format("YYYY-MM-DD HH:mm"),
               end: array[index+1].start,
               color: "green",
-              open: true,
+              type: "uncut"
             }
             
             if(evening.duration > 0){
@@ -321,7 +321,7 @@ Vue.component("calendar", {
               start: element.start,
               end: moment(dayStart).add(o.dayEndH, "hours").add(o.dayEndM, "minutes").format("YYYY-MM-DD HH:mm"),
               color: "red",
-              open: true,
+              type: "uncut"
             }
             evening["duration"] = moment.duration(moment(evening.end).diff(moment(evening.start))).asMinutes()            
             if(evening.duration > 5){
@@ -333,7 +333,7 @@ Vue.component("calendar", {
                     start: moment(open).add([n+1] * 24, "hours").format("YYYY-MM-DD HH:mm"),
                     end: moment(dayStart).add([n+1] * 24 + o.dayEndH, "hours").format("YYYY-MM-DD HH:mm"),
                     color: "orange",
-                    open: true,
+                    type: "uncut"
                 }
                 arr.push(ganz)
             }
@@ -342,7 +342,7 @@ Vue.component("calendar", {
               start: moment(array[index+1].start).startOf("day").add(o.dayStartH, "hours").add(o.dayStartM, "minutes").format("YYYY-MM-DD HH:mm"),
               end: array[index+1].start,
               color: "pink",
-              open: true,
+              type: "uncut"
             }
             arr.push(morning)
             return arr
@@ -352,8 +352,13 @@ Vue.component("calendar", {
             return element
           }
         })
-        let neu = cut.filter(function(e){
-          return e.open === true
+        uncut.forEach(e => console.log(e.type))
+        console.log(uncut)
+        let neu = uncut.filter(function(e){
+          return e.type === "uncut"
+        })
+        let old = uncut.filter(function(e){
+          return e.type === "phone"
         })
         let split = neu.flatMap(function(e, i, a){
           let d = o.dauer
@@ -366,8 +371,7 @@ Vue.component("calendar", {
               start: moment(e.start).add(index*d, "minutes").format("YYYY-MM-DD HH:mm"),
               end: moment(e.start).add(index*d+d, "minutes").format("YYYY-MM-DD HH:mm"),
               duration: d,
-              open: true,
-              toDb: true,
+              type: "split",
               color: "green",
               startFormated: moment(e.start).add(index*d, "minutes").format("HH:mm")
             }     
@@ -386,13 +390,13 @@ Vue.component("calendar", {
           return array
         })
         
-        this.events = split.concat(oldE)
+        this.events = uncut
 
       },
       onSubmit() {
         //wählt Wochentage
         const now = this.focus
-        const newEvents = this.events.filter((e,i,a) => e.toDb === true)
+        const newEvents = this.events.filter((e,i,a) => e.type === "split")
         let week = newEvents.filter(function(e,i,a){
           let t = moment(e.start)
           let weekStart = moment(now).startOf("week")
