@@ -140,7 +140,7 @@ router.post('/buchung/:id/register', (req, res) => {
                           'success_msg',
                           'You are now registered and can log in'
                       )
-                      res.redirect('auth/buchung/' + req.params.id)
+                      res.redirect('/auth/buchung/' + req.params.id)
                       custom.saveDate(termin.id)
                   })
                   .catch(err => console.log(err))
