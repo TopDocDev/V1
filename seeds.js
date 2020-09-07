@@ -11,16 +11,7 @@ var data = [
         spec: "Dermatologie",
         star: "5.0",
         rating: "966"
-    },     /*
-    {
-        name: "Dr. Céline Folly",
-        image: "images\\folly.jpeg",
-        description: "Die Praxisklinik Kreyden ist eine spezialisierte Hautarztpraxis in Muttenz bei Basel und deckt sämtliche Teilgebiete der klassischen und ästhetischen Dermatologie (Laser, Botox, Filler, Peeling) ab. Hierzu gehört neben der ästhetischen Dermatologie auch die Behandlung des übermässigen Schwitzens (Hyperhidrose) sowie die plastisch rekonstruktive Chirurgie bei Tumorerkrankungen. Dr. Oliver Ph. Kreyden ist Pionier auf dem Gebiet der Hyperhidrose und ein international anerkannter Experte im grossen Feld der ästhetischen Dermatologie.",
-        spec: "Dermatologie",
-        star: "5.0",
-        rating: "966"
-    },
-   
+    }, 
     {
         name: "Dr. Jasmine Parambia", 
         image: "https://images.docfinder.at/vl0vay6wgW/dr-jasmin-darabnia-praktische-aerztin-1010-wien-54267.jpg",
@@ -28,6 +19,14 @@ var data = [
         spec: "Gynäkologie",
         star: "4.7",
         rating: "852",
+    }    /*
+    {
+        name: "Dr. Céline Folly",
+        image: "images\\folly.jpeg",
+        description: "Die Praxisklinik Kreyden ist eine spezialisierte Hautarztpraxis in Muttenz bei Basel und deckt sämtliche Teilgebiete der klassischen und ästhetischen Dermatologie (Laser, Botox, Filler, Peeling) ab. Hierzu gehört neben der ästhetischen Dermatologie auch die Behandlung des übermässigen Schwitzens (Hyperhidrose) sowie die plastisch rekonstruktive Chirurgie bei Tumorerkrankungen. Dr. Oliver Ph. Kreyden ist Pionier auf dem Gebiet der Hyperhidrose und ein international anerkannter Experte im grossen Feld der ästhetischen Dermatologie.",
+        spec: "Dermatologie",
+        star: "5.0",
+        rating: "966"
     },
     {
         name: "Dr. Florent Ratatouille", 

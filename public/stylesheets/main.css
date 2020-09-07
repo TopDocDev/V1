@@ -13,8 +13,8 @@
 
 }
 .filter {
-    height: 200px;
-    padding: 8px;
+    height: 150px;
+    padding: 0px;
 }
 .suche-index {
     padding-top: 50px;
@@ -99,7 +99,7 @@ sharp-sans-semibold, Arial, sans-serif
     padding-left: 0px;
     padding-right: 0px;
     padding-top: 6px;
-    margin-top: 5px;
+    margin-top: 8px;
     height: 31px;
     width: 66px;
     background-color: rgb(255, 240, 75);
@@ -107,11 +107,21 @@ sharp-sans-semibold, Arial, sans-serif
     cursor: pointer;
     color: black;
 }
+.termin:hover{
+    color: white;
+    background-color:rgb(0, 35, 75);
+    text-decoration: none;
+    }
+.more:hover{
+    color: white;
+    background-color:rgb(0, 35, 75);
+    text-decoration: none;
+}
 .more {
     padding-left: 0px;
     padding-right: 0px;
     padding-top: 6px;
-    margin-top: 5px;
+    margin-top: 8px;
     height: 31px;
     width: 66px;
     background-color: rgb(255, 240, 75);
@@ -221,7 +231,11 @@ sharp-sans-semibold, Arial, sans-serif
 * VISUAL STYLES
 * Design-y stuff ot particularly important to the demo
 *************************/
+a {
+    text-decoration: none !important;
+}
 body {
+ text-decoration: none;
  padding: 50px;
  max-width: 1100px;
  margin: 0 0.1fr;

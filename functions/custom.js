@@ -6,7 +6,7 @@ const Termin = require("../models/termin.js")
 function saveDate(id, user){
   Termin.findByIdAndUpdate(
       id,
-      { status: "pending",
+      { type: "booked",
       color: "blue",
       user: user
       },

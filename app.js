@@ -15,7 +15,7 @@ const express     = require("express"),
     bcrypt      = require("bcryptjs"),
     session = require('express-session'),
     flash = require('connect-flash')
-
+seedDB()
 app.use(session({
 	secret:'happy dog',
 	saveUninitialized: true,

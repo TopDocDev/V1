@@ -189,7 +189,7 @@ Vue.component("calendar", {
               <v-btn
                 text
                 color="secondary"
-                @click="deleteEvent"
+                @click="deleteEvent()"
               >
                 Delete Event
               </v-btn>
@@ -232,14 +232,16 @@ Vue.component("calendar", {
     mounted (){ 
     },
     methods: {
-      //delete method, looks for same start property
-      deleteEvent(e){
-        const start = this.selectedEvent.start
-        this.events = this.events.filter(function( obj ) {
-          return obj.start !== start;
-        })
+      deleteEvent(){
+        const selectedEvent = this.selectedEvent
+        if(selectedEvent.type === "phone"){
+          alert("Achtung: Termin ist auf Vitomed und kann hier nicht gelöscht werden!")
+        } else {
+          this.events = this.events.filter(function( element ) {
+            return element !== selectedEvent;
+          })
+        }
         this.selectedOpen = false
-        e.preventDefault()
       },
       makeArray(){
         let wochentage = this.wochentage
@@ -396,15 +398,14 @@ Vue.component("calendar", {
       onSubmit() {
         //wählt Wochentage
         const now = this.focus
-        const newEvents = this.events.filter((e,i,a) => e.type === "split")
+        const newEvents = this.events.filter((e,i,a) => e.type !== "phone")
         let week = newEvents.filter(function(e,i,a){
           let t = moment(e.start)
           let weekStart = moment(now).startOf("week")
           let weekEnd = moment(now).endOf("week")
           return weekStart < t && t < weekEnd
         })
-        console.log(week)
-        axios.post('http://localhost:3000/arzt/calendar', { 
+        axios.post('/arzt/calendar', { 
           params: { 
             week: JSON.stringify(week),
             now: now

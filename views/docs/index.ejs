@@ -2,18 +2,18 @@
 
 <div class="container-fluid position-relative">
   <div class="row position-relative">
-    <div class="col-8 Liste">
+    <div class="col-md-8 Liste">
       <section class="innereListe">
-        <div class="filter">                     
+        <div class="d-none d-lg-block filter">                     
           <form>
             <div class="form-row suche-index">
-              <div class="col">
+              <div class="col-md">
                 <input type="text" class="form-control" placeholder="facharzt" id="facharzt">
               </div>
-              <div class="col">
+              <div class="col-md">
                 <input id="autocomplete" type="text" class="form-control" placeholder="ort">
               </div>
-              <div class="col">
+              <div class="col-md">
                 <input type="text" class="form-control" id="date">
               </div>
               <a type="button" class="btn btn-info" onclick=initMap()>Suche</a>
@@ -21,25 +21,25 @@
           </form>
         </div>
         <div id="app">
-          <div class="kachel-top row">
-            <div class="col-7"></div>
+          <div class="d-none d-lg-block kachel-top row">
+            <div class="col-lg-7"></div>
             <div v-for="item in arr">   
-              <tag v-bind:tag="item.tag" v-bind:date="item.date"></tag>
+              <tag class="col-md-1 tag" v-bind:tag="item.tag" v-bind:date="item.date"></tag>
             </div>
           </div>
-          <div class="kachel" v-for="doc in docs">
+          <div v-for="(doc, docIndex) in docs" class="kachel" v-bind:class="{ enlarge:doc == selected }">
             <div class="aufteilung row">
-              <a class='col-7 doc-info' v-bind:href="'/docs/' + doc._id">
+              <a class='col-md-7 doc-info' v-bind:href="'/docs/' + doc._id">
                 <div class="row">
-                  <div class='photo circular--landscape'>
+                  <div class='photo circular--landscape' style='height: 86px; width: 86px;'>
                     <picture>
-                      <photo
-                      v-bind:src="doc.image"
-                      ></photo>
+                      <img v-bind:src="doc.image"></img>
                     </picture>
                   </div>
                   <div class='text'>
-                    <h3>{{doc.name}}</h3>
+                    <div>
+                      <p class="name">{{doc.name}}</p>
+                    </div>
                     <span>{{doc.spec}}</span>
                     <div class="rating">
                       <sterne></sterne>
@@ -49,23 +49,22 @@
                   </div>
                 </div>
               </a>
-              <div class="col-1 termin-spalte"v-for="n in time">  
+              <div class="d-none d-lg-block col-lg-1 termin-spalte"v-for="n in time">  
                 <div v-for="item in n.slice(0, toShow)"> 
                   <a v-bind:href="'/auth/buchung/' + item._id">                 
                     <termin v-bind:zeit="item.startFormated"></termin>
                   </a>
                 </div>
-                <a v-bind:href="'/docs/' + doc._id">
-                  <more></more> 
-                </a>
+                <div v-if="n.length > 4" class='more' v-on:click='showMore(docIndex)'>Mehr</div> 
               </div>
+              <!-- <div v-if="time.length < 20"><h1>hi</h1></div> -->
               
             </div>
           </div>
         </div>
       </div>
     </section>
-    <div class="karte-aussen col-4">
+    <div class="karte-aussen d-none d-lg-block col-md-4">
       <div id="karte-innen">
         <div id="map"></div>
       </div>
@@ -80,9 +79,14 @@
   var countryRestrict = {"country" : "ch"}
 
   function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 7,
-  center: {lat: 47, lng: 8}
+    map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 14,
+      center: {lat: 47.5228134, lng: 7.6416644}
+    })
+    var marker = new google.maps.Marker({
+    position: {lat: 47.5228134, lng: 7.6416644},
+    map: map,
+    title: 'Hello World!'
   });
 
   // Create the autocomplete object and associate it with the UI input control.
@@ -123,7 +127,7 @@
 Vue.component('tag', {
     props: ["tag", "date"],
     template: `
-    <div class="col-1 tag">
+    <div>
       <div class="Wochentag">{{tag}}</div>
       <div class="Datum">
         <span>{{date}}</span>
@@ -132,20 +136,14 @@ Vue.component('tag', {
     `
   ,
 })
-Vue.component('more', {
-  template: "<div class='more' onclick='showMore'>Mehr</div>",
-  methods: {
-    showMore(){
-      this.toShow = arr.length
-      console.log(this.toShow)
-    }
-  }
-})  
-var dayStart = moment();
+moment.locale('es')
+var dayStart = moment().locale("de");
 var arr = [];
 for(i=-1; i<4; i++){
     let d = dayStart.add(1, "day");
+    moment.locale('es')
     let tag = d.format("dd");
+    moment.locale('es')
     let date = d.format("DD.MM");
     arr.push({
         tag: tag,
@@ -154,13 +152,11 @@ for(i=-1; i<4; i++){
 }
 
 // app-index
-Vue.component('kachel', {
-  template: "<div class='kachel'></div>",
-})  
+
 
 Vue.component('photo', {
   props: ['photo'],
-  template: "<img style='height: 86px; width: 86px;'>",
+  template: "<img >",
   message: "hello"
 })
 
@@ -186,18 +182,30 @@ var app = new Vue({
       newArr: [],
       time: <%- data %>,
       arr: arr,
-      toShow: 4,
+      toShow: 3,
+      selected: undefined,
     }
   },
   mounted(){
     console.log(this.time)
   },
   methods: {
-
+    showMore(docIndex){
+      this.toShow = 20
+      this.selected = docIndex
+      console.log(this.selected)
+    },
   }
 })
 </script>
 <style scoped>
+
+body:hover {
+    text-decoration: none;
+}
+.enlarged {
+  height: 1000px;
+}
 .circular--landscape {
   display: inline-block;
   position: relative;
@@ -205,16 +213,28 @@ var app = new Vue({
   height: 85px;
   overflow: hidden;
   border-radius: 50%;
-  }
-
-  .circular--landscape img {
-  width: auto;
-  height: 100%;
-  margin-left: 0px;
-  }
-  .datum {
-    width: 46px;
 }
+
+.circular--landscape img {
+width: auto;
+height: 100%;
+margin-left: 0px;
+}
+.datum {
+  width: 46px;
+}
+.name {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+@media screen and (max-width: 992px) {
+  .name {
+    font-size: 1em;
+    font-weight: bold;
+  }
+}
+
+
 
 </style>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7k5XIGkkgwdc7rcCSH10ZoGl-U3DlKiQ&callback=initMap&libraries=places " async defer></script>

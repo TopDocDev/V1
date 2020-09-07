@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const User = require('../models/user');
 const Termin = require('../models/termin'); 
+const custom = require("../functions/custom")
 //const { forwardAuthenticated } = require('../config/auth');
 
 router.get("/buchung/:id",function(req, res){
@@ -154,7 +155,6 @@ router.post('/buchung/:id/register', (req, res) => {
 router.post('/buchung/:id/login', (req, res, next) => {
   Termin.findById(req.params.id, (err, result) => {
       require('../config/passport')(passport, result)
-      req._toParam = 'Hello'
       passport.authenticate('local', {
         successRedirect: '/auth/buchung/' + req.params.id,
         successFlash: 'Termin erfolgreich gebucht!',
