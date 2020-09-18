@@ -1,4 +1,7 @@
-
+body{
+    font: arial;
+    color: rgb(0, 35, 75);
+}
 .corona {
     padding: 10px;
     height: 48px;

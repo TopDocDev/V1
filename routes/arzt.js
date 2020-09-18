@@ -1,9 +1,27 @@
-const router  = require("express").Router()
+const router = require("express").Router()
+const moment = require("moment")
+const passport = require('passport')
+
 const custom = require("../functions/custom")
 const Termin = require("../models/termin.js")
-const moment = require("moment")
+const Doc = require("../models/doc.js")
+const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth')
 
-router.get("/calendar", (req, res) => {
+router.get("/login", forwardAuthenticated, (req, res) => res.render("arzt/login"))
+
+router.post("/login", (req, res, next) => {
+    console.log(req.body)
+    require('../config/doc-passport')(passport)
+    passport.authenticate('docLocal', {
+        successRedirect: '/arzt/calendar',
+        failureRedirect: '/arzt/login',
+        badRequestMessage: 'Nutzer und Passwort stimmen nicht überein',
+        failureFlash: true
+    })(req, res, next);
+})
+
+
+router.get("/calendar", ensureAuthenticated, (req, res) => {
     Termin.find({}, (err, result) => {
         const momentified = result.map((e,i,a) => {
             return {

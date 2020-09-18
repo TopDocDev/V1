@@ -16,11 +16,13 @@ const express     = require("express"),
     session = require('express-session'),
     flash = require('connect-flash')
 //seedDB()
-app.use(session({
-	secret:'happy dog',
-	saveUninitialized: true,
-	resave: true
-}))
+app.use(
+    session({
+      secret: 'secret',
+      resave: true,
+      saveUninitialized: true
+    })
+  );
 
 mongoose.connect('mongodb://louis:louis@cluster0-shard-00-00-bbdc4.mongodb.net:27017,cluster0-shard-00-01-bbdc4.mongodb.net:27017,cluster0-shard-00-02-bbdc4.mongodb.net:27017/TopDoc?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority', {useNewUrlParser: true,  useUnifiedTopology: true })  
     .then(() => console.log('MongoDB Connected'))
@@ -31,6 +33,7 @@ app.use(bodyParser.json());
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"))
 app.use(passport.initialize())
+app.use(passport.session())
 
 app.use(flash())
 app.use(function(req, res, next) {

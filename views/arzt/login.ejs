@@ -1,0 +1,56 @@
+<% include ../partials/header %>
+<head>
+  <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+  <link href="/stylesheets/arztlogin.css"" rel="stylesheet">
+</head>
+
+
+<body class="text-center">
+  <form class="form-signin" action="/arzt/login" method="POST">
+    <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+    <% if(typeof errors != 'undefined'){ %> <% errors.forEach(function(error) { %>
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <%= error.msg %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <% }); %> <% } %> <% if(success_msg != ''){ %>
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <%= success_msg %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <% } %> <% if(error_msg != ''){ %>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <%= error_msg %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <% } %> <% if(error != ''){ %>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <%= error %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <% } %>
+    <h1 class="h3 mb-3 font-weight-normal">Bitte loggen sie sich ein</h1>
+    <label for="username" class="sr-only">Benutzername</label>
+    <input type="text" id="inputEmail" class="form-control" placeholder="Benutzername" value="arzt" name="username" required autofocus>
+    <label for="inputPassword" class="sr-only">Passwort</label>
+    <input type="password" id="inputPassword" class="form-control" placeholder="Password" value="&s8x.UW^'ur2M@ua" name="password" required>
+    <div class="checkbox mb-3">
+      <label>
+        <input type="checkbox" value="remember-me"> Remember me
+      </label>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
+    <p class="mt-5 mb-3 text-muted">&copy; 2020</p>
+  </form>
+</body>
+
+
+<% include ../partials/footer %>

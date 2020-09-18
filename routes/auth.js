@@ -65,13 +65,11 @@ router.post('/register', (req, res) => {
           handy,
           password
         })
-
-
-        console.log(newUser)
-        
-
         bcrypt.genSalt(10, (err, salt) => {
           bcrypt.hash(newUser.password, salt, (err, hash) => {
+            console.log("hi")
+            console.log("salt: " + salt)
+            console.log("hash: " + hash)
             if (err) throw err;
             newUser.password = hash;
             newUser
@@ -128,7 +126,6 @@ router.post('/buchung/:id/register', (req, res) => {
               handy,
               password
             })
-            //console.log(newUser)  
             bcrypt.genSalt(10, (err, salt) => {
               bcrypt.hash(newUser.password, salt, (err, hash) => {
                 if (err) throw err;
@@ -154,16 +151,15 @@ router.post('/buchung/:id/register', (req, res) => {
 
 router.post('/buchung/:id/login', (req, res, next) => {
   Termin.findById(req.params.id, (err, result) => {
-      require('../config/passport')(passport, result)
-      passport.authenticate('local', {
-        successRedirect: '/auth/buchung/' + req.params.id,
-        successFlash: 'Termin erfolgreich gebucht!',
-        failureRedirect: '/auth/buchung/' + req.params.id,
-        failureFlash: true
-      })
-      (req, res, next);
+    require('../config/user-passport')(passport, result)
+    passport.authenticate('userLocal', {
+      successRedirect: '/auth/buchung/' + req.params.id,
+      successFlash: 'Termin erfolgreich gebucht!',
+      failureRedirect: '/auth/buchung/' + req.params.id,
+      failureFlash: true
+    })
+    (req, res, next);
   })
-
 })
 
 module.exports = router

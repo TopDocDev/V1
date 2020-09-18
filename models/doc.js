@@ -1,6 +1,8 @@
 var mongoose = require("mongoose");
 
 var docSchema = new mongoose.Schema({
+   username: String,
+   password: String,
    name: String,
    image: String,
    description: String,
