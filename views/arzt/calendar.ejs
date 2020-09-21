@@ -1,4 +1,4 @@
-<% include ../partials/header %>
+<%- include("../partials/header-arzt", {doc: JSON.parse(doc)}) %>
 
 <div id="app">
   <v-app>
@@ -12,13 +12,13 @@ import {byEnd, getEmpty} from "/scripts/calendar.js"
 
 Vue.component("calendar", {
   template: `
+
  <v-row class="fill-height">
     <v-col>
       <v-sheet height="200">
 
 <form class="form">
   <div class="form-row">
-      
     <div class="col-2">
     <label for="i.a">Morgen von:</label>
       <input type="text" class="form-control" placeholder="08:00" v-model="i.a" label="i.a">
@@ -216,6 +216,7 @@ Vue.component("calendar", {
       selectedElement: null,
       selectedOpen: false,
       events: <%- data %>,
+      doc: <%- doc %>,
       newEvents: [],
       i: {
         a: "08:00",

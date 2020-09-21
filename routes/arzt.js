@@ -19,10 +19,18 @@ router.post("/login", (req, res, next) => {
         failureFlash: true
     })(req, res, next);
 })
+router.get('/logout', (req, res) => {
+    req.logout();
+    req.flash('success_msg', 'erfolgreich abgemeldet');
+    res.redirect('/arzt/login');
+  });
 
+router.get("/account", ensureAuthenticated, (req, res) => {
+    res.render("arzt/account", {doc: JSON.stringify(req.user)})
+})
 
 router.get("/calendar", ensureAuthenticated, (req, res) => {
-    Termin.find({}, (err, result) => {
+    Termin.find({arzt: req.user._id}, (err, result) => {
         const momentified = result.map((e,i,a) => {
             return {
                 name: e.name,
@@ -34,7 +42,11 @@ router.get("/calendar", ensureAuthenticated, (req, res) => {
                 type: e.type
             }
         })
-        res.render("arzt/calendar", {data: JSON.stringify(momentified)})
+        res.render("arzt/calendar", 
+        {
+            data: JSON.stringify(momentified),
+            doc: JSON.stringify(req.user)
+        })
     })
 })
 

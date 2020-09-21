@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>TopDoc</title>
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<link rel="stylesheet" href="/stylesheets/main.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script text="type/javascript" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment-with-locales.min.js"></script>
+<script src="/scripts/map.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.js"></script>
+<style>
+  /* Always set the map height explicitly to define the size of the div
+    * element that contains the map. */
+  #map {
+    height: 100%;
+  }
+  /* Optional: Makes the sample page fill the window. */
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .box {
+    height: 200px;
+    width: 200px;
+    text-align: center;
+  }
+  .red {
+    background-color: red;
+  }
+  .green {
+    background-color: green;
+  }
+  </style>
+               
+<script>
+  // This example requires the Places library. Include the libraries=places
+  // parameter when you first load the API. For example:
+  // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+  var map;
+
+  function initMap() {
+    // Create the map.
+    var lat = parseInt(document.getElementById("lat").value);
+    var lng = parseInt(document.getElementById("lng").value);
+    var liestal = {lat: 47.4895838, lng: 7.732632};
+    var ort = {
+      lat: lat,
+      lng: lng
+    };
+    var map = new google.maps.Map(document.getElementById('map'), {
+            center: ort,
+            zoom: 13,
+            mapTypeId: 'roadmap'
+        });
+                                            
+
+    console.log(lat, lng);
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: ort,
+      zoom: 14
+    });
+
+    // Create the places service.
+    var service = new google.maps.places.PlacesService(map);
+    var getNextPage = null;
+
+
+    // Perform a nearby search.
+    service.nearbySearch(
+        {location: ort, radius: 5000, type: ['doctor']},
+        function(results, status) {
+          if (status !== 'OK') return;
+
+          createMarkers(results);
+
+        });
+  }
+
+  function createMarkers(places) {
+    var bounds = new google.maps.LatLngBounds();
+    var placesList = document.getElementById('places');
+
+    for (var i = 0, place; place = places[i]; i++) {
+      var image = {
+        url: "https://www.kindpng.com/picc/m/164-1648612_hospital-map-marker-pin-doctor-medical-plus-logo.png",
+        size: new google.maps.Size(71, 71),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34),
+        scaledSize: new google.maps.Size(25, 25)
+      };
+
+      var marker = new google.maps.Marker({
+        map: map,
+        icon: image,
+        title: place.name,
+        position: place.geometry.location
+      });
+
+
+      bounds.extend(place.geometry.location);
+    }
+    map.fitBounds(bounds);
+  }
+</script>
+            
+</head>
+<body>
+<div style="position:absolute; left:2em; right:2em;">  <nav class="navbar navbar-inverse bg-inverse navbar-toggleable-md">
+    <div class="container">
+       <a class="navbar-brand" href="/arzt/calendar">Kalender</a>
+       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleCenteredNav" aria-controls="navbarsExampleCenteredNav" aria-expanded="false" aria-label="Toggle navigation">
+       <span class="navbar-toggler-icon"></span>
+       </button>    
+       <div class="collapse navbar-collapse navbar-collapse justify-content-md-end" id="navbarsExampleCenteredNav">
+          <ul class="navbar-nav">
+             <li class="nav-item">
+                <a class="nav-link" href="/arzt/account"><%= doc.name %></a>
+             </li>
+             <li class="nav-item">
+                <a href="/arzt/logout" type="button" class="btn btn-light" style="color: black;">abmelden</a>
+             </li>
+          </ul>
+       </div>
+    </div>
+ </nav>
+ 
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+ 
+ <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
