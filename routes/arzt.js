@@ -29,6 +29,29 @@ router.get("/account", ensureAuthenticated, (req, res) => {
     res.render("arzt/account", {doc: JSON.stringify(req.user)})
 })
 
+router.post("/account", (req,res) => {
+    const {name, spec, email, phone, street, location, description, testimonial} = req.body
+    const id = req.body._id
+    
+    Doc.findOneAndUpdate({ id: id}, {
+        name,
+        spec, 
+        email, 
+        phone, 
+        street, 
+        location, 
+        description, 
+        testimonial
+    }, {useFindAndModify: false}, (err, newlyCreated) => {
+        if(err){
+            console.log(err)
+        } else {
+            console.log(newlyCreated)
+            res.redirect("/arzt/account")
+        }
+    })
+})
+
 router.get("/calendar", ensureAuthenticated, (req, res) => {
     Termin.find({arzt: req.user._id}, (err, result) => {
         const momentified = result.map((e,i,a) => {

@@ -8,7 +8,7 @@
 
 <body class="text-center">
   <form class="form-signin" action="/arzt/login" method="POST">
-    <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+    <img class="mb-4" src="/images/logo.jpg" alt="">
     <% if(typeof errors != 'undefined'){ %> <% errors.forEach(function(error) { %>
       <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <%= error.msg %>
