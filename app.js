@@ -15,7 +15,10 @@ const express     = require("express"),
     bcrypt      = require("bcryptjs"),
     session = require('express-session'),
     flash = require('connect-flash')
+    fs = require('fs'),
+    https = require("https"),
 //seedDB()
+
 app.use(
     session({
       secret: 'secret',
@@ -55,6 +58,16 @@ app.use("/auth", authRoutes)
 app.use("/arzt", arztRoutes)
 
 var port = process.env.PORT || 3000;
+
+// var privateKey = fs.readFileSync( 'privatekey.pem' );
+// var certificate = fs.readFileSync( 'certificate.pem' );
+
+// https.createServer({
+//     key: privateKey,
+//     cert: certificate
+// }, app).listen(port);
+
+
 app.listen(port, function () {
     console.log("Server Has Started!");
 })
