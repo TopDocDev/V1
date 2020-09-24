@@ -2,21 +2,19 @@ const express     = require("express"),
     app         = express(),
     bodyParser  = require("body-parser"),
     mongoose    = require("mongoose"),
-    doc         = require("./models/doc"),
-    Comment     = require("./models/comment"),
-    seedDB      = require("./seeds"),
-    sql         = require("mssql"),
-    sequelize   = require("sequelize"),
-    moment      = require('moment'),
-    axios       = require("axios"),
-    async       = require("async"),
+    // Doc         = require("./models/doc"),
+    // Comment     = require("./models/comment"),
+    // seedDB      = require("./seeds"),
+    // sql         = require("mssql"),
+    // sequelize   = require("sequelize"),
+    // moment      = require('moment'),
+    // axios       = require("axios"),
+    // async       = require("async"),
     passport    = require("passport")
     LocalStrategy = require("passport-local")
     bcrypt      = require("bcryptjs"),
     session = require('express-session'),
     flash = require('connect-flash')
-    fs = require('fs'),
-    https = require("https"),
 //seedDB()
 
 app.use(

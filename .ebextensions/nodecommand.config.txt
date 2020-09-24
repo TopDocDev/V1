@@ -1,6 +1,6 @@
 option_settings:
   aws:elasticbeanstalk:container:nodejs:
-    NodeCommand: "npm run dev"
+    NodeCommand: "node app.js"
 
 Resources:
   sslSecurityGroupIngress: 

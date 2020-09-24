@@ -1,5 +1,4 @@
 const moment = require("moment")
-const sql = require("mssql")
 const mongoose = require("mongoose")
 const Termin = require("../models/termin.js")
 
@@ -19,51 +18,52 @@ function saveDate(id, user){
       }
   )
 }
+// -> Vermittler
 
-const dbConfig = {  
-  server: 'localhost', 
-  database: "v21db",
-  authentication: {
-    type: 'default',
-    options: {
-        userName: 'louis', 
-        password: 'password'  
-    }
-  },
-}
+// const dbConfig = {  
+//   server: 'localhost', 
+//   database: "v21db",
+//   authentication: {
+//     type: 'default',
+//     options: {
+//         userName: 'louis', 
+//         password: 'password'  
+//     }
+//   },
+// }
 
-module.exports.getDb = () => {
-  return new Promise((resolve, reject) => {
-    var conn = new sql.ConnectionPool(dbConfig);  // create sql instance
-    var req = new sql.Request(conn);
-    conn.connect(function (err){
-      if (err) {
-          console.log(err);
-          return;
-      }
-      let a = {
-          number: 200,
-          date: "07/20/2020",
-      }
-      const text = "SELECT TOP "+ a.number + "TT_PNAME as name, TT_DATAUS as 'end', DATEADD(MINUTE, -TT_DAUER, TT_DATAUS) AS start, 'green' as color from v21db.dbo.vm97$ where TT_DATAUS > '" + a.date +"' and TT_PNR is not null order by TT_DATAUS"
-      req.query(text, function (err, myobject){
+// module.exports.getDb = () => {
+//   return new Promise((resolve, reject) => {
+//     var conn = new sql.ConnectionPool(dbConfig);  // create sql instance
+//     var req = new sql.Request(conn);
+//     conn.connect(function (err){
+//       if (err) {
+//           console.log(err);
+//           return;
+//       }
+//       let a = {
+//           number: 200,
+//           date: "07/20/2020",
+//       }
+//       const text = "SELECT TOP "+ a.number + "TT_PNAME as name, TT_DATAUS as 'end', DATEADD(MINUTE, -TT_DAUER, TT_DATAUS) AS start, 'green' as color from v21db.dbo.vm97$ where TT_DATAUS > '" + a.date +"' and TT_PNR is not null order by TT_DATAUS"
+//       req.query(text, function (err, myobject){
         
-        let arr = JSON.parse(JSON.stringify(myobject.recordset));
-        let newArr = arr.map(e => ({
-            name: "Termin auf Vitomed",
-            start: moment(e.start).utc().format("YYYY-MM-DD HH:mm"),
-            end: moment(e.end).utc().format("YYYY-MM-DD HH:mm"),
-            color: "yellow",
-            duration: moment.duration(moment(e.end).diff(moment(e.start))).asMinutes(),
-            open: false,               
-        }))
+//         let arr = JSON.parse(JSON.stringify(myobject.recordset));
+//         let newArr = arr.map(e => ({
+//             name: "Termin auf Vitomed",
+//             start: moment(e.start).utc().format("YYYY-MM-DD HH:mm"),
+//             end: moment(e.end).utc().format("YYYY-MM-DD HH:mm"),
+//             color: "yellow",
+//             duration: moment.duration(moment(e.end).diff(moment(e.start))).asMinutes(),
+//             open: false,               
+//         }))
         
-        // let split = custom.makeArray(newArr)
-        resolve(newArr)
-      });
-    });   
-  })
-}
+//         // let split = custom.makeArray(newArr)
+//         resolve(newArr)
+//       });
+//     });   
+//   })
+// }
 function makeArray(oldE) {
     let y = oldE.map(e => ({
         name: e.name,
