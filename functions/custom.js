@@ -233,6 +233,7 @@ function getNDays(input, n){
 }
 function makeOrange(e,i,a){
   const obj = {
+    arzt: e.arzt,
     name: "Termin auf Website",
     type: "unbooked",
     start: moment(e.start).toISOString(),
