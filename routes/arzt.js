@@ -10,7 +10,6 @@ const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth')
 router.get("/login", forwardAuthenticated, (req, res) => res.render("arzt/login"))
 
 router.post("/login", (req, res, next) => {
-    console.log(req.body)
     require('../config/doc-passport')(passport)
     passport.authenticate('docLocal', {
         successRedirect: '/arzt/calendar',
@@ -53,6 +52,7 @@ router.post("/account", (req,res) => {
 })
 
 router.get("/calendar", ensureAuthenticated, (req, res) => {
+    console.log(req.user._id)
     Termin.find({arzt: req.user._id}, (err, result) => {
         const momentified = result.map((e,i,a) => {
             return {
@@ -97,7 +97,6 @@ router.post("/calendar", (req, res) => {
     for (let i = 0; i < orangeArray.length; i++) {
         const e = orangeArray[i];
         Termin.create(e)  
-        console.log(e.start)
     }
     
 })

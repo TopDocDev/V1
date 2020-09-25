@@ -245,6 +245,7 @@ Vue.component("calendar", {
         this.selectedOpen = false
       },
       makeArray(){
+        const id = this.doc._id
         let wochentage = this.wochentage
         let i = this.i
         let o = {
@@ -355,8 +356,6 @@ Vue.component("calendar", {
             return element
           }
         })
-        uncut.forEach(e => console.log(e.type))
-        console.log(uncut)
         let neu = uncut.filter(function(e){
           return e.type === "uncut"
         })
@@ -370,6 +369,7 @@ Vue.component("calendar", {
           let array = []
           for (let index = 0; index < x; index++) {
             let obj = {
+              arzt: id,
               name: "freier Termin",
               start: moment(e.start).add(index*d, "minutes").format("YYYY-MM-DD HH:mm"),
               end: moment(e.start).add(index*d+d, "minutes").format("YYYY-MM-DD HH:mm"),

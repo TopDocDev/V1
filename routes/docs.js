@@ -2,6 +2,7 @@ const router  = require("express").Router()
 const custom = require("../functions/custom")
 const Doc = require("../models/doc")
 const Termin = require("../models/termin")
+const Comment = require("../models/comment")
 
 router.get("/", (req, res) => Doc.find({}, function(err, allDocs){
     if(err){
