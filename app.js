@@ -15,6 +15,7 @@ const express     = require("express"),
     bcrypt      = require("bcryptjs"),
     session = require('express-session'),
     flash = require('connect-flash')
+    mail = require("./mail.js")
 //seedDB()
 
 app.use(
@@ -48,12 +49,17 @@ app.use(function(req, res, next) {
 const docRoutes = require("./routes/docs")
 const indexRoutes = require("./routes/index")
 const authRoutes = require("./routes/auth")
-const arztRoutes = require("./routes/arzt")
+const arztRoutes = require("./routes/arzt");
 
 app.use("/", indexRoutes)
 app.use("/docs", docRoutes)
 app.use("/auth", authRoutes)
 app.use("/arzt", arztRoutes)
+
+setInterval(() => {
+    mail.updateSuccess()
+    mail.updateFailure() 
+}, 3000)
 
 var port = process.env.PORT || 3000;
 
