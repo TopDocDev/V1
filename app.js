@@ -4,6 +4,7 @@ const express     = require("express"),
     mongoose    = require("mongoose"),
     // Doc         = require("./models/doc"),
     // Comment     = require("./models/comment"),
+    Termin = require("./models/termin")
     // seedDB      = require("./seeds"),
     // sql         = require("mssql"),
     // sequelize   = require("sequelize"),
@@ -50,28 +51,25 @@ const docRoutes = require("./routes/docs")
 const indexRoutes = require("./routes/index")
 const authRoutes = require("./routes/auth")
 const arztRoutes = require("./routes/arzt");
+const termin = require("./models/termin.js");
 
 app.use("/", indexRoutes)
 app.use("/docs", docRoutes)
 app.use("/auth", authRoutes)
 app.use("/arzt", arztRoutes)
 
+// setInterval(() => {
+//     mail.updateSuccess()
+//     mail.updateFailure() 
+// }, 3000)
 setInterval(() => {
     mail.updateSuccess()
-    mail.updateFailure() 
+    mail.updateFailure()
 }, 3000)
 
+
+
 var port = process.env.PORT || 3000;
-
-// var privateKey = fs.readFileSync( 'privatekey.pem' );
-// var certificate = fs.readFileSync( 'certificate.pem' );
-
-// https.createServer({
-//     key: privateKey,
-//     cert: certificate
-// }, app).listen(port);
-
-
 app.listen(port, function () {
     console.log("Server Has Started!");
 })

@@ -158,7 +158,7 @@ router.post('/buchung/:id/login', (req, res, next) => {
       failureRedirect: '/auth/buchung/' + req.params.id,
       failureFlash: true
     })
-    (req, res, next);
+    (req,res,next)
   })
 })
 

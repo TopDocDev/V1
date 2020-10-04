@@ -5,9 +5,11 @@ const Termin = require("../models/termin.js")
 function saveDate(id, user){
   Termin.findByIdAndUpdate(
       id,
-      { type: "booked",
-      color: "blue",
-      user: user
+      {
+        name: "Wartet auf Bestätigung",
+        type: "pending",
+        color: "black",
+        user: user
       },
       function(err, result) {
         if (err) {
