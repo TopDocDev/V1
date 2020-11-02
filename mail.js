@@ -22,14 +22,16 @@ module.exports.updateSuccess = () => {
             console.log(err)
         } else {
             if (typeof terminArr !== 'undefined' && terminArr.length > 0) {
-                for (let i = 0; i < terminArr.length; i++) {
+                for (let i = 0; i < 1; i++) {
                     const t = terminArr[i];
+                    console.log(t)
                     User.findById(t.user, {useFindAndModify: false}, (err, foundUser) => {
                         if(err){
                             console.log(err)
                         } else {
+                            console.log(foundUser)
                             nexmo.message.sendSms('TopDoc', foundUser.handy, 'Termin um ' + t.start + 'wurde erfolgreich bestätigt');
-                            console.log("SMS!")
+                            console.log("Success SMS!")
                             Termin.findByIdAndUpdate(t.id, {type: "accepted"}, err => {
                                 if(err){console.log(err)}
                             })
@@ -45,17 +47,20 @@ module.exports.updateSuccess = () => {
 }
 module.exports.updateFailure = () => {
     Termin.find({type: "rejected"}, {useFindAndModify: false}, (err, terminArr) => {
+        //console.log(terminArr)
         if(err){
             console.log(err)
         } else {
             if (typeof terminArr !== 'undefined' && terminArr.length > 0) {
-                for (let i = 0; i < terminArr.length; i++) {
+                for (let i = 0; i < 1; i++) {
                     const t = terminArr[i];
                     User.findById(t.user, {useFindAndModify: false}, (err, foundUser) => {
+                        console.log(foundUser)
                         if(err){
                             console.log(err)
                         } else {
                             nexmo.message.sendSms('TopDoc', foundUser.handy, 'Termin konnte nicht gebucht werden!');
+                            console.log("Failure SMS sent!")
                             Termin.findByIdAndUpdate(t.id, {type: "degraded"}, err => {
                                 if(err){console.log(err)}
                             })
@@ -63,7 +68,7 @@ module.exports.updateFailure = () => {
                     })
                 }
             } else {
-                // console.log("no rejected appointments found!")
+                //console.log("no rejected appointments found!")
             }
         }
     })

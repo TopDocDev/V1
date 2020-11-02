@@ -2,12 +2,3 @@ option_settings:
   aws:elasticbeanstalk:container:nodejs:
     NodeCommand: "node app.js"
 
-Resources:
-  sslSecurityGroupIngress: 
-    Type: AWS::EC2::SecurityGroupIngress
-    Properties:
-      GroupId: {"Fn::GetAtt" : ["AWSEBSecurityGroup", "GroupId"]}
-      IpProtocol: tcp
-      ToPort: 443
-      FromPort: 443
-      CidrIp: 0.0.0.0/0

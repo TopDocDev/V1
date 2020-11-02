@@ -5,7 +5,7 @@ const express     = require("express"),
     // Doc         = require("./models/doc"),
     // Comment     = require("./models/comment"),
     Termin = require("./models/termin")
-    // seedDB      = require("./seeds"),
+    seedDB      = require("./seeds"),
     // sql         = require("mssql"),
     // sequelize   = require("sequelize"),
     // moment      = require('moment'),
@@ -27,7 +27,8 @@ app.use(
     })
   );
 
-mongoose.connect('mongodb://louis:louis@cluster0-shard-00-00-bbdc4.mongodb.net:27017,cluster0-shard-00-01-bbdc4.mongodb.net:27017,cluster0-shard-00-02-bbdc4.mongodb.net:27017/TopDoc?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority', {useNewUrlParser: true,  useUnifiedTopology: true })  
+const db = 'build'
+mongoose.connect('mongodb://louis:louis@cluster0-shard-00-00-bbdc4.mongodb.net:27017,cluster0-shard-00-01-bbdc4.mongodb.net:27017,cluster0-shard-00-02-bbdc4.mongodb.net:27017/' + db + '?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority', {useNewUrlParser: true,  useUnifiedTopology: true })  
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.log(err));
 

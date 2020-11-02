@@ -2,10 +2,11 @@ var mongoose = require("mongoose");
 var doc = require("./models/doc");
 var Comment   = require("./models/comment");
 const Termin = require("./models/termin")
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcryptjs")
 
 var data = [
     {
+        _id: '5f7ad998634b2a3744a88331',
         username: "arzt",
         password: "&s8x.UW^'ur2M@ua",
         name: "Dr. Oliver Ph. Kreyden",
